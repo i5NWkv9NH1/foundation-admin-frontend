@@ -15,6 +15,11 @@ declare module 'vue' {
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    StatusEmpty: typeof import('./components/StatusEmpty.vue')['default']
+    StatusFailed: typeof import('./components/StatusFailed.vue')['default']
+    StatusHandler: typeof import('./components/StatusHandler.vue')['default']
+    StatusLoading: typeof import('./components/StatusLoading.vue')['default']
+    StatusSuccess: typeof import('./components/StatusSuccess.vue')['default']
     ThemeSwitch: typeof import('./components/ThemeSwitch.vue')['default']
   }
 }
