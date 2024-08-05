@@ -80,10 +80,10 @@
     :rail="appStore.rail"
   >
     <VList density="compact" nav>
-      <VListItem subtitle="john@google.com" title="John Leider">
+      <VListItem title="Foundation Admin">
         <template #prepend>
           <VAvatar
-            image="https://cdn.vuetifyjs.com/images/john.png"
+            image="@/assets/logo.svg"
             :size="appStore.rail ? 'x-small' : 'small'"
           />
         </template>

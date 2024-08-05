@@ -4,6 +4,7 @@
       <VCardTitle> Home </VCardTitle>
       <VCardText>
         <VBtn to="/admin">Admin</VBtn>
+        <VBtn to="/auth">Auth</VBtn>
       </VCardText>
     </VCard>
   </VContainer>

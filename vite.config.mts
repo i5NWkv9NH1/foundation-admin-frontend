@@ -15,7 +15,7 @@ import { fileURLToPath, URL } from 'node:url'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vueDevTools(),
+    // vueDevTools(),
     // VueRouter({
     //   dts: 'src/typed-router.d.ts',
     //   routesFolder: [

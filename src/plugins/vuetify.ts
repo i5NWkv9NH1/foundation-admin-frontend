@@ -14,5 +14,5 @@ import { md3 } from 'vuetify/blueprints'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
-  blueprint: md3,
+  // blueprint: md3,
 })

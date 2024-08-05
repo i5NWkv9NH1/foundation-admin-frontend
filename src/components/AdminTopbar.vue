@@ -13,7 +13,7 @@
       @click="appStore.toggleDrawer"
     /> -->
     <VAppBarNavIcon @click="appStore.toggleDrawer" />
-    <VAppBarTitle> Web Admin </VAppBarTitle>
+    <!-- <VAppBarTitle> Foundation Admin </VAppBarTitle> -->
     <VSpacer />
     <VBtn to="/">Home</VBtn>
   </VAppBar>
