@@ -5,16 +5,10 @@
 -->
 
 <template>
-  <VApp>
-    <AdminDrawer />
-    <AdminTopbar />
-    <VMain>
-      <RouterView v-slot="{ Component, route }">
-        <VSlideXReverseTransition>
-          <component :is="Component" :key="route.path" />
-        </VSlideXReverseTransition>
-      </RouterView>
-    </VMain>
-    <AdminFooter />
-  </VApp>
+  <RouterView />
 </template>
+
+<route lang="yaml">
+meta:
+  layout: admin
+</route>

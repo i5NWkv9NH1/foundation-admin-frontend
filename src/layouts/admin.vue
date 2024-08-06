@@ -3,7 +3,11 @@
     <AdminDrawer />
     <AdminTopbar />
     <VMain>
-      <RouterView />
+      <RouterView v-slot="{ Component, route }">
+        <VScrollYReverseTransition hide-on-leave leave-absolute>
+          <component :is="Component" :key="route.path" />
+        </VScrollYReverseTransition>
+      </RouterView>
     </VMain>
     <AdminFooter />
   </VApp>

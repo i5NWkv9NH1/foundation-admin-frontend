@@ -15,6 +15,7 @@
     <VAppBarNavIcon @click="appStore.toggleDrawer" />
     <!-- <VAppBarTitle> Foundation Admin </VAppBarTitle> -->
     <VSpacer />
+    <ThemeSwitch />
     <VBtn to="/">Home</VBtn>
   </VAppBar>
 </template>

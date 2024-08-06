@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { useAppStore } from '@/stores/app'
   import { VDivider, VList, VListItem, VListSubheader } from 'vuetify/components'
+  import { VResizeDrawer } from '@wdns/vuetify-resize-drawer'
   const appStore = useAppStore()
 
   const list = ref([
@@ -10,6 +11,7 @@
       routes: [
         { name: 'Analysis', value: 'analysis', icon: 'mdi-history' },
         { name: 'Workplace', value: 'workplace', icon: 'mdi-history' },
+        { name: 'Tools', value: 'tools', icon: 'mdi-tools' },
       ],
     },
     {
@@ -36,6 +38,11 @@
           name: 'Organizations',
           value: 'organizations',
           icon: 'mdi-domain',
+        },
+        {
+          name: 'CDN',
+          value: 'cdn',
+          icon: 'mdi-server',
         },
       ],
     },
@@ -74,11 +81,7 @@
 </script>
 
 <template>
-  <VNavigationDrawer
-    v-model:model-value="appStore.drawer"
-    order="1"
-    :rail="appStore.rail"
-  >
+  <VResizeDrawer v-model:model-value="appStore.drawer" order="1">
     <VList density="compact" nav>
       <VListItem title="Foundation Admin">
         <template #prepend>
@@ -119,7 +122,7 @@
         @click="appStore.toggleRail"
       />
     </template>
-  </VNavigationDrawer>
+  </VResizeDrawer>
 </template>
 
 <style scoped lang="scss"></style>
