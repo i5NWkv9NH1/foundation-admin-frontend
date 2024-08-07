@@ -1,46 +1,45 @@
 <template>
   <VContainer>
     <div class="d-flex justify-space-between align-center mb-4">
-      <div class="text-h4">Users</div>
-      <VBtn color="primary" :to="'/admin/system/users/-1'"> Add User </VBtn>
+      <div class="text-h4">Accounts</div>
+      <VBtn color="primary" :to="'/admin/system/accounts/-1'"> Add User </VBtn>
     </div>
-    <!-- Existing DataTable or other content here -->
     <VDataTableServer
       v-model:items-per-page="itemsPerPage"
       :headers="headers"
       item-value="name"
       :items="items"
-      :items-length="meta.total"
+      :items-length="meta.itemsCount"
       :loading="loading"
       :search="search"
       @update:options="loadItems"
     >
-      <template #item.avatarUrl="{ item }: { item: any }">
+      <template #item.avatarUrl="{ item }: { item: Account }">
         <VAvatar
           :image="item.avatarUrl || getRandomAvatar(item.phone)"
           size="40"
         />
       </template>
-      <template #item.createdAt="{ item }: { item: any }">
+      <template #item.createdAt="{ item }: { item: Account }">
         <span>
           {{ dayjs(item.createdAt).format('YYYY-MM-DD HH:mm:ss') }}
         </span>
       </template>
-      <template #item.username="{ item }: { item: any }">
+      <template #item.username="{ item }: { item: Account }">
         <VBtn
           color="primary"
           :text="item.username"
-          :to="`/admin/system/users/${item.id}`"
+          :to="`/admin/system/accounts/${item.id}`"
           variant="plain"
         />
       </template>
-      <template #item.actions="{ item }: { item: any }">
+      <template #item.actions="{ item }: { item: Account }">
         <div class="d-flex">
           <VBtn
             class="mr-2"
             color="primary"
             icon="mdi-pencil"
-            :to="`/admin/system/users/${item.id}`"
+            :to="`/admin/system/accounts/${item.id}`"
             variant="text"
           />
           <VBtn
@@ -58,8 +57,9 @@
 <script setup lang="ts">
   import { ref, watch } from 'vue'
   import dayjs from 'dayjs'
-  import { useCrud } from '@/composables'
+  import { useCrud } from '@/composables/use-crud'
   import { getRandomAvatar } from '@/helpers'
+  import { Account } from '@/types/entities'
 
   const headers = ref<any>([
     { title: 'Avatar', key: 'avatarUrl', align: 'start', sortable: false },
@@ -75,10 +75,10 @@
   const itemsPerPage = ref(10)
   const page = ref(1)
   const { items, meta, loading, search, refetch, remove } =
-    useCrud('/system/users')
+    useCrud<Account>('/accounts')
 
-  const loadItems = async ({ page: pageNum, itemsPerPage: pageSize }: any) => {
-    await refetch(pageNum, pageSize)
+  const loadItems = async ({ page, itemsPerPage }: any) => {
+    await refetch(page, itemsPerPage)
   }
 
   watch([page, itemsPerPage, search], async () => {

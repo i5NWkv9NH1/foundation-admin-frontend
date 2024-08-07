@@ -36,7 +36,7 @@
       const response = await axios.get(
         `http://localhost:3200/api/system/roles/${id}`
       )
-      form.value = response.data
+      form.value = response.data.result
     } catch (error) {
       console.error('Failed to load role:', error)
     }

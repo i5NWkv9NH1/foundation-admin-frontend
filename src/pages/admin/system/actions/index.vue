@@ -9,7 +9,7 @@
       :headers="headers"
       item-value="name"
       :items="items"
-      :items-length="meta.total"
+      :items-length="meta.itemsCount"
       :loading="loading"
       :search="search"
       @update:options="loadItems"
@@ -21,6 +21,9 @@
           :to="`/admin/system/actions/${item.id}`"
           variant="plain"
         />
+      </template>
+      <template #item.icon="{ item }: { item: any }">
+        <VIcon>{{ item.icon }}</VIcon>
       </template>
       <template #item.menu="{ item }: { item: any }">
         <span>{{ item.menu?.label || 'N/A' }}</span>
@@ -43,16 +46,16 @@
     { title: 'Name', key: 'name', align: 'start', sortable: false },
     { title: 'Code', key: 'code', align: 'start', sortable: false },
     { title: 'Icon', key: 'icon', align: 'start', sortable: false },
-    { title: 'Menu', key: 'menu', align: 'start', sortable: false },
+    { title: 'Menu', key: 'menuId', align: 'start', sortable: false },
     { title: 'Created At', key: 'createdAt', align: 'start', sortable: true },
   ])
 
   const itemsPerPage = ref(10)
   const page = ref(1)
-  const { items, meta, loading, search, refetch } = useCrud('/system/actions')
+  const { items, meta, loading, search, refetch } = useCrud('/actions')
 
-  const loadItems = async ({ page: pageNum, itemsPerPage: pageSize }: any) => {
-    await refetch(pageNum, pageSize)
+  const loadItems = async ({ page, itemsPerPage }: any) => {
+    await refetch(page, itemsPerPage)
   }
 
   watch([page, itemsPerPage, search], async () => {

@@ -8,7 +8,12 @@
       <VTextField v-model="form.label" label="Label" required />
       <VTextField v-model="form.router" label="Router" required />
       <VTextField v-model="form.path" label="Path" />
-      <VTextField v-model="form.icon" label="Icon" readonly>
+      <VTextField
+        v-model="form.icon"
+        label="Icon"
+        readonly
+        @click.stop="openIconPicker"
+      >
         <template #append-inner>
           <VBtn icon="mdi-heart" variant="text" @click="openIconPicker" />
         </template>

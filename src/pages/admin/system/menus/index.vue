@@ -9,7 +9,7 @@
       :headers="headers"
       item-value="label"
       :items="items"
-      :items-length="meta.total"
+      :items-length="meta.itemsCount"
       :loading="loading"
       :search="search"
       @update:options="loadItems"
@@ -21,6 +21,9 @@
           :to="`/admin/system/menus/${item.id}`"
           variant="plain"
         />
+      </template>
+      <template #item.icon="{ item }: { item: any }">
+        <VIcon>{{ item.icon }}</VIcon>
       </template>
       <template #item.createdAt="{ item }: { item: any }">
         <span>
@@ -47,7 +50,7 @@
 
   const itemsPerPage = ref(10)
   const page = ref(1)
-  const { items, meta, loading, search, refetch } = useCrud('/system/menus')
+  const { items, meta, loading, search, refetch } = useCrud('/menus')
 
   const loadItems = async ({ page: pageNum, itemsPerPage: pageSize }: any) => {
     await refetch(pageNum, pageSize)

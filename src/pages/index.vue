@@ -3,8 +3,8 @@
     <VCard>
       <VCardTitle> Home </VCardTitle>
       <VCardText>
-        <VBtn to="/admin">Admin</VBtn>
-        <VBtn to="/auth">Auth</VBtn>
+        <VBtn to="/admin/dashboard/analysis">Admin</VBtn>
+        <VBtn to="/auth/signin">Signin</VBtn>
       </VCardText>
     </VCard>
   </VContainer>

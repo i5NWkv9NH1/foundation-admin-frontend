@@ -1,35 +1,36 @@
 // use-crud.ts
 import { ref } from 'vue'
 import axios from 'axios'
+import { PaginateMeta, SystemPaginateResponse } from '@/types/response'
 
 export const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3200/api',
+  baseURL: 'http://localhost:3200/api/system',
   timeout: 10000,
 })
 
 export function useCrud<T> (url: string, initialPage = 1, initialPageSize = 10) {
   const items = ref<T[]>([])
   const loading = ref(true)
-  const meta = ref({
-    currentPage: initialPage,
-    pageSize: initialPageSize,
-    total: 0,
-    totalPages: 0,
+  const meta = ref<PaginateMeta>({
+    page: initialPage,
+    itemPerPage: initialPageSize,
+    itemsCount: 0,
+    pagesCount: 0,
   })
   const search = ref('')
   const error = ref<string | null>(null)
 
-  const fetchData = async (pageNum = initialPage, size = initialPageSize) => {
+  const fetchData = async (
+    page = initialPage,
+    itemsPerPage = initialPageSize
+  ) => {
     loading.value = true
     try {
-      const response = await axiosInstance.get<{
-        items: T[]
-        meta: typeof meta.value
-      }>(url, {
-        params: { page: pageNum, pageSize: size, search: search.value },
+      const response = await axiosInstance.get<SystemPaginateResponse<T>>(url, {
+        params: { page, pageSize: itemsPerPage, search: search.value },
       })
-      items.value = response.data.items
-      meta.value = response.data.meta
+      items.value = response.data.result.items
+      meta.value = response.data.result.meta
     } catch (err: any) {
       error.value = err.message || 'An error occurred'
     } finally {

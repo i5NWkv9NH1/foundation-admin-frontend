@@ -7,8 +7,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AdminBreadcrumb: typeof import('./components/AdminBreadcrumb.vue')['default']
     AdminDrawer: typeof import('./components/AdminDrawer.vue')['default']
     AdminFooter: typeof import('./components/AdminFooter.vue')['default']
+    AdminHistoryTab: typeof import('./components/AdminHistoryTab.vue')['default']
     AdminTopbar: typeof import('./components/AdminTopbar.vue')['default']
     AppDrawer: typeof import('./components/AppDrawer.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']

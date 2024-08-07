@@ -9,8 +9,9 @@
       name: 'Dashboard',
       value: 'dashboard',
       routes: [
-        { name: 'Analysis', value: 'analysis', icon: 'mdi-history' },
-        { name: 'Workplace', value: 'workplace', icon: 'mdi-history' },
+        { name: 'Dashboard', value: '', icon: 'mdi-apps' },
+        { name: 'Analysis', value: 'analysis', icon: 'mdi-poll' },
+        { name: 'Workplace', value: 'workplace', icon: 'mdi-briefcase' },
         { name: 'Tools', value: 'tools', icon: 'mdi-tools' },
       ],
     },
@@ -18,7 +19,7 @@
       name: 'System',
       value: 'system',
       routes: [
-        { name: 'Users', value: 'users', icon: 'mdi-account-outline' },
+        { name: 'Accounts', value: 'accounts', icon: 'mdi-account' },
         {
           name: 'Roles',
           value: 'roles',
@@ -38,11 +39,6 @@
           name: 'Organizations',
           value: 'organizations',
           icon: 'mdi-domain',
-        },
-        {
-          name: 'CDN',
-          value: 'cdn',
-          icon: 'mdi-server',
         },
       ],
     },
@@ -90,14 +86,14 @@
             :size="appStore.rail ? 'x-small' : 'small'"
           />
         </template>
-        <template #append>
+        <!-- <template #append>
           <v-btn
             :icon="appStore.rail ? 'mdi-chevron-right' : 'mdi-chevron-left'"
             size="small"
             variant="text"
             @click="appStore.toggleRail"
           />
-        </template>
+        </template> -->
       </VListItem>
     </VList>
     <VDivider />
@@ -107,6 +103,7 @@
         <VListItem
           v-for="route in item.routes"
           :key="route.value"
+          exact
           :prepend-icon="route.icon"
           :title="route.name"
           :to="`/admin/${item.value}/${route.value}`"
