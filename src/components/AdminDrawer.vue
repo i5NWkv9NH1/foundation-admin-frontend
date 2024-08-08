@@ -13,6 +13,7 @@
         { name: 'Analysis', value: 'analysis', icon: 'mdi-poll' },
         { name: 'Workplace', value: 'workplace', icon: 'mdi-briefcase' },
         { name: 'Tools', value: 'tools', icon: 'mdi-tools' },
+        { name: 'Test', value: 'test', icon: 'mdi-wrench' },
       ],
     },
     {
@@ -77,8 +78,14 @@
 </script>
 
 <template>
-  <VResizeDrawer v-model:model-value="appStore.drawer" order="1">
-    <VList density="compact" nav>
+  <VResizeDrawer
+    v-model:model-value="appStore.drawer"
+    order="1"
+    :style="{
+      border: '0',
+    }"
+  >
+    <VList>
       <VListItem title="Foundation Admin">
         <template #prepend>
           <VAvatar
@@ -97,7 +104,7 @@
       </VListItem>
     </VList>
     <VDivider />
-    <VList density="compact" nav>
+    <VList nav>
       <template v-for="item in list" :key="item.name">
         <VListSubheader>{{ item.name }}</VListSubheader>
         <VListItem
@@ -111,14 +118,6 @@
         />
       </template>
     </VList>
-    <template #append>
-      <VBtn
-        v-if="appStore.rail"
-        icon="mdi-chevron-right"
-        variant="text"
-        @click="appStore.toggleRail"
-      />
-    </template>
   </VResizeDrawer>
 </template>
 

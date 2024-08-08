@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-  import { defineEmits, ref, watch } from 'vue'
+  import { defineEmits, ref } from 'vue'
 
   const emit = defineEmits(['update:icon'])
   const selectedIcon = ref('')

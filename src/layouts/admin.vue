@@ -5,11 +5,12 @@
     <VMain>
       <AdminBreadcrumb />
       <AdminHistoryTab />
-      <RouterView v-slot="{ Component, route }">
+      <!-- <RouterView v-slot="{ Component, route }">
         <VScrollYReverseTransition hide-on-leave leave-absolute>
           <component :is="Component" :key="route.path" />
         </VScrollYReverseTransition>
-      </RouterView>
+      </RouterView> -->
+      <RouterView />
     </VMain>
     <AdminFooter />
   </VApp>
