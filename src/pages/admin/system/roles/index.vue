@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useCrud } from '@/composables/use-crud';
-import { getRandomAvatar } from '@/helpers';
 import { FormField, TableHeader } from '@/types';
 import { Account, Organization, Role } from '@/types/entities';
 import dayjs from 'dayjs';
@@ -19,7 +18,6 @@ const selectedAccounts = ref<Account[]>([]);
 const itemsPerPage = ref(-1);
 const page = ref(1);
 const loadItems = async ({ page, itemsPerPage }: any) => {
-  console.log('load items from data table');
   await refetchAccounts(page, itemsPerPage);
 };
 const isSelectedAccounts = computed(() => !!selectedAccounts.value.length);
@@ -171,7 +169,7 @@ onMounted(async () => {
 
                 <template #item.avatarUrl="{ item }">
                   <VAvatar
-                    :image="item.avatarUrl || getRandomAvatar(item.phone)"
+                    :image="item.avatarUrl"
                     size="40"
                   />
                 </template>

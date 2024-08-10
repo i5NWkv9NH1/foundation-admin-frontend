@@ -3,7 +3,9 @@ import { defineStore } from 'pinia';
 
 export const useUIStore = defineStore('ui', {
   state: () => ({
-    drawer: true
+    drawer: true,
+    showProgress: false,
+    progress: 0
   }),
   actions: {
     toggleDrawer() {
@@ -11,6 +13,18 @@ export const useUIStore = defineStore('ui', {
     },
     setDrawerState(isOpen: boolean) {
       this.drawer = isOpen;
+    },
+    /** progress */
+    startProgress() {
+      this.showProgress = true;
+      this.progress = 0;
+    },
+    updateProgress(value: number) {
+      this.progress = value;
+    },
+    stopProgress() {
+      this.showProgress = false;
+      this.progress = 100;
     }
   }
 });

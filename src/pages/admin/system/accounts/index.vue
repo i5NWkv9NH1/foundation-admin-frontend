@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useCrud } from '@/composables/use-crud';
-import { getRandomAvatar } from '@/helpers';
 import { FormField, TableHeader } from '@/types';
 import { Account, Organization, Role } from '@/types/entities';
 import { ref, watch } from 'vue';
@@ -225,7 +224,7 @@ onMounted(async () => {
 
                 <template #item.avatarUrl="{ item }">
                   <VAvatar
-                    :image="item.avatarUrl || getRandomAvatar(item.phone)"
+                    :image="item.avatarUrl"
                     size="40"
                   />
                 </template>

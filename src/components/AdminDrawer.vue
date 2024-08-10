@@ -88,10 +88,7 @@ const list = ref([
     <VList>
       <VListItem title="Foundation Admin">
         <template #prepend>
-          <VAvatar
-            image="@/assets/logo.svg"
-            :size="appStore.rail ? 'x-small' : 'small'"
-          />
+          <VAvatar image="@/assets/logo.svg" />
         </template>
       </VListItem>
     </VList>

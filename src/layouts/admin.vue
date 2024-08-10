@@ -3,8 +3,6 @@
     <AdminDrawer />
     <AdminTopbar />
     <VMain>
-      <AdminBreadcrumb />
-      <AdminHistoryTab />
       <!-- <RouterView v-slot="{ Component, route }">
         <VScrollYReverseTransition hide-on-leave leave-absolute>
           <component :is="Component" :key="route.path" />

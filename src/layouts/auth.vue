@@ -16,7 +16,14 @@ const router = useRouter();
             lg="4"
             md="4"
           >
-            <div class="caption">Home</div>
+            <div class="caption">
+              <RouterLink
+                class="text-surface text-decoration-none text-h4 text-weight"
+                to="/"
+              >
+                Foundation Admin
+              </RouterLink>
+            </div>
             <video
               autoplay
               class="video"
