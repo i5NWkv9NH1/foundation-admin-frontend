@@ -14,6 +14,8 @@ declare module 'vue' {
     AdminTopbar: typeof import('./components/AdminTopbar.vue')['default']
     AppDrawer: typeof import('./components/AppDrawer.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
+    AuthForm: typeof import('./components/AuthForm.vue')['default']
+    CaptchaField: typeof import('./components/CaptchaField.vue')['default']
     ComponentCard: typeof import('./components/ComponentCard.vue')['default']
     ConfirmDeleteDialog: typeof import('./components/ConfirmDeleteDialog.vue')['default']
     CreateAndEditDialog: typeof import('./components/CreateAndEditDialog.vue')['default']

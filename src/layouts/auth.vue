@@ -1,72 +1,60 @@
 <script setup lang="ts">
-  import { RouterView } from 'vue-router'
-
-  const hidden = ref(false)
+import { RouterView } from 'vue-router';
+const router = useRouter();
 </script>
 
 <template>
   <VApp>
-    <!-- <VFab
-      absolute
-      :active="!hidden"
-      app
-      appear
-      class="ms-4 mb-4"
-      extended
-      location="bottom end"
-      offset
-      prepend-icon="mdi-arrow-left"
-      to="/"
-      transition="slide-x-transition"
-    >
-      Back to Home
-    </VFab> -->
     <VMain>
-      <VContainer class="pa-0 full-height overflow-hidden" fluid>
+      <VContainer
+        class="pa-0 full-height overflow-hidden"
+        fluid
+      >
         <VRow no-gutters>
-          <VCol class="hidden-xs position-relative" lg="8" md="7" sm="6">
-            <!-- <VImg
-              cover
-              height="100vh"
-              src="/public/auth-bg.jpg"
-              transition="slide-x-transition"
-            /> -->
-            <div class="caption">
-              <!-- <div class="text-h2 text-white font-weight-bold">Welcome</div> -->
-              <!-- <ThemeSwitch /> -->
-              <VList rounded="lg">
-                <VListItem
-                  prepend-avatar="@/assets/logo.svg"
-                  title="Foundation Admin"
-                  to="/"
-                >
-                  <template #append>
-                    <ThemeSwitch />
-                  </template>
-                </VListItem>
-              </VList>
-            </div>
+          <VCol
+            class="hidden-sm position-relative"
+            lg="4"
+            md="4"
+          >
+            <div class="caption">Home</div>
             <video
               autoplay
-              class="auth-video"
+              class="video"
               loop
               muted
-              poster="/public/auth-poster.jpg"
-              src="https://www.w3schools.com/howto/rain.mp4"
-            >
-              <!-- <source src="/public/auth-video.mp4" type="video/mp4"> -->
-              <!-- <source
-                src="https://www.w3schools.com/howto/rain.mp4"
-                type="video/mp4"
-              > -->
-            </video>
+              :src="`${router.currentRoute.value.meta.videoUrl}`"
+            />
           </VCol>
-          <VCol cols="12" lg="4" md="5" sm="6">
-            <RouterView v-slot="{ Component, route }">
-              <VSlideXTransition>
-                <component :is="Component" :key="route.path" />
-              </VSlideXTransition>
-            </RouterView>
+          <VCol
+            cols="12"
+            lg="8"
+            md="8"
+            sm="12"
+          >
+            <VContainer fluid>
+              <VRow
+                align="center"
+                class="full-height"
+                justify="center"
+                no-gutters
+              >
+                <VCol
+                  cols="10"
+                  lg="6"
+                  md="8"
+                  sm="6"
+                >
+                  <RouterView v-slot="{ Component, route }">
+                    <VScrollXReverseTransition hide-on-leave>
+                      <component
+                        :is="Component"
+                        :key="route.path"
+                      />
+                    </VScrollXReverseTransition>
+                  </RouterView>
+                </VCol>
+              </VRow>
+            </VContainer>
           </VCol>
         </VRow>
       </VContainer>
@@ -78,20 +66,16 @@
 .caption {
   position: absolute;
   z-index: 999;
-  // width: 100%;
-  // height: 100%;
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
+  left: 10%;
+  top: 10%;
   > div {
     letter-spacing: 0.5rem !important;
   }
 }
-.auth-video {
+video {
   width: 100%;
   height: 100vh;
   object-fit: cover;
-  // position: absolute;
   z-index: 1;
 }
 </style>
