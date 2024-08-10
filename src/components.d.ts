@@ -23,6 +23,7 @@ declare module 'vue' {
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     IconPicker: typeof import('./components/IconPicker.vue')['default']
     Notification: typeof import('./components/Notification.vue')['default']
+    QueryFilters: typeof import('./components/QueryFilters.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ServerDataTable: typeof import('./components/ServerDataTable.vue')['default']

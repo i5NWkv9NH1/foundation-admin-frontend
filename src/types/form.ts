@@ -10,4 +10,5 @@ export interface FormField {
   rules?: Array<(value: any) => boolean | string>;
   attrs?: Record<string, any>;
   multiple?: boolean; // Indicates if the field supports multiple selections (e.g., for select components)
+  chips?: boolean;
 }

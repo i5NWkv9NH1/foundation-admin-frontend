@@ -3,13 +3,12 @@ import { useCrud } from '@/composables/use-crud';
 import { getRandomAvatar } from '@/helpers';
 import { FormField, TableHeader } from '@/types';
 import { Account, Organization, Role } from '@/types/entities';
-import dayjs from 'dayjs';
 import { ref, watch } from 'vue';
 
 // Account Table state
 const headers = ref<TableHeader[]>([
   { title: 'Avatar', key: 'avatarUrl', align: 'start', sortable: false },
-  { title: 'Name', key: 'name', align: 'start', sortable: false },
+  { title: 'Name', key: 'name', align: 'start', sortable: false, minWidth: '150px' },
   { title: 'Username', key: 'username', align: 'start', sortable: false },
   { title: 'Email', key: 'email', align: 'start', sortable: false },
   { title: 'Status', key: 'status', align: 'start', sortable: false },
@@ -32,12 +31,9 @@ const selectedAccounts = ref<Account[]>([]);
 const itemsPerPage = ref(-1);
 const page = ref(1);
 const loadItems = async ({ page, itemsPerPage }: any) => {
-  console.log('load items from data table');
   await refetchAccounts(page, itemsPerPage);
 };
 const isSelectedAccounts = computed(() => !!selectedAccounts.value.length);
-// Filters
-const accountFilters = ref({ organizationId: '', username: '' });
 // Fetch
 const { items: accounts, meta, loading, search, refetch: refetchAccounts, findById, create, update, deleteById, deleteByIds } = useCrud<Account>('/accounts', page.value, itemsPerPage.value);
 const { items: organizations, refetch: refetchOrganizations } = useCrud<Organization>('/organizations');
@@ -46,9 +42,36 @@ const { items: roles, refetch: refetchRoles } = useCrud<Role>('/roles');
 const activatedIds = ref<string[]>([]);
 watch(activatedIds, async (newValue, oldValue) => {
   if (newValue[0] === oldValue[0]) return;
-  accountFilters.value.organizationId = activatedIds.value![0] || '';
-  await refetchAccounts(page.value, itemsPerPage.value, accountFilters.value);
+  // Reset filters when organizaiton change
+  filters.value = { ...defaultFilters.value };
+  filters.value.organizationId = activatedIds.value![0] || '';
+  await refetchAccounts(page.value, itemsPerPage.value, filters.value);
 });
+
+// Filters
+const defaultFilters = ref<Record<string, any>>({ organizationId: '', status: 'ALL', text: '' });
+const filters = ref<Record<string, any>>({ ...defaultFilters.value });
+const filterFileds = ref<FormField[]>([
+  { name: 'name', label: 'Name', type: 'text', required: true, attrs: { variant: 'outlined', density: 'compact' } },
+  {
+    name: 'status',
+    label: 'Status',
+    type: 'select',
+    required: true,
+    attrs: { 'item-title': 'name', density: 'compact', variant: 'outlined', width: '120px', 'item-value': 'value' },
+    options: [
+      { name: 'All', value: 'ALL' },
+      { name: 'Enable', value: 'ENABLE' },
+      { name: 'Disable', value: 'DISABLE' }
+    ]
+  }
+]);
+const onResetFilters = () => {
+  filters.value = { ...defaultFilters.value };
+};
+const onSubmitFilters = async () => {
+  await refetchAccounts(page.value, itemsPerPage.value, filters.value);
+};
 // Dialogs
 // Delete dialog
 const isDeleteDialogVisible = ref(false);
@@ -81,13 +104,15 @@ const currentItem = ref<Account>({ ...defaultItem.value });
 const fields = ref<FormField[]>([
   { name: 'name', label: 'Name', type: 'text', required: true, attrs: { 'variant': 'solo'} },
   { name: 'username', label: 'Username', type: 'text', required: true, attrs: { 'variant': 'solo'}  },
+  { name: 'password', label: 'Password', type: 'text', required: true, attrs: {'variant': 'solo', type: 'password'}},
   { name: 'gender', label: 'Gender', type: 'radios', options: [{ value: 'PRIVATE', text: 'Private', color: 'grey', icon: 'mdi-help' }, { value: 'MALE', text: 'Male', color: 'blue',icon: 'mdi-gender-male' }, { value: 'FEMALE', text: 'Female', color: 'pink', icon: 'mdi-gender-female' }], required: true, attrs: { 'inline': true, 'hide-details': true,  } },
   { name: 'phone', label: 'Phone', type: 'text', attrs: { 'variant': 'solo'}  },
   { name: 'address', label: 'Address', type: 'text', attrs: { 'variant': 'solo'}  },
-  { name: 'email', label: 'Email', type: 'text', required: false , attrs: { 'variant': 'solo'} },
+  { name: 'email', label: 'Email', type: 'text', required: false , attrs: { type: 'email', 'variant': 'solo'} },
   { name: 'avatarUrl', label: 'Avatar', type: 'text', attrs: { 'variant': 'solo'}  },
   { name: 'status', label: 'Status', type: 'radios', options: [{ value: 'ENABLE', text: 'Enable' }, { value: 'DISABLE', text: 'Disable' }], required: true, attrs: { 'inline': true, 'hide-details': true  } },
-  { name: 'roles', label: 'Roles', type: 'select', multiple: true, attrs: {'item-props': true, 'item-title': 'name', 'return-object': true, 'variant': 'solo' }, placeholder: 'Select roles' },
+  // { name: 'createdAt', label: 'Created Date', type: 'date', attrs: { readonly: true }},
+  { name: 'roles', label: 'Roles', type: 'select', multiple: true, chips: true, attrs: {'item-props': true, 'item-title': 'name', 'return-object': true, 'variant': 'solo' }, placeholder: 'Select roles' },
   // { name: 'organizations', label: 'Organizations', type: 'select', multiple: true },
 ]);
 
@@ -103,12 +128,11 @@ const onOpenDialog = async (isEdit: boolean, item?: Record<string, any>) => {
 };
 const onSubmitDialog = async () => {
   if (isEditing.value) {
-    // update
     await update(currentItem.value);
   } else {
     await create(currentItem.value);
   }
-  await refetchAccounts(page.value, itemsPerPage.value, accountFilters.value);
+  await refetchAccounts(page.value, itemsPerPage.value, filters.value);
   isDialogVisible.value = false;
 };
 const onCloseDialog = () => {};
@@ -126,8 +150,12 @@ onMounted(async () => {
     }
     return field;
   });
+  // Update form component options
   fields.value = updatedFields;
+  // Update treeview activated
   activatedIds.value = [organizations.value[0].id || ''];
+  // Update filters
+  defaultFilters.value.organizationId = organizations.value[0].id || '';
 });
 </script>
 
@@ -147,9 +175,12 @@ onMounted(async () => {
       <VCol cols="9">
         <div class="d-flex flex-column ga-4">
           <!-- Filters -->
-          <VCard>
-            <VCardText>Filters</VCardText>
-          </VCard>
+          <QueryFilters
+            v-model="filters"
+            :fields="filterFileds"
+            @reset="onResetFilters"
+            @submit="onSubmitFilters"
+          />
           <!-- Tables -->
           <VCard>
             <VCardText>
@@ -177,7 +208,10 @@ onMounted(async () => {
                     </VBtn>
                     <VSlideXTransition>
                       <template v-if="isSelectedAccounts">
-                        <VBtn color="error">
+                        <VBtn
+                          color="error"
+                          @click="onOpenDeleteDialog"
+                        >
                           <VIcon start>mdi-delete-outline</VIcon>
                           <span>Delete</span>
                         </VBtn>
@@ -196,12 +230,7 @@ onMounted(async () => {
                   />
                 </template>
                 <template #item.username="{ item }">
-                  <VBtn
-                    color="primary"
-                    :text="item.username"
-                    :to="`/admin/system/accounts/${item.id}`"
-                    variant="plain"
-                  />
+                  <div class="d-flex text-decoration-underline">{{ item.username }}</div>
                 </template>
                 <template #item.status="{ item }">
                   <VChip

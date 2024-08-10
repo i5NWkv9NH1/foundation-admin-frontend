@@ -156,9 +156,11 @@ const fieldComponent = (type: FormComponent): Component => {
                 <template v-else-if="field.type === 'select'">
                   <VSelect
                     v-model="form[field.name]"
+                    :chips="field.chips"
                     :items="field.options"
-                    :multiple="field.multiple"
                     v-bind="field.attrs"
+                    :label="field.label"
+                    :multiple="field.multiple"
                   />
                 </template>
                 <component
@@ -181,13 +183,18 @@ const fieldComponent = (type: FormComponent): Component => {
         </VForm>
       </VCardText>
       <VCardActions>
-        <VBtn @click="onClose"> Cancel </VBtn>
+        <VBtn @click="onClose">
+          <VIcon start>mdi-close-thick</VIcon>
+          <span>Cancel</span>
+        </VBtn>
         <VBtn
           color="primary"
           :disabled="!isValid"
+          variant="elevated"
           @click="onSubmit"
         >
-          Save
+          <VIcon start>mdi-content-save-outline</VIcon>
+          <span>Save</span>
         </VBtn>
       </VCardActions>
     </VCard>
