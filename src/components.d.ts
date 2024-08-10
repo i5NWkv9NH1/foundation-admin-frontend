@@ -14,9 +14,15 @@ declare module 'vue' {
     AdminTopbar: typeof import('./components/AdminTopbar.vue')['default']
     AppDrawer: typeof import('./components/AppDrawer.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
+    ComponentCard: typeof import('./components/ComponentCard.vue')['default']
+    ConfirmDeleteDialog: typeof import('./components/ConfirmDeleteDialog.vue')['default']
+    CreateAndEditDialog: typeof import('./components/CreateAndEditDialog.vue')['default']
     DataTable: typeof import('./components/DataTable.vue')['default']
+    DataTableServer: typeof import('./components/DataTableServer.vue')['default']
+    FormDialog: typeof import('./components/FormDialog.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     IconPicker: typeof import('./components/IconPicker.vue')['default']
+    Notification: typeof import('./components/Notification.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ServerDataTable: typeof import('./components/ServerDataTable.vue')['default']
@@ -26,5 +32,7 @@ declare module 'vue' {
     StatusLoading: typeof import('./components/StatusLoading.vue')['default']
     StatusSuccess: typeof import('./components/StatusSuccess.vue')['default']
     ThemeSwitch: typeof import('./components/ThemeSwitch.vue')['default']
+    TreeView: typeof import('./components/TreeView.vue')['default']
+    UserProfileMenu: typeof import('./components/UserProfileMenu.vue')['default']
   }
 }

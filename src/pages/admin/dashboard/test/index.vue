@@ -1,19 +1,27 @@
 <script setup lang="ts">
-  const colors = ref([
-    'primary',
-    'secondary',
-    'tertiary',
-    'error',
-    'surface',
-    'info',
-    'warning',
-    'success',
-  ])
+import { useCrud } from '@/composables';
+
+const roleService = useCrud('/roles');
+const orgService = useCrud('/organizations');
+const accountService = useCrud('/accounts');
+
+onMounted(async () => {
+  await Promise.all([accountService.refetch(), orgService.refetch(), roleService.refetch()]);
+});
+const form = ref({
+  roles: []
+});
 </script>
+
 <template>
   <VContainer>
-    <VBtn v-for="color in colors" :key="color" :color="color">
-      <span>{{ color }}</span>
-    </VBtn>
+    <VSelect
+      v-model="form.roles"
+      item-props
+      :item-title="'name'"
+      :items="roleService.items.value"
+      multiple
+      return-object
+    />
   </VContainer>
 </template>

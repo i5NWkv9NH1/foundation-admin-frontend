@@ -16,6 +16,7 @@
     <!-- <VAppBarTitle> Foundation Admin </VAppBarTitle> -->
     <VSpacer />
     <ThemeSwitch />
-    <VBtn to="/">Home</VBtn>
+    <UserProfileMenu />
+    <!-- <VBtn to="/">Home</VBtn> -->
   </VAppBar>
 </template>
