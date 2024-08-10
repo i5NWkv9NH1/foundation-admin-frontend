@@ -1,21 +1,23 @@
+// stores/notifications.ts
 import { defineStore } from 'pinia';
 
 interface Notification {
   id: string;
-  color: string;
   message: string;
+  type: 'success' | 'error' | 'info';
 }
 
-export const useNotificationStore = defineStore('notification', () => {
-  const items = ref<Notification[]>([]);
-
-  const addNotification = (notification: Notification) => {
-    items.value.push(notification);
-  };
-
-  const removeNotification = (id: string) => {
-    items.value = items.value.filter((item) => item.id !== id);
-  };
-
-  return { items, addNotification, removeNotification };
+export const useNotificationStore = defineStore('notifications', {
+  state: () => ({
+    notifications: [] as Notification[]
+  }),
+  actions: {
+    addNotification(message: string, type: 'success' | 'error' | 'info') {
+      const id = Date.now().toString();
+      this.notifications.push({ id, message, type });
+    },
+    removeNotification(id: string) {
+      this.notifications = this.notifications.filter((notif) => notif.id !== id);
+    }
+  }
 });

@@ -38,7 +38,7 @@ export interface Account extends BaseEntity {
   status: 'DISABLE' | 'ENABLE';
   gender: 'MALE' | 'FEMALE' | 'PRIVATE';
   roles?: Role[];
-  organizations: Organization[];
+  organizations?: Organization[];
 }
 
 export interface Organization extends BaseEntity {
