@@ -7,14 +7,10 @@
 module.exports = {
   root: true,
   env: {
-    node: true,
+    node: true
   },
-  extends: [
-    'vuetify',
-    '@vue/eslint-config-typescript',
-    './.eslintrc-auto-import.json',
-  ],
+  extends: ['vuetify', 'plugin:vue/vue3-recommended', 'prettier', '@vue/eslint-config-typescript', './.eslintrc-auto-import.json'],
   rules: {
-    'vue/multi-word-component-names': 'off',
-  },
-}
+    'vue/multi-word-component-names': 'off'
+  }
+};
