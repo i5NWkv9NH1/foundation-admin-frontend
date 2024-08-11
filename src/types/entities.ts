@@ -1,3 +1,5 @@
+import { RouteLocationNormalized } from 'vue-router';
+
 /* eslint-disable no-use-before-define */
 export interface BaseEntity {
   id?: string;
@@ -53,4 +55,9 @@ export interface Organization extends BaseEntity {
   parent: Organization;
   children: Organization[];
   accounts: Account[];
+}
+
+export interface History extends Pick<RouteLocationNormalized, 'name' | 'path' | 'query' | 'params' | 'fullPath' | 'hash' | 'meta'> {
+  // 你可以在这里添加额外的字段
+  timestamp?: number; // 例如，添加一个时间戳字段来记录访问时间
 }

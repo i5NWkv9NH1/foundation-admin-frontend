@@ -27,6 +27,7 @@ declare module 'vue' {
     Notification: typeof import('./components/Notification.vue')['default']
     Progress: typeof import('./components/Progress.vue')['default']
     QueryFilters: typeof import('./components/QueryFilters.vue')['default']
+    RouterHistory: typeof import('./components/RouterHistory.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ServerDataTable: typeof import('./components/ServerDataTable.vue')['default']

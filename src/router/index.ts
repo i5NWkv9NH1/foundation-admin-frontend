@@ -8,7 +8,7 @@
 import { createRouter, createWebHistory } from 'vue-router/auto';
 import { setupLayouts } from 'virtual:generated-layouts';
 import { routes } from 'vue-router/auto-routes';
-import { useUIStore } from '@/stores';
+import { useAppStore, useUIStore } from '@/stores';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,10 +19,9 @@ let progressInterval: number | null = null;
 router.beforeEach((to, from, next) => {
   const uiStore = useUIStore();
   uiStore.startProgress();
-
   // Simulate progress increase
   let progress = 0;
-  progressInterval = window.setInterval(() => {
+  progressInterval = setInterval(() => {
     progress += 10; // Increase progress
     if (progress > 90) {
       progress = 90; // Cap progress at 90%
@@ -31,12 +30,18 @@ router.beforeEach((to, from, next) => {
   }, 100);
   next();
 });
-router.afterEach(() => {
+router.afterEach((to) => {
+  const appStore = useAppStore();
   const uiStore = useUIStore();
+  if (!appStore.histories.some((_) => _.fullPath === to.fullPath)) {
+    appStore.histories.push({ ...to, timestamp: new Date().getTime() });
+    localStorage.setItem('histories', JSON.stringify(appStore.histories));
+  }
+
   if (progressInterval) {
     clearInterval(progressInterval);
   }
-  uiStore.stopProgress(); // Ensure progress bar completes at 100%
+  uiStore.stopProgress();
 });
 
 // Workaround for https://github.com/vitejs/vite/issues/11804
