@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useCrud } from '@/composables/use-crud';
 import { FormField, TableHeader } from '@/types';
 import { Account, Organization, Role } from '@/types/entities';
 import { ref, watch } from 'vue';
@@ -79,7 +78,7 @@ const onOpenDeleteDialog = (action: 'single' | 'multiple') => {
   deleteDialogAction.value = action;
   isDeleteDialogVisible.value = true;
 };
-const onConfirmDeleteDialog = (action: 'single' | 'multiple') => {
+const onDeleteConfirmDialog = (action: 'single' | 'multiple') => {
   if (action === 'single') {
     // Handle single item deletion
     // TODO: api
@@ -174,7 +173,7 @@ onMounted(async () => {
       <VCol cols="9">
         <div class="d-flex flex-column ga-4">
           <!-- Filters -->
-          <QueryFilters
+          <FiltersPanel
             v-model="filters"
             :fields="filterFileds"
             @reset="onResetFilters"
@@ -280,14 +279,14 @@ onMounted(async () => {
     </VRow>
 
     <!-- Delete confirm dialog -->
-    <ConfirmDeleteDialog
+    <DeleteConfirmDialog
       v-model="isDeleteDialogVisible"
       :action="deleteDialogAction"
-      @confirm="onConfirmDeleteDialog"
+      @confirm="onDeleteConfirmDialog"
     />
 
     <!-- Create and Edit Dialog  -->
-    <CreateAndEditDialog
+    <CreateEditDialog
       v-model:form="currentItem"
       v-model:isVisible="isDialogVisible"
       :fields="fields"

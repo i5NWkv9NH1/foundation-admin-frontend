@@ -1,5 +1,6 @@
 <script setup lang="ts" generic="T extends BaseEntity">
-import { BaseEntity, buildTree, Organization, organizationFieldMapping } from '@/types';
+import { BaseEntity } from '@/types';
+
 interface Props {
   itemTitle?: string;
   items: T[];

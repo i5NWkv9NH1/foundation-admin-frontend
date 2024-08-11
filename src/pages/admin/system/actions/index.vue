@@ -2,7 +2,11 @@
   <VContainer fluid>
     <div class="d-flex justify-space-between align-center mb-4">
       <div class="text-h4">Actions</div>
-      <VBtn color="primary" :to="'/admin/system/actions/-1'">Add Action</VBtn>
+      <VBtn
+        color="primary"
+        :to="'/admin/system/actions/-1'"
+        >Add Action</VBtn
+      >
     </div>
     <VDataTableServer
       v-model:items-per-page="itemsPerPage"
@@ -38,27 +42,26 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
-  import dayjs from 'dayjs'
-  import { useCrud } from '@/composables'
+import { ref, watch } from 'vue';
+import dayjs from 'dayjs';
 
-  const headers = ref<any>([
-    { title: 'Name', key: 'name', align: 'start', sortable: false },
-    { title: 'Code', key: 'code', align: 'start', sortable: false },
-    { title: 'Icon', key: 'icon', align: 'start', sortable: false },
-    { title: 'Menu', key: 'menuId', align: 'start', sortable: false },
-    { title: 'Created At', key: 'createdAt', align: 'start', sortable: true },
-  ])
+const headers = ref<any>([
+  { title: 'Name', key: 'name', align: 'start', sortable: false },
+  { title: 'Code', key: 'code', align: 'start', sortable: false },
+  { title: 'Icon', key: 'icon', align: 'start', sortable: false },
+  { title: 'Menu', key: 'menuId', align: 'start', sortable: false },
+  { title: 'Created At', key: 'createdAt', align: 'start', sortable: true }
+]);
 
-  const itemsPerPage = ref(10)
-  const page = ref(1)
-  const { items, meta, loading, search, refetch } = useCrud('/actions')
+const itemsPerPage = ref(10);
+const page = ref(1);
+const { items, meta, loading, search, refetch } = useCrud('/actions');
 
-  const loadItems = async ({ page, itemsPerPage }: any) => {
-    await refetch(page, itemsPerPage)
-  }
+const loadItems = async ({ page, itemsPerPage }: any) => {
+  await refetch(page, itemsPerPage);
+};
 
-  watch([page, itemsPerPage, search], async () => {
-    await loadItems({ page: page.value, itemsPerPage: itemsPerPage.value })
-  })
+watch([page, itemsPerPage, search], async () => {
+  await loadItems({ page: page.value, itemsPerPage: itemsPerPage.value });
+});
 </script>

@@ -64,6 +64,21 @@
     "watch": true,
     "watchEffect": true,
     "watchPostEffect": true,
-    "watchSyncEffect": true
+    "watchSyncEffect": true,
+    "UIStatus": true,
+    "axiosInstance": true,
+    "buildTree": true,
+    "convertToTree": true,
+    "getCookie": true,
+    "getRandomAvatar": true,
+    "isTokenExpired": true,
+    "menuFieldMapping": true,
+    "organizationFieldMapping": true,
+    "setCookie": true,
+    "useCaptcha": true,
+    "useCountdown": true,
+    "useCrud": true,
+    "useFetchData": true,
+    "validationRules": true
   }
 }

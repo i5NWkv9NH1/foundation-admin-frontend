@@ -34,7 +34,7 @@ async function onSubmit(formEl: any) {
 <template>
   <VSheet>
     <div class="text-h4 mb-4 font-weight-bold">Signin</div>
-    <AuthForm
+    <Authentication
       :loading="loading"
       submit-text="Signin"
       @submit="onSubmit"
@@ -57,7 +57,7 @@ async function onSubmit(formEl: any) {
           type="password"
           variant="solo"
         />
-        <CaptchaField
+        <CaptchaInput
           v-model="form.captcha"
           placeholder="Text of the graphic shown on the right."
           :rules="validationRules.captcha"
@@ -83,7 +83,7 @@ async function onSubmit(formEl: any) {
           variant="text"
         />
       </template>
-    </AuthForm>
+    </Authentication>
   </VSheet>
 </template>
 

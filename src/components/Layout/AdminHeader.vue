@@ -7,7 +7,7 @@ const uiStore = useUIStore();
   <VAppBar order="2">
     <VAppBarNavIcon @click="uiStore.toggleDrawer" />
     <VSpacer />
-    <ThemeSwitch />
-    <UserProfileMenu />
+    <ThemeToggle />
+    <UserProfileDropdown />
   </VAppBar>
 </template>

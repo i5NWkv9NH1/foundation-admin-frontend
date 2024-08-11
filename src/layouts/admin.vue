@@ -1,7 +1,7 @@
 <template>
   <VApp>
-    <AdminDrawer />
-    <AdminTopbar />
+    <AdminSidebar />
+    <AdminHeader />
     <VMain>
       <RouterView v-slot="{ Component, route }">
         <VScrollYReverseTransition

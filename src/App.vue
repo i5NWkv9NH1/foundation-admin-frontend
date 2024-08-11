@@ -9,7 +9,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <Progress
+  <ProgressBar
     v-model:model-value="uiStore.showProgress"
     v-model:progress="uiStore.progress"
   />

@@ -6,21 +6,29 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
+  const UIStatus: typeof import('./types/ui-status')['UIStatus']
+  const axiosInstance: typeof import('./composables/useCRUD')['axiosInstance']
+  const buildTree: typeof import('./helpers/tree')['buildTree']
   const computed: typeof import('vue')['computed']
+  const convertToTree: typeof import('./helpers/tree')['convertToTree']
   const createApp: typeof import('vue')['createApp']
   const customRef: typeof import('vue')['customRef']
   const defineAsyncComponent: typeof import('vue')['defineAsyncComponent']
   const defineComponent: typeof import('vue')['defineComponent']
   const effectScope: typeof import('vue')['effectScope']
+  const getCookie: typeof import('./helpers/storage')['getCookie']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
+  const getRandomAvatar: typeof import('./helpers/avatar')['getRandomAvatar']
   const h: typeof import('vue')['h']
   const inject: typeof import('vue')['inject']
   const isProxy: typeof import('vue')['isProxy']
   const isReactive: typeof import('vue')['isReactive']
   const isReadonly: typeof import('vue')['isReadonly']
   const isRef: typeof import('vue')['isRef']
+  const isTokenExpired: typeof import('./helpers/token')['isTokenExpired']
   const markRaw: typeof import('vue')['markRaw']
+  const menuFieldMapping: typeof import('./helpers/tree')['menuFieldMapping']
   const nextTick: typeof import('vue')['nextTick']
   const onActivated: typeof import('vue')['onActivated']
   const onBeforeMount: typeof import('vue')['onBeforeMount']
@@ -37,11 +45,13 @@ declare global {
   const onServerPrefetch: typeof import('vue')['onServerPrefetch']
   const onUnmounted: typeof import('vue')['onUnmounted']
   const onUpdated: typeof import('vue')['onUpdated']
+  const organizationFieldMapping: typeof import('./helpers/tree')['organizationFieldMapping']
   const provide: typeof import('vue')['provide']
   const reactive: typeof import('vue')['reactive']
   const readonly: typeof import('vue')['readonly']
   const ref: typeof import('vue')['ref']
   const resolveComponent: typeof import('vue')['resolveComponent']
+  const setCookie: typeof import('./helpers/storage')['setCookie']
   const shallowReactive: typeof import('vue')['shallowReactive']
   const shallowReadonly: typeof import('vue')['shallowReadonly']
   const shallowRef: typeof import('vue')['shallowRef']
@@ -52,12 +62,17 @@ declare global {
   const triggerRef: typeof import('vue')['triggerRef']
   const unref: typeof import('vue')['unref']
   const useAttrs: typeof import('vue')['useAttrs']
+  const useCaptcha: typeof import('./composables/useCaptcha')['useCaptcha']
+  const useCountdown: typeof import('./composables/useCountdown')['useCountdown']
+  const useCrud: typeof import('./composables/useCRUD')['useCrud']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
+  const useFetchData: typeof import('./composables/useFetch')['useFetchData']
   const useLink: typeof import('vue-router')['useLink']
   const useRoute: typeof import('vue-router/auto')['useRoute']
   const useRouter: typeof import('vue-router/auto')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
+  const validationRules: typeof import('./helpers/form')['validationRules']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
@@ -68,6 +83,9 @@ declare global {
   // @ts-ignore
   export type { Component, ComponentPublicInstance, ComputedRef, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, VNode, WritableComputedRef } from 'vue'
   import('vue')
+  // @ts-ignore
+  export type { UIStatus, UIStatus } from './types/ui-status'
+  import('./types/ui-status')
 }
 // for vue template auto import
 import { UnwrapRef } from 'vue'
@@ -75,21 +93,29 @@ declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
+    readonly UIStatus: UnwrapRef<typeof import('./types/ui-status')['UIStatus']>
+    readonly axiosInstance: UnwrapRef<typeof import('./composables/useCRUD')['axiosInstance']>
+    readonly buildTree: UnwrapRef<typeof import('./helpers/tree')['buildTree']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
+    readonly convertToTree: UnwrapRef<typeof import('./helpers/tree')['convertToTree']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
+    readonly getCookie: UnwrapRef<typeof import('./helpers/storage')['getCookie']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
+    readonly getRandomAvatar: UnwrapRef<typeof import('./helpers/avatar')['getRandomAvatar']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
     readonly isProxy: UnwrapRef<typeof import('vue')['isProxy']>
     readonly isReactive: UnwrapRef<typeof import('vue')['isReactive']>
     readonly isReadonly: UnwrapRef<typeof import('vue')['isReadonly']>
     readonly isRef: UnwrapRef<typeof import('vue')['isRef']>
+    readonly isTokenExpired: UnwrapRef<typeof import('./helpers/token')['isTokenExpired']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
+    readonly menuFieldMapping: UnwrapRef<typeof import('./helpers/tree')['menuFieldMapping']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
     readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>
@@ -104,11 +130,13 @@ declare module 'vue' {
     readonly onServerPrefetch: UnwrapRef<typeof import('vue')['onServerPrefetch']>
     readonly onUnmounted: UnwrapRef<typeof import('vue')['onUnmounted']>
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
+    readonly organizationFieldMapping: UnwrapRef<typeof import('./helpers/tree')['organizationFieldMapping']>
     readonly provide: UnwrapRef<typeof import('vue')['provide']>
     readonly reactive: UnwrapRef<typeof import('vue')['reactive']>
     readonly readonly: UnwrapRef<typeof import('vue')['readonly']>
     readonly ref: UnwrapRef<typeof import('vue')['ref']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
+    readonly setCookie: UnwrapRef<typeof import('./helpers/storage')['setCookie']>
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
@@ -119,11 +147,16 @@ declare module 'vue' {
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
+    readonly useCaptcha: UnwrapRef<typeof import('./composables/useCaptcha')['useCaptcha']>
+    readonly useCountdown: UnwrapRef<typeof import('./composables/useCountdown')['useCountdown']>
+    readonly useCrud: UnwrapRef<typeof import('./composables/useCRUD')['useCrud']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
+    readonly useFetchData: UnwrapRef<typeof import('./composables/useFetch')['useFetchData']>
     readonly useRoute: UnwrapRef<typeof import('vue-router/auto')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router/auto')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly validationRules: UnwrapRef<typeof import('./helpers/form')['validationRules']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>
