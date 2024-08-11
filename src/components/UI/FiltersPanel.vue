@@ -28,7 +28,7 @@ const resetFilters = () => {
     <VCardText>
       <VRow>
         <VCol
-          v-for="(field, index) in fields"
+          v-for="(field, index) in props.fields"
           :key="index"
           cols="12"
           :md="field.type === 'textarea' ? 12 : 6"

@@ -6,7 +6,6 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
-  const UIStatus: typeof import('./types/ui-status')['UIStatus']
   const axiosInstance: typeof import('./composables/useCRUD')['axiosInstance']
   const buildTree: typeof import('./helpers/tree')['buildTree']
   const computed: typeof import('vue')['computed']
@@ -32,8 +31,6 @@ declare global {
   const nextTick: typeof import('vue')['nextTick']
   const onActivated: typeof import('vue')['onActivated']
   const onBeforeMount: typeof import('vue')['onBeforeMount']
-  const onBeforeRouteLeave: typeof import('vue-router')['onBeforeRouteLeave']
-  const onBeforeRouteUpdate: typeof import('vue-router')['onBeforeRouteUpdate']
   const onBeforeUnmount: typeof import('vue')['onBeforeUnmount']
   const onBeforeUpdate: typeof import('vue')['onBeforeUpdate']
   const onDeactivated: typeof import('vue')['onDeactivated']
@@ -67,8 +64,8 @@ declare global {
   const useCrud: typeof import('./composables/useCRUD')['useCrud']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
+  const useFetch: typeof import('./composables/useFetch')['useFetch']
   const useFetchData: typeof import('./composables/useFetch')['useFetchData']
-  const useLink: typeof import('vue-router')['useLink']
   const useRoute: typeof import('vue-router/auto')['useRoute']
   const useRouter: typeof import('vue-router/auto')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
@@ -83,9 +80,6 @@ declare global {
   // @ts-ignore
   export type { Component, ComponentPublicInstance, ComputedRef, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, VNode, WritableComputedRef } from 'vue'
   import('vue')
-  // @ts-ignore
-  export type { UIStatus, UIStatus } from './types/ui-status'
-  import('./types/ui-status')
 }
 // for vue template auto import
 import { UnwrapRef } from 'vue'
@@ -93,7 +87,6 @@ declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
-    readonly UIStatus: UnwrapRef<typeof import('./types/ui-status')['UIStatus']>
     readonly axiosInstance: UnwrapRef<typeof import('./composables/useCRUD')['axiosInstance']>
     readonly buildTree: UnwrapRef<typeof import('./helpers/tree')['buildTree']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
@@ -152,7 +145,7 @@ declare module 'vue' {
     readonly useCrud: UnwrapRef<typeof import('./composables/useCRUD')['useCrud']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
-    readonly useFetchData: UnwrapRef<typeof import('./composables/useFetch')['useFetchData']>
+    readonly useFetch: UnwrapRef<typeof import('./composables/useFetch')['useFetch']>
     readonly useRoute: UnwrapRef<typeof import('vue-router/auto')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router/auto')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>

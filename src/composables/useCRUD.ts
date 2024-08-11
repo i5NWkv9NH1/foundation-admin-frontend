@@ -9,7 +9,7 @@ export const axiosInstance = axios.create({
 });
 
 export function useCrud<T extends BaseEntity>(url: string, initialPage = 1, initialPageSize = -1) {
-  const items = ref<T[]>([]);
+  const items = ref<T[]>();
   const loading = ref(false);
   const meta = ref<PaginateMeta>({
     page: initialPage,

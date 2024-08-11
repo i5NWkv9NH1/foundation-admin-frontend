@@ -33,7 +33,7 @@ const loadItems = async ({ page, itemsPerPage }: any) => {
 };
 const isSelectedAccounts = computed(() => !!selectedAccounts.value.length);
 // Fetch
-const { items: accounts, meta, loading, search, refetch: refetchAccounts, findById, create, update, deleteById, deleteByIds } = useCrud<Account>('/accounts', page.value, itemsPerPage.value);
+const { items: accounts, meta, loading, search, refetch: refetchAccounts, findById, create, update } = useCrud<Account>('/accounts', page.value, itemsPerPage.value);
 const { items: organizations, refetch: refetchOrganizations } = useCrud<Organization>('/organizations');
 const { items: roles, refetch: refetchRoles } = useCrud<Role>('/roles');
 // Tree
@@ -151,9 +151,9 @@ onMounted(async () => {
   // Update form component options
   fields.value = updatedFields;
   // Update treeview activated
-  activatedIds.value = [organizations.value[0].id || ''];
+  activatedIds.value = [organizations.value![0].id || ''];
   // Update filters
-  defaultFilters.value.organizationId = organizations.value[0].id || '';
+  defaultFilters.value.organizationId = organizations.value![0].id || '';
 });
 </script>
 
@@ -164,6 +164,7 @@ onMounted(async () => {
         <VCard>
           <VCardText>
             <TreeView
+              v-if="organizations"
               v-model:activated-ids="activatedIds"
               :items="organizations"
             />
