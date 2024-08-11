@@ -1,6 +1,12 @@
 <template>
-  <VContainer class="d-flex align-center justify-center" fluid>
-    <VAlert text="No data available." type="info" />
+  <VContainer
+    class="d-flex align-center justify-center"
+    fluid
+  >
+    <VAlert
+      text="No data available."
+      type="info"
+    />
   </VContainer>
 </template>
 

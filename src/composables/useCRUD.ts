@@ -1,6 +1,10 @@
 import { ref } from 'vue';
 import axios from 'axios';
-import { PaginateMeta, SystemPaginateResponse, SystemResponse } from '@/types/response';
+import {
+  PaginateMeta,
+  SystemPaginateResponse,
+  SystemResponse
+} from '@/types/response';
 import { BaseEntity } from '@/types';
 
 export const axiosInstance = axios.create({
@@ -8,7 +12,11 @@ export const axiosInstance = axios.create({
   timeout: 10000
 });
 
-export function useCrud<T extends BaseEntity>(url: string, initialPage = 1, initialPageSize = -1) {
+export function useCrud<T extends BaseEntity>(
+  url: string,
+  initialPage = 1,
+  initialPageSize = -1
+) {
   const items = ref<T[]>();
   const loading = ref(false);
   const meta = ref<PaginateMeta>({
@@ -32,7 +40,11 @@ export function useCrud<T extends BaseEntity>(url: string, initialPage = 1, init
     }
   };
 
-  const fetchData = async (page = initialPage, itemsPerPage = initialPageSize, filters: Record<string, any> = {}) => {
+  const fetchData = async (
+    page = initialPage,
+    itemsPerPage = initialPageSize,
+    filters: Record<string, any> = {}
+  ) => {
     const response = await apiCall(
       axiosInstance.get<SystemPaginateResponse<T>>(url, {
         params: { page, itemsPerPage, filters: JSON.stringify(filters) }
@@ -49,7 +61,9 @@ export function useCrud<T extends BaseEntity>(url: string, initialPage = 1, init
   };
 
   const update = async (entity: T) => {
-    return apiCall(axiosInstance.put<SystemResponse<T>>(`${url}/${entity.id}`, entity));
+    return apiCall(
+      axiosInstance.put<SystemResponse<T>>(`${url}/${entity.id}`, entity)
+    );
   };
 
   const findById = async (id: string) => {

@@ -1,9 +1,7 @@
 <template>
-  <VContainer>
-    Workplace
-  </VContainer>
+  <VContainer> Workplace </VContainer>
 </template>
 
 <script lang="ts" setup>
-  //
+//
 </script>

@@ -1,9 +1,7 @@
 <template>
-  <VContainer>
-    Analysis
-  </VContainer>
+  <VContainer> Analysis </VContainer>
 </template>
 
 <script lang="ts" setup>
-  //
+//
 </script>

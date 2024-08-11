@@ -12,9 +12,12 @@ export function useCaptcha() {
 
   async function fetchCaptcha() {
     try {
-      const response = await axios.post('http://localhost:3200/api/captcha/generate', {
-        uniqueId: appStore.uniqueId
-      });
+      const response = await axios.post(
+        'http://localhost:3200/api/captcha/generate',
+        {
+          uniqueId: appStore.uniqueId
+        }
+      );
       captchaImage.value = response.data;
       isGetCaptcha.value = true;
       start();

@@ -10,10 +10,13 @@ const themes = ref([
   { name: 'System', value: 'light', icon: 'mdi-laptop' }
 ]);
 
-const props = withDefaults(defineProps<{ variant?: any; openHover?: boolean }>(), {
-  variant: 'plain',
-  openHover: true
-});
+const props = withDefaults(
+  defineProps<{ variant?: any; openHover?: boolean }>(),
+  {
+    variant: 'plain',
+    openHover: true
+  }
+);
 </script>
 <template>
   <VMenu

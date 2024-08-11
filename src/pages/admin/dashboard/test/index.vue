@@ -6,7 +6,11 @@ const orgService = useCrud('/organizations');
 const accountService = useCrud('/accounts');
 
 onMounted(async () => {
-  await Promise.all([accountService.refetch(), orgService.refetch(), roleService.refetch()]);
+  await Promise.all([
+    accountService.refetch(),
+    orgService.refetch(),
+    roleService.refetch()
+  ]);
 });
 const form = ref({
   roles: []

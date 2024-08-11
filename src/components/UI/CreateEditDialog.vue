@@ -1,6 +1,30 @@
 <script setup lang="ts">
 import { FormComponent, FormField } from '@/types';
-import { VAutocomplete, VBtn, VCard, VCardActions, VCardSubtitle, VCardText, VCardTitle, VCheckbox, VChipGroup, VCol, VColorPicker, VContainer, VDatePicker, VDialog, VFileInput, VForm, VRadio, VRadioGroup, VRow, VSelect, VSlider, VSwitch, VTextField } from 'vuetify/components';
+import {
+  VAutocomplete,
+  VBtn,
+  VCard,
+  VCardActions,
+  VCardSubtitle,
+  VCardText,
+  VCardTitle,
+  VCheckbox,
+  VChipGroup,
+  VCol,
+  VColorPicker,
+  VContainer,
+  VDatePicker,
+  VDialog,
+  VFileInput,
+  VForm,
+  VRadio,
+  VRadioGroup,
+  VRow,
+  VSelect,
+  VSlider,
+  VSwitch,
+  VTextField
+} from 'vuetify/components';
 
 // Define props
 const props = defineProps<{
@@ -92,7 +116,9 @@ const fieldComponent = (type: FormComponent): Component => {
       <VCardTitle>
         {{ props.isEdit ? 'Edit Item' : 'New Item' }}
       </VCardTitle>
-      <VCardSubtitle v-if="props.isEdit"> Editing {{ form.id || 'New Item' }} </VCardSubtitle>
+      <VCardSubtitle v-if="props.isEdit">
+        Editing {{ form.id || 'New Item' }}
+      </VCardSubtitle>
       <VCardText>
         <VForm
           ref="formRef"
@@ -102,7 +128,11 @@ const fieldComponent = (type: FormComponent): Component => {
             <VSheet class="text-center my-4">
               <VSlideYTransition>
                 <VAvatar
-                  v-if="!!props.fields.filter((field) => field.name === 'avatarUrl') && !!form['avatarUrl']"
+                  v-if="
+                    !!props.fields.filter(
+                      (field) => field.name === 'avatarUrl'
+                    ) && !!form['avatarUrl']
+                  "
                   :image="form['avatarUrl']"
                   size="120"
                 />
@@ -175,8 +205,7 @@ const fieldComponent = (type: FormComponent): Component => {
                   :required="field.required"
                   :rules="field.rules"
                   v-bind="field.attrs"
-                >
-                </component>
+                />
               </VCol>
             </VRow>
           </VContainer>
@@ -184,7 +213,7 @@ const fieldComponent = (type: FormComponent): Component => {
       </VCardText>
       <VCardActions>
         <VBtn @click="onClose">
-          <VIcon start>mdi-close-thick</VIcon>
+          <VIcon start> mdi-close-thick </VIcon>
           <span>Cancel</span>
         </VBtn>
         <VBtn
@@ -193,7 +222,7 @@ const fieldComponent = (type: FormComponent): Component => {
           variant="elevated"
           @click="onSubmit"
         >
-          <VIcon start>mdi-content-save-outline</VIcon>
+          <VIcon start> mdi-content-save-outline </VIcon>
           <span>Save</span>
         </VBtn>
       </VCardActions>

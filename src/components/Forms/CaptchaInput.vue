@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { useCaptcha } from '@/composables';
 
-const { captchaImage, countdown, isRunning, isGetCaptcha, fetchCaptcha } = useCaptcha();
+const { captchaImage, countdown, isRunning, isGetCaptcha, fetchCaptcha } =
+  useCaptcha();
 const props = defineProps<{
   rules: Array<(value: string) => boolean | string>;
   placeholder?: string;

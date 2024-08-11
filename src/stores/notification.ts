@@ -17,7 +17,9 @@ export const useNotificationStore = defineStore('notifications', {
       this.notifications.push({ id, message, type });
     },
     removeNotification(id: string) {
-      this.notifications = this.notifications.filter((notif) => notif.id !== id);
+      this.notifications = this.notifications.filter(
+        (notif) => notif.id !== id
+      );
     }
   }
 });

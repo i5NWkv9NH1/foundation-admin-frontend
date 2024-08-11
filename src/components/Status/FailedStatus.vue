@@ -1,6 +1,12 @@
 <template>
-  <VContainer class="d-flex align-center justify-center" fluid>
-    <VAlert text="Something went wrong." type="error" />
+  <VContainer
+    class="d-flex align-center justify-center"
+    fluid
+  >
+    <VAlert
+      text="Something went wrong."
+      type="error"
+    />
   </VContainer>
 </template>
 

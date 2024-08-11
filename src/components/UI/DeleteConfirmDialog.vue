@@ -49,7 +49,7 @@ const onConfirm = () => {
       <VCardText> Are you sure you want to delete this item? </VCardText>
       <VCardActions>
         <VBtn @click="onClose">
-          <VIcon start>mdi-close-thick</VIcon>
+          <VIcon start> mdi-close-thick </VIcon>
           <span>Cancel</span>
         </VBtn>
         <VBtn
@@ -57,7 +57,7 @@ const onConfirm = () => {
           variant="elevated"
           @click="onConfirm"
         >
-          <VIcon start>mdi-trash-can-outline</VIcon>
+          <VIcon start> mdi-trash-can-outline </VIcon>
           <span>Delete</span>
         </VBtn>
       </VCardActions>

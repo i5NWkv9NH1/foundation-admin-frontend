@@ -18,10 +18,13 @@ watch(
   () => props.activatedIds,
   () => (activatedIds.value = props.activatedIds)
 );
-watch(activatedIds, (newActivatedIds) => emits('update:activatedIds', newActivatedIds));
+watch(activatedIds, (newActivatedIds) =>
+  emits('update:activatedIds', newActivatedIds)
+);
 const tree = computed(() => buildTree(props.items, organizationFieldMapping));
 // Utility Functions
-const itemChildren = (item: any): any => (item.children ? (item.children.length === 0 ? false : item.children) : false);
+const itemChildren = (item: any): any =>
+  item.children ? (item.children.length === 0 ? false : item.children) : false;
 const itemTitle = (item: T) => `${item[props.itemTitle]}`;
 const itemValue = (item: T) => item.id;
 // ? el

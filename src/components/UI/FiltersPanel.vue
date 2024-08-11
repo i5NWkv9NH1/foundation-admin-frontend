@@ -104,14 +104,14 @@ const resetFilters = () => {
         color="primary"
         @click="submitFilters"
       >
-        <VIcon start>mdi-magnify</VIcon>
+        <VIcon start> mdi-magnify </VIcon>
         <span>Submit</span>
       </VBtn>
       <VBtn
         variant="outlined"
         @click="resetFilters"
       >
-        <VIcon start>mdi-refresh</VIcon>
+        <VIcon start> mdi-refresh </VIcon>
         <span>Reset</span>
       </VBtn>
     </VCardText>

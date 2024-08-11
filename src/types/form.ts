@@ -1,4 +1,17 @@
-export type FormComponent = 'text' | 'number' | 'select' | 'checkbox' | 'date' | 'switch' | 'textarea' | 'autocomplete' | 'file' | 'slider' | 'chips' | 'color-picker' | 'radios';
+export type FormComponent =
+  | 'text'
+  | 'number'
+  | 'select'
+  | 'checkbox'
+  | 'date'
+  | 'switch'
+  | 'textarea'
+  | 'autocomplete'
+  | 'file'
+  | 'slider'
+  | 'chips'
+  | 'color-picker'
+  | 'radios';
 
 export interface FormField {
   name: string;

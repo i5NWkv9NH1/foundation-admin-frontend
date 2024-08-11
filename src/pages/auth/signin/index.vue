@@ -17,7 +17,10 @@ async function onSubmit(formEl: any) {
   if (valid) {
     try {
       loading.value = true;
-      await axios.post('http://localhost:3200/api/system/auth/signin', { ...form, uniqueId: appStore.uniqueId });
+      await axios.post('http://localhost:3200/api/system/auth/signin', {
+        ...form,
+        uniqueId: appStore.uniqueId
+      });
       // TODO: store and navigate
     } catch (error) {
       alert('Error submitting form: ' + error);
@@ -40,7 +43,7 @@ async function onSubmit(formEl: any) {
       @submit="onSubmit"
     >
       <template #fields>
-        <VLabel class="mb-2">Username</VLabel>
+        <VLabel class="mb-2"> Username </VLabel>
         <VTextField
           v-model="form.username"
           class="mb-2"
@@ -48,7 +51,7 @@ async function onSubmit(formEl: any) {
           :rules="validationRules.username"
           variant="solo"
         />
-        <VLabel class="mb-2">Password</VLabel>
+        <VLabel class="mb-2"> Password </VLabel>
         <VTextField
           v-model="form.password"
           class="mb-2"

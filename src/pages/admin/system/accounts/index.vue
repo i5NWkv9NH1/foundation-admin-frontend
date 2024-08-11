@@ -6,7 +6,13 @@ import { ref, watch } from 'vue';
 // Account Table state
 const headers = ref<TableHeader[]>([
   { title: 'Avatar', key: 'avatarUrl', align: 'start', sortable: false },
-  { title: 'Name', key: 'name', align: 'start', sortable: false, minWidth: '150px' },
+  {
+    title: 'Name',
+    key: 'name',
+    align: 'start',
+    sortable: false,
+    minWidth: '150px'
+  },
   { title: 'Username', key: 'username', align: 'start', sortable: false },
   { title: 'Email', key: 'email', align: 'start', sortable: false },
   { title: 'Status', key: 'status', align: 'start', sortable: false },
@@ -33,8 +39,18 @@ const loadItems = async ({ page, itemsPerPage }: any) => {
 };
 const isSelectedAccounts = computed(() => !!selectedAccounts.value.length);
 // Fetch
-const { items: accounts, meta, loading, search, refetch: refetchAccounts, findById, create, update } = useCrud<Account>('/accounts', page.value, itemsPerPage.value);
-const { items: organizations, refetch: refetchOrganizations } = useCrud<Organization>('/organizations');
+const {
+  items: accounts,
+  meta,
+  loading,
+  search,
+  refetch: refetchAccounts,
+  findById,
+  create,
+  update
+} = useCrud<Account>('/accounts', page.value, itemsPerPage.value);
+const { items: organizations, refetch: refetchOrganizations } =
+  useCrud<Organization>('/organizations');
 const { items: roles, refetch: refetchRoles } = useCrud<Role>('/roles');
 // Tree
 const activatedIds = ref<string[]>([]);
@@ -47,16 +63,32 @@ watch(activatedIds, async (newValue, oldValue) => {
 });
 
 // Filters
-const defaultFilters = ref<Record<string, any>>({ organizationId: '', status: 'ALL', text: '' });
+const defaultFilters = ref<Record<string, any>>({
+  organizationId: '',
+  status: 'ALL',
+  text: ''
+});
 const filters = ref<Record<string, any>>({ ...defaultFilters.value });
 const filterFileds = ref<FormField[]>([
-  { name: 'name', label: 'Name', type: 'text', required: true, attrs: { variant: 'outlined', density: 'compact' } },
+  {
+    name: 'name',
+    label: 'Name',
+    type: 'text',
+    required: true,
+    attrs: { variant: 'outlined', density: 'compact' }
+  },
   {
     name: 'status',
     label: 'Status',
     type: 'select',
     required: true,
-    attrs: { 'item-title': 'name', density: 'compact', variant: 'outlined', width: '120px', 'item-value': 'value' },
+    attrs: {
+      'item-title': 'name',
+      density: 'compact',
+      variant: 'outlined',
+      width: '120px',
+      'item-value': 'value'
+    },
     options: [
       { name: 'All', value: 'ALL' },
       { name: 'Enable', value: 'ENABLE' },
@@ -202,7 +234,7 @@ onMounted(async () => {
                       color="primary"
                       @click="onOpenDialog(false)"
                     >
-                      <VIcon start>mdi-plus</VIcon>
+                      <VIcon start> mdi-plus </VIcon>
                       <span>New</span>
                     </VBtn>
                     <VSlideXTransition>
@@ -211,7 +243,7 @@ onMounted(async () => {
                           color="error"
                           @click="onOpenDeleteDialog"
                         >
-                          <VIcon start>mdi-delete-outline</VIcon>
+                          <VIcon start> mdi-delete-outline </VIcon>
                           <span>Delete</span>
                         </VBtn>
                       </template>
@@ -219,7 +251,7 @@ onMounted(async () => {
                   </div>
                 </template>
                 <template #loading>
-                  <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+                  <v-skeleton-loader type="table-row@10" />
                 </template>
 
                 <template #item.avatarUrl="{ item }">
@@ -229,7 +261,9 @@ onMounted(async () => {
                   />
                 </template>
                 <template #item.username="{ item }">
-                  <div class="d-flex text-decoration-underline">{{ item.username }}</div>
+                  <div class="d-flex text-decoration-underline">
+                    {{ item.username }}
+                  </div>
                 </template>
                 <template #item.status="{ item }">
                   <VChip
@@ -238,9 +272,19 @@ onMounted(async () => {
                   />
                 </template>
                 <template #item.gender="{ item }">
-                  <VChip :color="item.gender === 'PRIVATE' ? 'Grey' : item.gender === 'FEMALE' ? 'pink' : 'blue'">
+                  <VChip
+                    :color="
+                      item.gender === 'PRIVATE'
+                        ? 'Grey'
+                        : item.gender === 'FEMALE'
+                          ? 'pink'
+                          : 'blue'
+                    "
+                  >
                     <template #prepend>
-                      <VIcon start>{{ genderIcon(item.gender) }} </VIcon>
+                      <VIcon start>
+                        {{ genderIcon(item.gender) }}
+                      </VIcon>
                     </template>
                     <template #default>
                       <strong>{{ item.gender }}</strong>

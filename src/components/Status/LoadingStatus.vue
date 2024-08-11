@@ -1,6 +1,12 @@
 <template>
-  <VContainer class="d-flex align-center justify-center" fluid>
-    <VProgressCircular color="primary" indeterminate />
+  <VContainer
+    class="d-flex align-center justify-center"
+    fluid
+  >
+    <VProgressCircular
+      color="primary"
+      indeterminate
+    />
   </VContainer>
 </template>
 

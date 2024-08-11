@@ -1,5 +1,4 @@
 <!-- TOOD: Form generator -->
-
 <script lang="ts" setup>
 const props = defineProps<{
   loading: boolean;
