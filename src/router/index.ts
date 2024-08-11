@@ -5,14 +5,122 @@
  */
 
 // Composables
-import { createRouter, createWebHistory } from 'vue-router/auto';
-import { setupLayouts } from 'virtual:generated-layouts';
-import { routes } from 'vue-router/auto-routes';
+import {
+  createRouter,
+  createWebHistory,
+  RouteRecordRaw
+} from 'vue-router/auto';
+// import { setupLayouts } from 'virtual:generated-layouts';
+// import { routes } from 'vue-router/auto-routes';
 import { useAppStore, useUIStore } from '@/stores';
+
+const AuthLayout = () => import('@/layouts/AuthLayout.vue');
+const AdminLayout = () => import('@/layouts/AdminLayout.vue');
+
+const routes: RouteRecordRaw[] = [
+  {
+    path: '/auth',
+    component: AuthLayout,
+    children: [
+      {
+        path: '',
+        redirect: '/auth/signin'
+      },
+      {
+        path: 'signin',
+        name: 'SignIn',
+        component: () => import('@/pages/auth/signin.vue'),
+        meta: {
+          vidoeUrl: '/public/signin.mp4'
+        }
+      },
+      {
+        path: 'signup',
+        name: 'SignUp',
+        component: () => import('@/pages/auth/signup.vue'),
+        meta: {
+          vidoeUrl: '/public/signup.mp4'
+        }
+      }
+    ]
+  },
+  {
+    path: '/',
+    component: AdminLayout,
+    children: [
+      {
+        path: '',
+        name: 'dashboard',
+        redirect: '/dashboard'
+      },
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('@/pages/dashboard.vue')
+      },
+      {
+        path: 'forbidden',
+        name: 'Forbidden',
+        component: () => import('@/pages/forbidden.vue')
+      },
+      {
+        path: 'unauthorized',
+        name: 'Unauthorized',
+        component: () => import('@/pages/unauthorized.vue')
+      },
+      {
+        path: 'system',
+        name: 'System',
+        children: [
+          {
+            path: '',
+            redirect: '/system/accounts'
+          },
+          {
+            path: 'accounts',
+            name: 'Accounts',
+            component: () => import('@/pages/system/accounts.vue')
+          }
+        ]
+      },
+      {
+        path: 'workplace',
+        name: 'Workplace',
+        children: [
+          {
+            path: '',
+            redirect: '/workplace/analysis'
+          },
+          {
+            path: 'analysis',
+            name: 'Analysis',
+            component: () => import('@/pages/workplace/analysis.vue')
+          },
+          {
+            path: 'test',
+            name: 'Test',
+            component: () => import('@/pages/workplace/test.vue')
+          },
+          {
+            path: 'tools',
+            name: 'Tools',
+            component: () => import('@/pages/workplace/tools.vue')
+          }
+        ]
+      },
+      {
+        path: ':pathMatch(.*)*',
+        name: '404',
+        component: () => import('@/pages/[...404].vue')
+      }
+    ]
+  }
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: setupLayouts(routes)
+  // routes: setupLayouts(routes)
+  routes
 });
 
 let progressInterval: number | null = null;

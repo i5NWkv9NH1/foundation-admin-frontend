@@ -7,23 +7,24 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AdminFooter: typeof import('./components/Layout/AdminFooter.vue')['default']
-    AdminHeader: typeof import('./components/Layout/AdminHeader.vue')['default']
-    AdminSidebar: typeof import('./components/Layout/AdminSidebar.vue')['default']
     Authentication: typeof import('./components/Forms/Authentication.vue')['default']
+    BottomBar: typeof import('./components/Layout/BottomBar.vue')['default']
     CaptchaInput: typeof import('./components/Forms/CaptchaInput.vue')['default']
     CreateEditDialog: typeof import('./components/UI/CreateEditDialog.vue')['default']
     DeleteConfirmDialog: typeof import('./components/UI/DeleteConfirmDialog.vue')['default']
+    Drawer: typeof import('./components/Layout/Drawer.vue')['default']
     EmptyStatus: typeof import('./components/UI/EmptyStatus.vue')['default']
     FailedStatus: typeof import('./components/Status/FailedStatus.vue')['default']
     FiltersPanel: typeof import('./components/UI/FiltersPanel.vue')['default']
     IconSelector: typeof import('./components/UI/IconSelector.vue')['default']
     LoadingStatus: typeof import('./components/Status/LoadingStatus.vue')['default']
+    Menu: typeof import('./components/Layout/Menu.vue')['default']
     ProgressBar: typeof import('./components/UI/ProgressBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     StatusManager: typeof import('./components/Status/StatusManager.vue')['default']
     ThemeToggle: typeof import('./components/UI/ThemeToggle.vue')['default']
+    TopBar: typeof import('./components/Layout/TopBar.vue')['default']
     TreeView: typeof import('./components/UI/TreeView.vue')['default']
     UserProfileDropdown: typeof import('./components/UI/UserProfileDropdown.vue')['default']
   }

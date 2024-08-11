@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router';
-const router = useRouter();
+import { useAppStore } from '@/stores';
+
+const appStore = useAppStore();
 </script>
 
 <template>
@@ -29,7 +30,7 @@ const router = useRouter();
               class="video"
               loop
               muted
-              :src="`${router.currentRoute.value.meta.videoUrl}`"
+              :src="appStore.authVideo"
             />
           </VCol>
           <VCol

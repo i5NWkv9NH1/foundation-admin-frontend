@@ -8,7 +8,8 @@ export const useAppStore = defineStore('app', {
     uniqueId: localStorage.getItem('uuid') || uuid(),
     histories: JSON.parse(
       localStorage.getItem('histories') || '[]'
-    ) as History[]
+    ) as History[],
+    authVideo: '/public/signin.mp4'
   }),
   actions: {
     initialize() {

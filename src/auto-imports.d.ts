@@ -15,6 +15,8 @@ declare global {
   const defineAsyncComponent: typeof import('vue')['defineAsyncComponent']
   const defineComponent: typeof import('vue')['defineComponent']
   const effectScope: typeof import('vue')['effectScope']
+  const generateAdminMenu: typeof import('./helpers/menus')['generateAdminMenu']
+  const generateMenu: typeof import('./helpers/menus')['generateMenu']
   const getCookie: typeof import('./helpers/storage')['getCookie']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
@@ -65,7 +67,6 @@ declare global {
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
   const useFetch: typeof import('./composables/useFetch')['useFetch']
-  const useFetchData: (typeof import('./composables/useFetch'))['useFetchData']
   const useRoute: typeof import('vue-router/auto')['useRoute']
   const useRouter: typeof import('vue-router/auto')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
@@ -96,6 +97,8 @@ declare module 'vue' {
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
+    readonly generateAdminMenu: UnwrapRef<typeof import('./helpers/menus')['generateAdminMenu']>
+    readonly generateMenu: UnwrapRef<typeof import('./helpers/menus')['generateMenu']>
     readonly getCookie: UnwrapRef<typeof import('./helpers/storage')['getCookie']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>

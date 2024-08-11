@@ -79,6 +79,8 @@
     "watchEffect": true,
     "watchPostEffect": true,
     "watchSyncEffect": true,
-    "useFetch": true
+    "useFetch": true,
+    "generateAdminMenu": true,
+    "generateMenu": true
   }
 }

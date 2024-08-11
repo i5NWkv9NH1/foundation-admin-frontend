@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import axios from 'axios';
-import { useAppStore } from '@/stores';
+import { useAppStore } from '@/stores/app';
 import { validationRules } from '@/helpers';
 
 const appStore = useAppStore();
 const form = reactive({
   username: '',
   password: '',
+  confirmPassword: '',
   captcha: ''
 });
 
@@ -17,13 +18,13 @@ async function onSubmit(formEl: any) {
   if (valid) {
     try {
       loading.value = true;
-      await axios.post('http://localhost:3200/api/system/auth/signin', {
+      await axios.post('http://localhost:3200/api/auth/signup', {
         ...form,
         uniqueId: appStore.uniqueId
       });
-      // TODO: store and navigate
+      // TODO: store, navigate
     } catch (error) {
-      alert('Error submitting form: ' + error);
+      alert('Error submitting form:' + error);
     } finally {
       loading.value = false;
     }
@@ -36,10 +37,10 @@ async function onSubmit(formEl: any) {
 
 <template>
   <VSheet>
-    <div class="text-h4 mb-4 font-weight-bold">Signin</div>
+    <div class="text-h4 mb-4 font-weight-bold">Sign Up</div>
     <Authentication
       :loading="loading"
-      submit-text="Signin"
+      submit-text="Signup"
       @submit="onSubmit"
     >
       <template #fields>
@@ -60,6 +61,14 @@ async function onSubmit(formEl: any) {
           type="password"
           variant="solo"
         />
+        <VLabel class="mb-2"> Confirm Password </VLabel>
+        <VTextField
+          v-model="form.confirmPassword"
+          class="mb-2"
+          placeholder="Confirm your password"
+          type="password"
+          variant="solo"
+        />
         <CaptchaInput
           v-model="form.captcha"
           placeholder="Text of the graphic shown on the right."
@@ -69,28 +78,13 @@ async function onSubmit(formEl: any) {
       <template #actions>
         <VBtn
           color="primary"
-          prepend-icon="mdi-arrow-right"
+          prepend-icon="mdi-arrow-left"
           rounded="0"
-          text="Don't have an account?"
-          to="/auth/signup"
-          variant="text"
-        />
-        <VBtn
-          class="text-decoration-underline"
-          color="red"
-          prepend-icon="mdi-lock"
-          rounded="0"
-          size="small"
-          text="Forget your password?"
-          to="/auth/reset-password"
+          text="Already have an account?"
+          to="/auth/signin"
           variant="text"
         />
       </template>
     </Authentication>
   </VSheet>
 </template>
-
-<route lang="yaml">
-meta:
-  videoUrl: /public/signin.mp4
-</route>

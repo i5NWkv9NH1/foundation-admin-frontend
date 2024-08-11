@@ -9,9 +9,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <ProgressBar
-    v-model:model-value="uiStore.showProgress"
-    v-model:progress="uiStore.progress"
-  />
-  <RouterView />
+  <VApp>
+    <ProgressBar
+      v-model:model-value="uiStore.showProgress"
+      v-model:progress="uiStore.progress"
+    />
+    <RouterView />
+  </VApp>
 </template>
