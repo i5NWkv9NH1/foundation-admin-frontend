@@ -12,6 +12,7 @@ import App from './App.vue';
 
 // Composables
 import { createApp } from 'vue';
+// import { setupPermission } from './router/permissionGuard';
 
 const app = createApp(App);
 

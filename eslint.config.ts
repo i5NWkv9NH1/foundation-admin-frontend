@@ -27,6 +27,6 @@ export default [
       'vue/valid-v-slot': 'off',
       '@typescript-eslint/no-empty-object-type': 'off'
     }
-  },
-  eslintConfigPrettier
+  }
+  // eslintConfigPrettier
 ] satisfies Linter.Config[];

@@ -1,9 +1,7 @@
 <script lang="ts" setup>
-import axios from 'axios';
-import { useAppStore } from '@/stores';
+import { useAuthStore, useAppStore } from '@/stores';
 import { validationRules } from '@/helpers';
 
-const appStore = useAppStore();
 const form = reactive({
   username: '',
   password: '',
@@ -11,25 +9,23 @@ const form = reactive({
 });
 
 const loading = ref(false);
+const { signin } = useAuthStore();
+const { uniqueId } = useAppStore();
+const { fetchCaptcha } = useCaptcha();
 
 async function onSubmit(formEl: any) {
   const { valid } = await formEl.validate();
-  if (valid) {
-    try {
-      loading.value = true;
-      await axios.post('http://localhost:3200/api/system/auth/signin', {
-        ...form,
-        uniqueId: appStore.uniqueId
-      });
-      // TODO: store and navigate
-    } catch (error) {
-      alert('Error submitting form: ' + error);
-    } finally {
-      loading.value = false;
-    }
-  } else {
-    alert('Front-end validation failed');
-    // Handle captcha refresh
+  if (!valid) {
+    return;
+  }
+  try {
+    loading.value = true;
+    await signin({ ...form, uniqueId });
+  } catch (error) {
+    await fetchCaptcha();
+    throw error;
+  } finally {
+    loading.value = false;
   }
 }
 </script>
@@ -50,6 +46,7 @@ async function onSubmit(formEl: any) {
           placeholder="Please input username"
           :rules="validationRules.username"
           variant="solo"
+          :disabled="loading"
         />
         <VLabel class="mb-2"> Password </VLabel>
         <VTextField
@@ -59,11 +56,13 @@ async function onSubmit(formEl: any) {
           :rules="validationRules.password"
           type="password"
           variant="solo"
+          :disabled="loading"
         />
         <CaptchaInput
           v-model="form.captcha"
           placeholder="Text of the graphic shown on the right."
           :rules="validationRules.captcha"
+          :disabled="loading"
         />
       </template>
       <template #actions>

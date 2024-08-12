@@ -25,6 +25,7 @@ declare module 'vue' {
     StatusManager: typeof import('./components/Status/StatusManager.vue')['default']
     ThemeToggle: typeof import('./components/UI/ThemeToggle.vue')['default']
     TopBar: typeof import('./components/Layout/TopBar.vue')['default']
+    TreeDataTable: typeof import('./components/Tables/TreeDataTable.vue')['default']
     TreeSelector: typeof import('./components/Forms/TreeSelector.vue')['default']
     TreeSelectorDrawer: typeof import('./components/Forms/TreeSelectorDrawer.vue')['default']
     TreeView: typeof import('./components/UI/TreeView.vue')['default']

@@ -40,7 +40,6 @@ export interface Account extends BaseEntity {
   gender: 'MALE' | 'FEMALE' | 'PRIVATE';
   roles?: Role[];
   organizations?: Organization[];
-  organizationIds?: string[];
 }
 
 export interface Organization extends BaseEntity {
@@ -57,11 +56,17 @@ export interface Organization extends BaseEntity {
   accounts: Account[];
 }
 
-export interface History
-  extends Pick<
-    RouteLocationNormalized,
-    'name' | 'path' | 'query' | 'params' | 'fullPath' | 'hash' | 'meta'
-  > {
-  // 你可以在这里添加额外的字段
-  timestamp?: number; // 例如，添加一个时间戳字段来记录访问时间
+export interface History extends Pick<RouteLocationNormalized, 'name' | 'path' | 'query' | 'params' | 'fullPath' | 'hash' | 'meta'> {
+  timestamp?: number;
 }
+
+// prettier-ignore
+export interface AccountDto extends Pick<Account, 'name' | 'username' | 'avatarUrl' | 'email' | 'phone' | 'address' | 'status' | 'gender'>{
+  organizationIds: string[]
+  roles: any[]
+}
+// prettier-ignore
+export interface CreateAccountDto extends AccountDto {}
+export interface UpdateAccountDto extends AccountDto {}
+export interface UpdateAccountOrganizationsDto {}
+export interface OrganizationDto {}

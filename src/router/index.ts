@@ -5,14 +5,10 @@
  */
 
 // Composables
-import {
-  createRouter,
-  createWebHistory,
-  RouteRecordRaw
-} from 'vue-router/auto';
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router/auto';
 // import { setupLayouts } from 'virtual:generated-layouts';
 // import { routes } from 'vue-router/auto-routes';
-import { useAppStore, useUIStore } from '@/stores';
+import { useAppStore, useAuthStore, useUIStore } from '@/stores';
 
 const AuthLayout = () => import('@/layouts/AuthLayout.vue');
 const AdminLayout = () => import('@/layouts/AdminLayout.vue');
@@ -80,6 +76,11 @@ const routes: RouteRecordRaw[] = [
             path: 'accounts',
             name: 'Accounts',
             component: () => import('@/pages/system/accounts.vue')
+          },
+          {
+            path: 'roles',
+            name: 'Roles',
+            component: () => import('@/pages/system/roles.vue')
           }
         ]
       },
@@ -124,7 +125,8 @@ const router = createRouter({
 });
 
 let progressInterval: number | null = null;
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  // * ProgressBar
   const uiStore = useUIStore();
   uiStore.startProgress();
   // Simulate progress increase
@@ -136,6 +138,12 @@ router.beforeEach((to, from, next) => {
     }
     uiStore.updateProgress(progress);
   }, 100);
+
+  const authStore = useAuthStore();
+  if (to.path !== '/auth/signin' && to.path !== '/auth/signup' && !authStore.isAuthenticated) {
+    next('/auth/signin');
+    return;
+  }
   next();
 });
 router.afterEach((to) => {

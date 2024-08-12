@@ -4,53 +4,23 @@ import { Account, Organization, Role } from '@/types/entities';
 import { ref, watch } from 'vue';
 
 // Account Table state
-const headers = ref<TableHeader[]>([
-  { title: 'Avatar', key: 'avatarUrl', align: 'start', sortable: false },
-  {
-    title: 'Name',
-    key: 'name',
-    align: 'start',
-    sortable: false,
-    minWidth: '150px'
-  },
-  { title: 'Username', key: 'username', align: 'start', sortable: false },
-  { title: 'Email', key: 'email', align: 'start', sortable: false },
-  { title: 'Status', key: 'status', align: 'start', sortable: false },
-  { title: 'Gender', key: 'gender', align: 'start', sortable: false },
-  // { title: 'CreatedAt', key: 'createdAt', align: 'start', sortable: false },
-  { title: 'Actions', key: 'actions', align: 'start', sortable: false }
-]);
+// prettier-ignore
+const headers = ref<TableHeader[]>([{ title: 'Avatar', key: 'avatarUrl', align: 'start', sortable: false }, { title: 'Name', key: 'name', align: 'start', sortable: false, minWidth: '150px' }, { title: 'Username', key: 'username', align: 'start', sortable: false }, { title: 'Email', key: 'email', align: 'start', sortable: false }, { title: 'Status', key: 'status', align: 'start', sortable: false }, { title: 'Gender', key: 'gender', align: 'start', sortable: false }, { title: 'Actions', key: 'actions', align: 'start', sortable: false }]);
+
 // Account Table Utils
-const genderIcon = (gender: string) => {
-  switch (gender) {
-    case 'PRIVATE':
-      return 'mdi-help';
-    case 'MALE':
-      return 'mdi-gender-male';
-    case 'FEMALE':
-      return 'mdi-gender-female';
-  }
-};
+// prettier-ignore
+const genderIcon = (gender: string) => { switch (gender) { case 'PRIVATE': return 'mdi-help'; case 'MALE': return 'mdi-gender-male'; case 'FEMALE': return 'mdi-gender-female'; } };
 const selectedAccounts = ref<Account[]>([]);
 const itemsPerPage = ref(-1);
 const page = ref(1);
 const loadItems = async ({ page, itemsPerPage }: any) => {
-  await refetchAccounts(page, itemsPerPage);
+  await refetchAccounts(page, itemsPerPage, filters.value);
 };
 const isSelectedAccounts = computed(() => !!selectedAccounts.value.length);
 // Fetch
-const {
-  items: accounts,
-  meta,
-  loading,
-  search,
-  refetch: refetchAccounts,
-  findById,
-  create,
-  update
-} = useCrud<Account>('/accounts', page.value, itemsPerPage.value);
-const { items: organizations, refetch: refetchOrganizations } =
-  useCrud<Organization>('/organizations');
+// prettier-ignore
+const { items: accounts, meta, loading, search, refetch: refetchAccounts, findById, create, update } = useCrud<Account>('/accounts', page.value, itemsPerPage.value);
+const { items: organizations, refetch: refetchOrganizations } = useCrud<Organization>('/organizations');
 const { items: roles, refetch: refetchRoles } = useCrud<Role>('/roles');
 // Tree
 const activatedIds = ref<string[]>([]);
@@ -86,16 +56,8 @@ const onOpenDeleteDialog = (action: 'single' | 'multiple') => {
   deleteDialogAction.value = action;
   isDeleteDialogVisible.value = true;
 };
-const onDeleteConfirmDialog = (action: 'single' | 'multiple') => {
-  if (action === 'single') {
-    // Handle single item deletion
-    // TODO: api
-  } else if (action === 'multiple') {
-    // Handle multiple items deletion
-    // TODO: api
-  }
-  isDeleteDialogVisible.value = false;
-};
+// prettier-ignore
+const onDeleteConfirmDialog = (action: 'single' | 'multiple') => { if (action === 'single') { /* Handle single item deletion */ /* TODO: api */ } else if (action === 'multiple') { /* Handle multiple items deletion */ /* TODO: api */ } isDeleteDialogVisible.value = false; };
 // Create and Edit dialog
 const isDialogVisible = ref(false);
 const isEditing = ref(false);
@@ -278,15 +240,7 @@ onMounted(async () => {
                   />
                 </template>
                 <template #item.gender="{ item }">
-                  <VChip
-                    :color="
-                      item.gender === 'PRIVATE'
-                        ? 'Grey'
-                        : item.gender === 'FEMALE'
-                          ? 'pink'
-                          : 'blue'
-                    "
-                  >
+                  <VChip :color="item.gender === 'PRIVATE' ? 'Grey' : item.gender === 'FEMALE' ? 'pink' : 'blue'">
                     <template #prepend>
                       <VIcon start>
                         {{ genderIcon(item.gender) }}
@@ -348,9 +302,7 @@ onMounted(async () => {
 
     <TreeSelectorDrawer
       :model-value="drawer"
-      :activateds="
-        currentItem.organizations?.map((item) => item.id as string) || []
-      "
+      :activateds="currentItem.organizations?.map((item) => item.id as string) || []"
       @save="onDrawerSave"
       :items="organizations || []"
     />

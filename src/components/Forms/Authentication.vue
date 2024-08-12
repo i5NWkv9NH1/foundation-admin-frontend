@@ -21,6 +21,7 @@ function handleSubmit() {
     <VCard
       color="transparent"
       variant="flat"
+      :loading="props.loading"
     >
       <VCardText>
         <slot name="fields" />
@@ -29,7 +30,7 @@ function handleSubmit() {
         <VBtn
           block
           color="primary"
-          :loading="props.loading"
+          :disabled="props.loading"
           rounded="lg"
           :text="props.submitText"
           type="submit"

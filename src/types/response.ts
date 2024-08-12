@@ -1,4 +1,4 @@
-export interface Response {
+export interface ApiResponse {
   meta?: {
     processedBy: string;
     version: string;
@@ -6,20 +6,23 @@ export interface Response {
   message: string;
   statusCode: number;
   errors?: any;
-  timestamp: string; // To include the response timestamp
+  timestamp: string;
 }
-export interface SystemResponse<T> extends Response {
+
+export interface ApiResponseWithResult<T> extends ApiResponse {
   result: T;
 }
-export interface PaginateMeta {
+
+export interface PaginationMeta {
   page: number;
-  itemPerPage: number;
-  itemsCount: number;
-  pagesCount: number;
+  itemsPerPage: number;
+  itemCount: number;
+  pageCount: number;
 }
-export interface SystemPaginateResponse<T> extends Response {
+
+export interface ApiPaginatedResponse<T> extends ApiResponse {
   result: {
     items: T[];
-    meta: PaginateMeta;
+    meta: PaginationMeta;
   };
 }
