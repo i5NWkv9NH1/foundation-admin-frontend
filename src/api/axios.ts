@@ -3,21 +3,37 @@ import { ApiResponse } from '@/types';
 import { useAuthStore } from '@/stores';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://localhost:3200/api/system',
   headers: {
     'Content-Type': 'application/json'
   }
 });
 
-const noAuthPaths = ['/auth/login'];
+const noAuthPaths = ['/auth/signin', '/auth/signup', '/auth/refresh'];
 
 apiClient.interceptors.request.use(
-  (config) => {
-    const authStore = useAuthStore();
-    const isNoAuth = noAuthPaths.some((path) => config.url && config.url.startsWith(path));
-    if (!isNoAuth && authStore.accessToken) {
-      config.headers.Authorization = `Bearer ${authStore.accessToken}`;
-    }
+  async (config) => {
+    // const router = useRouter();
+    // const authStore = useAuthStore();
+    // const isNoAuth = noAuthPaths.some((path) => config.url && config.url.startsWith(path));
+    // if (!isNoAuth && authStore.isAuthenticated) {
+    //   const { accessToken } = authStore;
+    //   if (accessToken) {
+    //     if (isTokenExpired(accessToken)) {
+    //       // Token is expired, try to refresh it
+    //       try {
+    //         await authStore.handleRefreshToken();
+    //         config.headers.Authorization = `Bearer ${authStore.accessToken}`;
+    //       } catch (refreshError) {
+    //         authStore.clearTokens();
+    //         router.push('/auth/signin');
+    //         throw new Error('Token refresh failed');
+    //       }
+    //     } else {
+    //       config.headers.Authorization = `Bearer ${accessToken}`;
+    //     }
+    //   }
+    // }
     return config;
   },
   (error: AxiosError) => Promise.reject(error)
@@ -44,7 +60,27 @@ apiClient.interceptors.response.use(
     // }
     return response;
   },
-  (error: AxiosError) => {
+  async (error: AxiosError) => {
+    const authStore = useAuthStore();
+    const originalRequest = error.config;
+
+    if (
+      error.response?.status === 401 &&
+      originalRequest &&
+      // @ts-ignore
+      !originalRequest._retry
+    ) {
+      // @ts-ignore
+      originalRequest._retry = true;
+      try {
+        await authStore.handleRefreshToken();
+        originalRequest.headers['Authorization'] = `Bearer ${authStore.accessToken}`;
+        return apiClient(originalRequest);
+      } catch (refreshError) {
+        return Promise.reject(refreshError);
+      }
+    }
+
     return Promise.reject(error);
   }
 );

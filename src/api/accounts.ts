@@ -15,10 +15,18 @@ export const getAccounts = (payload: RequestPayload<AccountFilterPayload>) => {
 };
 
 // * 获取单个账户
-export const getAccountById = (id: number) => apiClient.get<ApiResponseWithResult<Account>>(`/accounts/${id}`);
+const getAccountById = (id: number) => apiClient.get<ApiResponseWithResult<Account>>(`/accounts/${id}`);
 // * 创建新账户
-export const createAccount = (payload: CreateAccountPayload) => apiClient.post<ApiResponseWithResult<Account>>('/accounts', payload);
+const createAccount = (payload: CreateAccountPayload) => apiClient.post<ApiResponseWithResult<Account>>('/accounts', payload);
 /// * 更新现有账户
-export const updateAccount = (id: number, payload: UpdateAccountPayload) => apiClient.put<ApiResponseWithResult<Account>>(`/accounts/${id}`, payload);
+const updateAccount = (id: number, payload: UpdateAccountPayload) => apiClient.put<ApiResponseWithResult<Account>>(`/accounts/${id}`, payload);
 // * 删除账户
-export const deleteAccount = (id: number) => apiClient.delete<ApiResponse>(`/accounts/${id}`);
+const deleteAccount = (id: number) => apiClient.delete<ApiResponse>(`/accounts/${id}`);
+
+export const apiAccounts = {
+  getAccounts,
+  getAccountById,
+  createAccount,
+  updateAccount,
+  deleteAccount
+};
