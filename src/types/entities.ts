@@ -40,6 +40,7 @@ export interface Account extends BaseEntity {
   gender: 'MALE' | 'FEMALE' | 'PRIVATE';
   roles?: Role[];
   organizations?: Organization[];
+  organizationIds?: string[];
 }
 
 export interface Organization extends BaseEntity {

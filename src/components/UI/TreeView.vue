@@ -1,48 +1,55 @@
 <script setup lang="ts" generic="T extends BaseEntity">
-import { BaseEntity } from '@/types';
+import { BaseEntity, SelectItemKey } from '@/types';
 
 interface Props {
-  itemTitle?: string;
-  items: T[];
-  activatedIds?: string[];
+  items: T[] | undefined;
+  activated?: string[];
+  itemTitle?: SelectItemKey;
+  itemValue?: SelectItemKey;
+  activeStrategy?: 'single-independent' | 'independent';
+  color?: string;
 }
 const props = withDefaults(defineProps<Props>(), {
-  itemTitle: 'name',
   items: () => [],
-  activatedIds: () => []
+  // itemTitle: (item: any) => `${item['name']}`,
+  // itemValue: (item: any) => item.id,
+  itemTitle: 'name',
+  itemValue: 'id',
+  activated: () => [],
+  activeStrategy: 'single-independent',
+  color: 'primary'
 });
 // ? two way binding for activatedIds
 const emits = defineEmits(['update:activatedIds']);
-const activatedIds = ref(props.activatedIds);
+const activated = ref(props.activated);
 watch(
-  () => props.activatedIds,
-  () => (activatedIds.value = props.activatedIds)
+  () => props.activated,
+  () => (activated.value = props.activated)
 );
-watch(activatedIds, (newActivatedIds) =>
+watch(activated, (newActivatedIds) =>
   emits('update:activatedIds', newActivatedIds)
 );
 const tree = computed(() => buildTree(props.items, organizationFieldMapping));
 // Utility Functions
 const itemChildren = (item: any): any =>
   item.children ? (item.children.length === 0 ? false : item.children) : false;
-const itemTitle = (item: T) => `${item[props.itemTitle]}`;
-const itemValue = (item: T) => item.id;
+// const itemTitle = (item: T) => `${item[props.itemTitle]}`;
+// const itemValue = (item: T) => item.id;
 // ? el
 </script>
 
 <template>
   <VTreeview
-    v-model:activated="activatedIds"
+    v-model:activated="activated"
     v-bind="$attrs"
     activatable
-    active-strategy="single-independent"
-    color="primary"
+    :active-strategy="props.activeStrategy"
+    :color="props.color"
     :item-children="itemChildren"
-    item-props
-    :item-title="itemTitle"
-    :item-value="itemValue"
-    open-all
+    :item-title="props.itemTitle"
+    :item-value="props.itemValue"
     :items="tree"
+    open-all
     mandatory
   >
     <template

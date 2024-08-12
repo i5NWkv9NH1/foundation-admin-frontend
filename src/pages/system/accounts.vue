@@ -69,33 +69,9 @@ const defaultFilters = ref<Record<string, any>>({
   text: ''
 });
 const filters = ref<Record<string, any>>({ ...defaultFilters.value });
-const filterFileds = ref<FormField[]>([
-  {
-    name: 'name',
-    label: 'Name',
-    type: 'text',
-    required: true,
-    attrs: { variant: 'outlined', density: 'compact' }
-  },
-  {
-    name: 'status',
-    label: 'Status',
-    type: 'select',
-    required: true,
-    attrs: {
-      'item-title': 'name',
-      density: 'compact',
-      variant: 'outlined',
-      width: '120px',
-      'item-value': 'value'
-    },
-    options: [
-      { name: 'All', value: 'ALL' },
-      { name: 'Enable', value: 'ENABLE' },
-      { name: 'Disable', value: 'DISABLE' }
-    ]
-  }
-]);
+// prettier-ignore
+const filterFields = ref<FormField[]>([{ name: 'name', label: 'Name', type: 'text', required: true, attrs: { variant: 'outlined', density: 'compact' } }, { name: 'status', label: 'Status', type: 'select', required: true, attrs: { 'item-title': 'name', density: 'compact', variant: 'outlined', width: '120px', 'item-value': 'value' }, options: [{ name: 'All', value: 'ALL' }, { name: 'Enable', value: 'ENABLE' }, { name: 'Disable', value: 'DISABLE' }] }]);
+
 const onResetFilters = () => {
   filters.value = { ...defaultFilters.value };
 };
@@ -141,9 +117,8 @@ const fields = ref<FormField[]>([
   { name: 'email', label: 'Email', type: 'text', required: false , attrs: { type: 'email', 'variant': 'solo'} },
   { name: 'avatarUrl', label: 'Avatar', type: 'text', attrs: { 'variant': 'solo'}  },
   { name: 'status', label: 'Status', type: 'radios', options: [{ value: 'ENABLE', text: 'Enable' }, { value: 'DISABLE', text: 'Disable' }], required: true, attrs: { 'inline': true, 'hide-details': true  } },
-  // { name: 'createdAt', label: 'Created Date', type: 'date', attrs: { readonly: true }},
   { name: 'roles', label: 'Roles', type: 'select', multiple: true, chips: true, attrs: {'item-props': true, 'item-title': 'name', 'return-object': true, 'variant': 'solo' }, placeholder: 'Select roles' },
-  // { name: 'organizations', label: 'Organizations', type: 'select', multiple: true },
+  // { name: 'organizations', label: 'Organizations', type: 'treeview', activeStrategy: 'independent', options: [] },
 ]);
 
 const onOpenDialog = async (isEdit: boolean, item?: Record<string, any>) => {
@@ -166,6 +141,15 @@ const onSubmitDialog = async () => {
   isDialogVisible.value = false;
 };
 const onCloseDialog = () => {};
+
+// Drawer
+const drawer = ref(false);
+function toggleDrawer() {
+  drawer.value = !drawer.value;
+}
+function onDrawerSave(activateds: string[]) {
+  currentItem.value.organizationIds = activateds;
+}
 // Mounted
 onMounted(async () => {
   await Promise.all([refetchOrganizations(), refetchRoles()]);
@@ -192,23 +176,35 @@ onMounted(async () => {
 <template>
   <VContainer fluid>
     <VRow>
-      <VCol cols="3">
+      <VCol
+        lg="3"
+        md="4"
+        sm="6"
+        cols="12"
+      >
         <VCard>
           <VCardText>
             <TreeView
               v-if="organizations"
-              v-model:activated-ids="activatedIds"
+              v-model:activated="activatedIds"
               :items="organizations"
+              :active-strategy="'single-independent'"
+              :item-value="(item: any) => item.id"
             />
           </VCardText>
         </VCard>
       </VCol>
-      <VCol cols="9">
+      <VCol
+        lg="9"
+        md="8"
+        sm="6"
+        cols="12"
+      >
         <div class="d-flex flex-column ga-4">
           <!-- Filters -->
           <FiltersPanel
             v-model="filters"
-            :fields="filterFileds"
+            :fields="filterFields"
             @reset="onResetFilters"
             @submit="onSubmitFilters"
           />
@@ -233,9 +229,11 @@ onMounted(async () => {
                     <VBtn
                       color="primary"
                       @click="onOpenDialog(false)"
+                      density="compact"
+                      variant="text"
+                      icon
                     >
-                      <VIcon start> mdi-plus </VIcon>
-                      <span>New</span>
+                      <VIcon> mdi-plus </VIcon>
                     </VBtn>
                     <VSlideXTransition>
                       <template v-if="isSelectedAccounts">
@@ -256,9 +254,17 @@ onMounted(async () => {
 
                 <template #item.avatarUrl="{ item }">
                   <VAvatar
+                    v-if="item.avatarUrl"
                     :image="item.avatarUrl"
                     size="40"
                   />
+                  <VAvatar
+                    v-else
+                    color="primary"
+                    size="40"
+                  >
+                    <span>{{ item.name }}</span>
+                  </VAvatar>
                 </template>
                 <template #item.username="{ item }">
                   <div class="d-flex text-decoration-underline">
@@ -298,9 +304,9 @@ onMounted(async () => {
                   <div class="d-flex">
                     <VBtn
                       color="primary"
-                      icon="mdi-refresh"
+                      icon="mdi-account-group-outline"
                       variant="text"
-                      @click="loadItems"
+                      @click="toggleDrawer"
                     />
                     <VBtn
                       color="primary"
@@ -338,6 +344,15 @@ onMounted(async () => {
       :is-edit="isEditing"
       @close="onCloseDialog"
       @submit="onSubmitDialog"
+    />
+
+    <TreeSelectorDrawer
+      :model-value="drawer"
+      :activateds="
+        currentItem.organizations?.map((item) => item.id as string) || []
+      "
+      @save="onDrawerSave"
+      :items="organizations || []"
     />
   </VContainer>
 </template>

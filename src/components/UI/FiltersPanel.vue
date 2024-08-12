@@ -37,11 +37,13 @@ const resetFilters = () => {
           <VTextField
             v-if="field.type === 'text'"
             v-model="filters[field.name]"
-            :label="field.label"
-            :placeholder="field.placeholder"
             :required="field.required"
             v-bind="field.attrs"
             :rules="field.rules"
+            variant="plain"
+            :prepend-icon="`mdi-filter`"
+            placeholder="Type something"
+            hide-spin-buttons
           />
 
           <!-- Textarea Field -->
@@ -103,15 +105,14 @@ const resetFilters = () => {
         class="mr-2"
         color="primary"
         @click="submitFilters"
+        variant="outlined"
       >
-        <VIcon start> mdi-magnify </VIcon>
-        <span>Submit</span>
+        <span>Apply</span>
       </VBtn>
       <VBtn
-        variant="outlined"
+        variant="plain"
         @click="resetFilters"
       >
-        <VIcon start> mdi-refresh </VIcon>
         <span>Reset</span>
       </VBtn>
     </VCardText>

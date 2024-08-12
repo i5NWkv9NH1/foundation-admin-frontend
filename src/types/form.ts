@@ -11,9 +11,10 @@ export type FormComponent =
   | 'slider'
   | 'chips'
   | 'color-picker'
-  | 'radios';
+  | 'radios'
+  | 'treeview';
 
-export interface FormField {
+export interface FormField<T = Record<string, any>> {
   name: string;
   label: string;
   type: FormComponent;
@@ -24,4 +25,7 @@ export interface FormField {
   attrs?: Record<string, any>;
   multiple?: boolean; // Indicates if the field supports multiple selections (e.g., for select components)
   chips?: boolean;
+  activeStrategy?: 'single-independent' | 'independent';
+  itemValue?: (item: T) => void;
+  itemTitle?: (item: T) => void;
 }

@@ -45,6 +45,7 @@ export function useCrud<T extends BaseEntity>(
     itemsPerPage = initialPageSize,
     filters: Record<string, any> = {}
   ) => {
+    loading.value = true;
     const response = await apiCall(
       axiosInstance.get<SystemPaginateResponse<T>>(url, {
         params: { page, itemsPerPage, filters: JSON.stringify(filters) }
@@ -54,6 +55,7 @@ export function useCrud<T extends BaseEntity>(
       items.value = response.data.result.items;
       meta.value = response.data.result.meta;
     }
+    loading.value = false;
   };
 
   const create = async (entity: T) => {

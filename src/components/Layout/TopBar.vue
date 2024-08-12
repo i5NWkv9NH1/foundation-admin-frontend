@@ -4,7 +4,10 @@ const uiStore = useUIStore();
 </script>
 
 <template>
-  <VAppBar order="2">
+  <VAppBar
+    order="2"
+    flat
+  >
     <VAppBarNavIcon @click="uiStore.toggleDrawer" />
     <VSpacer />
     <ThemeToggle />

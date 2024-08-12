@@ -8,6 +8,13 @@ export type HeaderKey =
 export interface HeaderProps {
   [key: string]: any;
 }
+export type SelectItemKey<T = Record<string, any>> =
+  | boolean
+  | null
+  | undefined
+  | string
+  | readonly (string | number)[]
+  | ((item: T, fallback?: any) => any);
 
 export interface CellProps {
   (data: {

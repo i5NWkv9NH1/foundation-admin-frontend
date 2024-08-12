@@ -25,6 +25,7 @@ import {
   VSwitch,
   VTextField
 } from 'vuetify/components';
+import TreeView from './TreeView.vue';
 
 // Define props
 const props = defineProps<{
@@ -98,6 +99,8 @@ const fieldComponent = (type: FormComponent): Component => {
       return VColorPicker;
     case 'radios':
       return VRadioGroup;
+    case 'treeview':
+      return TreeView;
     default:
       return VTextField;
   }
@@ -191,6 +194,14 @@ const fieldComponent = (type: FormComponent): Component => {
                     v-bind="field.attrs"
                     :label="field.label"
                     :multiple="field.multiple"
+                  />
+                </template>
+                <template v-else-if="field.type === 'treeview'">
+                  <TreeView
+                    v-model:activated="form[field.name]"
+                    :items="field.options"
+                    :active-strategy="field.activeStrategy"
+                    v-bind="field.attrs"
                   />
                 </template>
                 <component
