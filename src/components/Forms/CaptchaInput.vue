@@ -1,15 +1,21 @@
 <script lang="ts" setup>
 import { useCaptcha } from '@/composables';
 
-const { captchaImage, countdown, isRunning, isGetCaptcha, fetchCaptcha } =
-  useCaptcha();
+const { captchaImage, image, countdown, isRunning, isGetCaptcha, fetchCaptcha } = useCaptcha();
 const props = defineProps<{
   rules: Array<(value: string) => boolean | string>;
   placeholder?: string;
 }>();
 const modelValue = defineModel<string>('modelValue', { required: true });
-const updateCaptcha = () => fetchCaptcha();
-
+const updateCaptcha = () => {
+  if (isRunning.value) return;
+  fetchCaptcha();
+};
+// ? useCaptcha is shared composable
+// ? expose it's state
+defineExpose({
+  fetchCaptcha: fetchCaptcha
+});
 onMounted(async () => {
   await fetchCaptcha();
 });
@@ -31,26 +37,22 @@ onMounted(async () => {
     <template #append-inner>
       <VSlideXTransition hide-on-leave>
         <VBtn
-          v-if="!captchaImage"
+          v-if="!image"
           color="primary"
           variant="outlined"
           @click.stop="updateCaptcha"
         >
           <span>Captcha</span>
         </VBtn>
-        <VBtn
+        <img
           v-else
-          :disabled="isRunning"
-          height="auto"
-          variant="flat"
+          cover
+          height="50"
+          :src="image"
+          :key="image"
           @click="updateCaptcha"
-        >
-          <VImg
-            cover
-            height="50"
-            v-html="captchaImage"
-          />
-        </VBtn>
+          :class="[isRunning ? 'cursor-default' : 'cursor-pointer']"
+        />
       </VSlideXTransition>
     </template>
   </VTextField>

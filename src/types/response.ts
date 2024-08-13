@@ -1,3 +1,6 @@
+import { Token } from './payload';
+import { Account, Permissions } from './entities';
+
 export interface ApiResponse {
   meta?: {
     processedBy: string;
@@ -8,10 +11,16 @@ export interface ApiResponse {
   errors?: any;
   timestamp: string;
 }
-
 export interface ApiResponseWithResult<T> extends ApiResponse {
   result: T;
 }
+export interface ApiSigninResponse extends ApiResponseWithResult<Account> {}
+
+export interface ApiFindMeResponse
+  extends ApiResponseWithResult<{
+    account: Account;
+    permissions: Permissions;
+  }> {}
 
 export interface PaginationMeta {
   page: number;

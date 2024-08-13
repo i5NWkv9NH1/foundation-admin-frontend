@@ -65,6 +65,10 @@ export interface AccountDto extends Pick<Account, 'name' | 'username' | 'avatarU
   organizationIds: string[]
   roles: any[]
 }
+export interface Permissions {
+  actions: Action[];
+  menus: Menu[];
+}
 // prettier-ignore
 export interface CreateAccountDto extends AccountDto {}
 export interface UpdateAccountDto extends AccountDto {}

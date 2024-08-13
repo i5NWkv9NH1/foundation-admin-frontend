@@ -36,8 +36,8 @@ async function onSubmit(formEl: any) {
 </script>
 
 <template>
-  <VSheet>
-    <div class="text-h4 mb-4 font-weight-bold">Sign Up</div>
+  <VCard>
+    <VCardSubtitle class="text-h4 mb-4 font-weight-bold">Sign Up</VCardSubtitle>
     <Authentication
       :loading="loading"
       submit-text="Signup"
@@ -79,12 +79,11 @@ async function onSubmit(formEl: any) {
         <VBtn
           color="primary"
           prepend-icon="mdi-arrow-left"
-          rounded="0"
           text="Already have an account?"
           to="/auth/signin"
           variant="text"
         />
       </template>
     </Authentication>
-  </VSheet>
+  </VCard>
 </template>

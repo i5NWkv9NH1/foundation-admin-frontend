@@ -10,13 +10,17 @@ const uiStore = useUIStore();
     v-model="uiStore.drawer"
     order="1"
   >
-    <VList>
-      <VListItem title="Foundation Admin">
-        <template #prepend>
+    <template #prepend>
+      <VToolbar
+        color="transparent"
+        class="px-4"
+      >
+        <div class="logo">
           <VAvatar image="@/assets/logo.svg" />
-        </template>
-      </VListItem>
-    </VList>
+        </div>
+        <VToolbarTitle> Foundation </VToolbarTitle>
+      </VToolbar>
+    </template>
     <VDivider />
     <Menu />
   </VResizeDrawer>

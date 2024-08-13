@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { FormField, TableHeader } from '@/types';
 import { Account, Organization, Role } from '@/types/entities';
-import { ref, watch } from 'vue';
 
 // Account Table state
 // prettier-ignore

@@ -1,5 +1,3 @@
-import { Account } from './entities';
-
 // 通用分页参数
 export interface PaginationPayload {
   page?: number;
@@ -33,7 +31,6 @@ export interface SignupPayload {
 export interface Token {
   accessToken: string;
   refreshToken: string;
-  account: Account;
 }
 
 // 获取账户的请求参数

@@ -11,7 +11,7 @@ const form = reactive({
 const loading = ref(false);
 const { signin } = useAuthStore();
 const { uniqueId } = useAppStore();
-const { fetchCaptcha } = useCaptcha();
+const captchaEl = ref();
 
 async function onSubmit(formEl: any) {
   const { valid } = await formEl.validate();
@@ -22,7 +22,8 @@ async function onSubmit(formEl: any) {
     loading.value = true;
     await signin({ ...form, uniqueId });
   } catch (error) {
-    await fetchCaptcha();
+    await captchaEl.value.fetchCaptcha();
+    form.captcha = '';
     throw error;
   } finally {
     loading.value = false;
@@ -31,8 +32,8 @@ async function onSubmit(formEl: any) {
 </script>
 
 <template>
-  <VSheet>
-    <div class="text-h4 mb-4 font-weight-bold">Signin</div>
+  <VCard class="pa-4">
+    <VCardSubtitle class="text-h4 mb-4 font-weight-bold">Signin</VCardSubtitle>
     <Authentication
       :loading="loading"
       submit-text="Signin"
@@ -59,6 +60,7 @@ async function onSubmit(formEl: any) {
           :disabled="loading"
         />
         <CaptchaInput
+          ref="captchaEl"
           v-model="form.captcha"
           placeholder="Text of the graphic shown on the right."
           :rules="validationRules.captcha"
@@ -69,7 +71,6 @@ async function onSubmit(formEl: any) {
         <VBtn
           color="primary"
           prepend-icon="mdi-arrow-right"
-          rounded="0"
           text="Don't have an account?"
           to="/auth/signup"
           variant="text"
@@ -78,7 +79,6 @@ async function onSubmit(formEl: any) {
           class="text-decoration-underline"
           color="red"
           prepend-icon="mdi-lock"
-          rounded="0"
           size="small"
           text="Forget your password?"
           to="/auth/reset-password"
@@ -86,5 +86,5 @@ async function onSubmit(formEl: any) {
         />
       </template>
     </Authentication>
-  </VSheet>
+  </VCard>
 </template>
