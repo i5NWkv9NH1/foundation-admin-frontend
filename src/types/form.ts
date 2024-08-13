@@ -1,18 +1,4 @@
-export type FormComponent =
-  | 'text'
-  | 'number'
-  | 'select'
-  | 'checkbox'
-  | 'date'
-  | 'switch'
-  | 'textarea'
-  | 'autocomplete'
-  | 'file'
-  | 'slider'
-  | 'chips'
-  | 'color-picker'
-  | 'radios'
-  | 'treeview';
+export type FormComponent = 'text' | 'number' | 'select' | 'checkbox' | 'date' | 'switch' | 'textarea' | 'autocomplete' | 'file' | 'slider' | 'chips' | 'color-picker' | 'radios' | 'treeview' | 'button' | 'btn' | 'avatar' | 'tree-activator' | 'tree-selector';
 
 export interface FormField<T = Record<string, any>> {
   name: string;
@@ -22,7 +8,10 @@ export interface FormField<T = Record<string, any>> {
   placeholder?: string;
   options?: Record<string, any>[];
   rules?: Array<(value: any) => boolean | string>;
-  attrs?: Record<string, any>;
+  attrs?: {
+    items?: Record<string, any>[] | any[];
+    [key: string]: any;
+  };
   multiple?: boolean; // Indicates if the field supports multiple selections (e.g., for select components)
   chips?: boolean;
   activeStrategy?: 'single-independent' | 'independent';

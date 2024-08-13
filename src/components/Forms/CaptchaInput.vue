@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useCaptcha } from '@/composables';
 
-const { captchaImage, image, countdown, isRunning, isGetCaptcha, fetchCaptcha } = useCaptcha();
+const { image, countdown, isRunning, isGetCaptcha, fetchCaptcha } = useCaptcha();
 const props = defineProps<{
   rules: Array<(value: string) => boolean | string>;
   placeholder?: string;
@@ -51,7 +51,7 @@ onMounted(async () => {
           :src="image"
           :key="image"
           @click="updateCaptcha"
-          :class="[isRunning ? 'cursor-default' : 'cursor-pointer']"
+          :class="[isRunning ? 'cursor-default' : 'cursor-pointer', 'bg-secondary']"
         />
       </VSlideXTransition>
     </template>

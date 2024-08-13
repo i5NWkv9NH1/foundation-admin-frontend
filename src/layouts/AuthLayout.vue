@@ -19,7 +19,7 @@ const appStore = useAppStore();
           >
             <div class="caption">
               <RouterLink
-                class="text-surface text-decoration-none text-h4 text-weight"
+                class="text-primary text-decoration-none text-h4 text-weight"
                 to="/"
               >
                 Foundation Admin

@@ -1,8 +1,8 @@
 // useCaptcha.ts
-import axios from 'axios';
 import { ref } from 'vue';
 import { useCountdown } from '@/composables';
 import { useAppStore } from '@/stores/app';
+import { apiCommon } from '@/api';
 
 export function useCaptcha() {
   const appStore = useAppStore();
@@ -14,9 +14,7 @@ export function useCaptcha() {
 
   async function fetchCaptcha(isStart?: boolean) {
     try {
-      const response = await axios.post('http://localhost:3200/api/captcha/generate', {
-        uniqueId: appStore.uniqueId
-      });
+      const response = await apiCommon.getCaptcha(appStore.uniqueId);
       // captchaImage.value = response.data
       captchaImage.value = response.data;
       if (isStart) {

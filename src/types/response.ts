@@ -25,8 +25,8 @@ export interface ApiFindMeResponse
 export interface PaginationMeta {
   page: number;
   itemsPerPage: number;
-  itemCount: number;
-  pageCount: number;
+  itemsCount: number;
+  pagesCount: number;
 }
 
 export interface ApiPaginatedResponse<T> extends ApiResponse {

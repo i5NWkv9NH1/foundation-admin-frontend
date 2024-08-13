@@ -1,3 +1,5 @@
+import { Account, Organization, Status } from './entities';
+
 // 通用分页参数
 export interface PaginationPayload {
   page?: number;
@@ -13,7 +15,7 @@ export interface FilterPayload {
 export interface RequestPayload<T = FilterPayload> {
   page: number;
   itemsPerPage: number;
-  filters: T;
+  filters?: T;
 }
 
 // 登录请求的 payload 类型
@@ -36,8 +38,10 @@ export interface Token {
 // 获取账户的请求参数
 // 特定于账户模块的过滤器参数
 export interface AccountFilterPayload {
-  search?: string;
-  status?: string;
+  text?: string;
+  status?: Status | 'ALL';
+  organizationId?: string;
+  roleId?: string;
   // 其他字段...
 }
 export interface RoleFilterPayload {}
@@ -45,16 +49,11 @@ export interface OrganizationFilterPayload {}
 export interface MenuFilterPayload {}
 
 // 创建账户的请求参数
-export interface CreateAccountPayload {
-  name: string;
-  // 其他字段...
-}
-
-// 更新账户的请求参数
-export interface UpdateAccountPayload {
-  name?: string;
-  // 其他字段...
-}
+export type CreateAccountPayload = Pick<Account, 'name' | 'username' | 'avatarUrl' | 'phone' | 'address' | 'gender' | 'status' | 'email' | 'roles'> & {
+  organizations?: Organization[] | string[];
+  organizationIds?: string[];
+};
+export type UpdateAccountPayload = CreateAccountPayload & {};
 
 // 创建角色的请求参数
 export interface CreateRolePayload {

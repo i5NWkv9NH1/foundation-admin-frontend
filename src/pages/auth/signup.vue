@@ -38,7 +38,7 @@ async function onSubmit(formEl: any) {
 <template>
   <VCard>
     <VCardSubtitle class="text-h4 mb-4 font-weight-bold">Sign Up</VCardSubtitle>
-    <Authentication
+    <AuthenticationForm
       :loading="loading"
       submit-text="Signup"
       @submit="onSubmit"
@@ -84,6 +84,6 @@ async function onSubmit(formEl: any) {
           variant="text"
         />
       </template>
-    </Authentication>
+    </AuthenticationForm>
   </VCard>
 </template>

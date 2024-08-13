@@ -5,7 +5,7 @@ import apiClient from './axios';
 // * 获取角色列表
 const getRoles = (payload: RequestPayload<RoleFilterPayload>) => {
   const { page, itemsPerPage, filters } = payload;
-  return apiClient.get<ApiPaginatedResponse<Role>>('/roles', {
+  return apiClient.get<ApiPaginatedResponse<Role>>('/system/roles', {
     params: {
       page,
       itemsPerPage,
@@ -15,16 +15,16 @@ const getRoles = (payload: RequestPayload<RoleFilterPayload>) => {
 };
 
 // * 获取单个角色
-const getRoleById = (id: number) => apiClient.get<ApiResponseWithResult<Role>>(`/roles/${id}`);
+const getRoleById = (id: number) => apiClient.get<ApiResponseWithResult<Role>>(`/system/roles/${id}`);
 
 // * 创建新角色
-const createRole = (payload: CreateRolePayload) => apiClient.post<ApiResponseWithResult<Role>>('/roles', payload);
+const createRole = (payload: CreateRolePayload) => apiClient.post<ApiResponseWithResult<Role>>('/system/roles', payload);
 
 // * 更新现有角色
-const updateRole = (id: number, payload: UpdateRolePayload) => apiClient.put<ApiResponseWithResult<Role>>(`/roles/${id}`, payload);
+const updateRole = (id: number, payload: UpdateRolePayload) => apiClient.put<ApiResponseWithResult<Role>>(`/system/roles/${id}`, payload);
 
 // * 删除角色
-const deleteRole = (id: number) => apiClient.delete<ApiResponse>(`/roles/${id}`);
+const deleteRole = (id: number) => apiClient.delete<ApiResponse>(`/system/roles/${id}`);
 
 export const apiRoles = {
   getRoles,

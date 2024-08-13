@@ -28,7 +28,8 @@ export interface Action extends BaseEntity {
   icon: string;
   menuId: string;
 }
-
+export type Gender = 'PRIVATE' | 'FEMALE' | 'MALE';
+export type Status = 'DISABLE' | 'ENABLE';
 export interface Account extends BaseEntity {
   name: string;
   username: string;
@@ -36,8 +37,8 @@ export interface Account extends BaseEntity {
   phone: string;
   address: string;
   avatarUrl: string;
-  status: 'DISABLE' | 'ENABLE';
-  gender: 'MALE' | 'FEMALE' | 'PRIVATE';
+  status: Status;
+  gender: Gender;
   roles?: Role[];
   organizations?: Organization[];
 }
@@ -61,9 +62,10 @@ export interface History extends Pick<RouteLocationNormalized, 'name' | 'path' |
 }
 
 // prettier-ignore
-export interface AccountDto extends Pick<Account, 'name' | 'username' | 'avatarUrl' | 'email' | 'phone' | 'address' | 'status' | 'gender'>{
+export interface AccountDto extends Pick<Account, 'id' | 'name' | 'username' | 'avatarUrl' | 'email' | 'phone' | 'address' | 'status' | 'gender'>{
   organizationIds: string[]
-  roles: any[]
+  roles?: Role[]
+  organzations?: Organization[]
 }
 export interface Permissions {
   actions: Action[];

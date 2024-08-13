@@ -16,14 +16,21 @@ export const menuFieldMapping = {
 export const organizationFieldMapping = {
   id: 'id',
   name: 'name',
+  label: 'label',
   icon: 'icon',
   path: 'path',
   parentId: 'parentId',
+  sort: 'sort',
+  status: 'status',
+  // TODO: bug
+  // type: 'type',
   parent: 'parent',
   children: 'children',
   accounts: 'accounts'
 };
-export function buildTree<T>(data: T[], fieldMapping): T[] {
+export function buildTree<T>(data?: T[], fieldMapping): T[] {
+  if (!data) return;
+  if (!!!data.length) return;
   const nodesMap = {};
   const rootNodes = [];
 

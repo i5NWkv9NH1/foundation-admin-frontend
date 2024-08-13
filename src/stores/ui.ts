@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 
 export const useUIStore = defineStore('ui', {
   state: () => ({
-    drawer: true,
+    drawer: false,
     showProgress: false,
     progress: 0
   }),

@@ -9,6 +9,7 @@ const uiStore = useUIStore();
   <VResizeDrawer
     v-model="uiStore.drawer"
     order="1"
+    class="drawer"
   >
     <template #prepend>
       <VToolbar
@@ -26,4 +27,8 @@ const uiStore = useUIStore();
   </VResizeDrawer>
 </template>
 
-<style scoped lang="scss"></style>
+<style lang="scss">
+.drawer {
+  background: var(--v-theme-surface);
+}
+</style>

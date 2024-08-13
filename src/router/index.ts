@@ -19,6 +19,7 @@ const routes: RouteRecordRaw[] = [
     component: AuthLayout,
     children: [
       {
+        name: 'index',
         path: '',
         redirect: '/auth/signin'
       },
@@ -70,6 +71,7 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: '',
+            name: 'index',
             redirect: '/system/accounts'
           },
           {
@@ -89,6 +91,7 @@ const routes: RouteRecordRaw[] = [
         name: 'Workplace',
         children: [
           {
+            name: 'index',
             path: '',
             redirect: '/workplace/analysis'
           },
@@ -149,10 +152,10 @@ router.beforeEach(async (to, from, next) => {
 router.afterEach((to) => {
   const appStore = useAppStore();
   const uiStore = useUIStore();
-  if (!appStore.histories.some((_) => _.fullPath === to.fullPath)) {
-    appStore.histories.push({ ...to, timestamp: new Date().getTime() });
-    localStorage.setItem('histories', JSON.stringify(appStore.histories));
-  }
+  // if (!appStore.histories.some((_) => _.fullPath === to.fullPath)) {
+  //   appStore.histories.push({ ...to, timestamp: new Date().getTime() });
+  //   localStorage.setItem('histories', JSON.stringify(appStore.histories));
+  // }
 
   if (progressInterval) {
     clearInterval(progressInterval);

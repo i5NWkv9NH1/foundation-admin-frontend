@@ -1,4 +1,5 @@
 <script setup lang="ts" generic="T extends BaseEntity">
+import { buildTree, organizationFieldMapping } from '@/helpers';
 import { BaseEntity, SelectItemKey } from '@/types';
 
 interface Props {
@@ -26,13 +27,10 @@ watch(
   () => props.activated,
   () => (activated.value = props.activated)
 );
-watch(activated, (newActivatedIds) =>
-  emits('update:activatedIds', newActivatedIds)
-);
+watch(activated, (newActivatedIds) => emits('update:activatedIds', newActivatedIds));
 const tree = computed(() => buildTree(props.items, organizationFieldMapping));
 // Utility Functions
-const itemChildren = (item: any): any =>
-  item.children ? (item.children.length === 0 ? false : item.children) : false;
+const itemChildren = (item: any): any => (item.children ? (item.children.length === 0 ? false : item.children) : false);
 // const itemTitle = (item: T) => `${item[props.itemTitle]}`;
 // const itemValue = (item: T) => item.id;
 // ? el
