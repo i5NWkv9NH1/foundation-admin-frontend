@@ -3,13 +3,13 @@ import { ApiResponse } from '@/types';
 import { useAuthStore } from '@/stores';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:3200/api/system',
+  baseURL: 'http://localhost:3200/api',
   headers: {
     'Content-Type': 'application/json'
   }
 });
 
-const noAuthPaths = ['/auth/signin', '/auth/signup', '/auth/refresh'];
+// const noAuthPaths = ['/system/auth/signin', '/system/auth/signup', '/system/auth/refresh'];
 
 apiClient.interceptors.request.use(
   async (config) => {
@@ -73,7 +73,7 @@ apiClient.interceptors.response.use(
       // @ts-ignore
       originalRequest._retry = true;
       try {
-        await authStore.handleRefreshToken();
+        await authStore.refresh();
         originalRequest.headers['Authorization'] = `Bearer ${authStore.accessToken}`;
         return apiClient(originalRequest);
       } catch (refreshError) {

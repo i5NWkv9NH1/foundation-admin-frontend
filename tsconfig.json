@@ -20,7 +20,7 @@
     "isolatedModules": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "src/**/*.vue", "dist/permissionGuard.ts"],
+  "include": ["src/**/*", "src/**/*.vue"],
   "exclude": ["dist", "node_modules", "cypress"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
