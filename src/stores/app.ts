@@ -7,9 +7,32 @@ import { useTheme } from 'vuetify';
 import { getLocalStorageItem, setLocalStorageItem } from '@/helpers';
 
 export const useAppStore = defineStore('app', () => {
+  // * Global
+  // Drawer and progress states
+  const drawer = ref(false);
+  const progress = ref(0);
+  const showProgress = ref(false);
   const uniqueId = ref(getLocalStorageItem('uuid', uuid()));
   const histories = ref(getLocalStorageItem('histories', [] as History[]));
+
+  // * Auth
   const authVideo = ref('/public/signin.mp4');
+  const updateAuthVideo = (path: string) => (authVideo.value = path);
+
+  const toggleDrawer = () => {
+    drawer.value = !drawer.value;
+  };
+  const startProgress = () => {
+    showProgress.value = true;
+    progress.value = 0;
+  };
+  const updateProgress = (value: number) => {
+    progress.value = value;
+  };
+  const stopProgress = () => {
+    showProgress.value = false;
+    progress.value = 100;
+  };
 
   // Themes
   const { themes, global } = useTheme();
@@ -60,6 +83,14 @@ export const useAppStore = defineStore('app', () => {
     uniqueId,
     histories,
     authVideo,
+    updateAuthVideo,
+    drawer,
+    progress,
+    showProgress,
+    toggleDrawer,
+    startProgress,
+    updateProgress,
+    stopProgress,
     initialize,
     lightThemes,
     darkThemes

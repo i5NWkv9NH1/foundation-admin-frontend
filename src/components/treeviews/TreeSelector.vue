@@ -1,4 +1,4 @@
-<!-- TODO: BUG -->
+<!-- TODO: type field bug-->
 <script setup lang="ts" generic="T extends BaseEntity">
 import { BaseEntity } from '@/types';
 

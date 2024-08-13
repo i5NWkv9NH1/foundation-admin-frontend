@@ -129,37 +129,26 @@ async function fetchOrganizations() {
 // prettier-ignore
 const isEditing = ref(false)
 const createEditDialog = ref(false);
+// prettier-ignore
 const fields = ref<FormField[]>([
   { name: 'avatarUrl', label: '', type: 'avatar', attrs: { size: 120, grid: { class: ['text-center'] } } },
   { name: 'name', label: 'Name', type: 'text', required: true, attrs: { variant: 'solo' } },
   { name: 'username', label: 'Username', type: 'text', required: true, attrs: { variant: 'solo' } },
   { name: 'password', label: 'Password', type: 'text', required: true, attrs: { variant: 'solo', type: 'password' } },
-  {
-    name: 'gender',
-    label: 'Gender',
-    type: 'radios',
-    options: [
+  { name: 'gender', label: 'Gender', type: 'radios', required: true, attrs: {   inline: true, 'hide-details': true },    options: [
       { value: 'PRIVATE', text: 'Private', color: 'grey', icon: 'mdi-help' },
       { value: 'MALE', text: 'Male', color: 'blue', icon: 'mdi-gender-male' },
       { value: 'FEMALE', text: 'Female', color: 'pink', icon: 'mdi-gender-female' }
     ],
-    required: true,
-    attrs: { inline: true, 'hide-details': true }
   },
   { name: 'phone', label: 'Phone', type: 'text', attrs: { variant: 'solo' } },
   { name: 'address', label: 'Address', type: 'text', attrs: { variant: 'solo' } },
   { name: 'email', label: 'Email', type: 'text', required: false, attrs: { type: 'email', variant: 'solo' } },
   { name: 'avatarUrl', label: 'Avatar', type: 'text', attrs: { variant: 'solo' } },
-  {
-    name: 'status',
-    label: 'Status',
-    type: 'radios',
-    options: [
+  { name: 'status', label: 'Status', type: 'radios', options: [
       { value: 'ENABLE', text: 'Enable' },
       { value: 'DISABLE', text: 'Disable' }
-    ],
-    required: true,
-    attrs: { inline: true, 'hide-details': true }
+  ],required: true, attrs: { inline: true, 'hide-details': true }
   },
   { name: 'roles', label: 'Roles', type: 'select', multiple: true, chips: true, attrs: { 'item-props': true, 'item-title': 'name', 'return-object': true, variant: 'solo' }, placeholder: 'Select roles' }
   // { name: 'organizations', label: 'Organizations', type: 'treeview', activeStrategy: 'independent', options: [] },
@@ -266,7 +255,7 @@ const onSaveOrganizations = (organizationIds: string[]) => {
     <VRow>
       <!-- Organization Tree -->
       <!-- prettier-ignore -->
-      <VCol cols="12" lg="3" md="4" sm="6">
+      <VCol cols="12" lg="3" md="4" sm="4">
         <VCard>
           <VCardText>
             <TreeActivator
@@ -277,7 +266,7 @@ const onSaveOrganizations = (organizationIds: string[]) => {
         </VCard>
       </VCol>
       <!-- prettier-ignore -->
-      <VCol cols="12" lg="9" md="8" sm="6">
+      <VCol cols="12" lg="9" md="8" sm="8">
         <div class="d-flex flex-column ga-4">
           <!-- Filter Panel -->
           <QueryFilterPanel

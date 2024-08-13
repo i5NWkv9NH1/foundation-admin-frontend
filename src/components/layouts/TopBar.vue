@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useUIStore } from '@/stores';
-const uiStore = useUIStore();
+import { useAppStore } from '@/stores';
+const appStore = useAppStore();
 </script>
 
 <template>
@@ -8,7 +8,7 @@ const uiStore = useUIStore();
     order="2"
     flat
   >
-    <VAppBarNavIcon @click="uiStore.toggleDrawer" />
+    <VAppBarNavIcon @click="appStore.toggleDrawer" />
     <VSpacer />
     <NotificationSheet />
     <UserProfileDropdown />

@@ -22,7 +22,7 @@ export const organizationFieldMapping = {
   parentId: 'parentId',
   sort: 'sort',
   status: 'status',
-  // TODO: bug
+  // TODO: type field bug
   // type: 'type',
   parent: 'parent',
   children: 'children',
