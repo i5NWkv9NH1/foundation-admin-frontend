@@ -1,8 +1,8 @@
 // useCaptcha.ts
-import axios from 'axios';
 import { ref } from 'vue';
 import { useCountdown } from '@/composables';
 import { useAppStore } from '@/stores/app';
+import { apiCommon } from '@/api';
 
 export function useCaptcha() {
   const appStore = useAppStore();
@@ -10,21 +10,21 @@ export function useCaptcha() {
   const { countdown, isRunning, start } = useCountdown(60);
   const isGetCaptcha = ref(false);
 
-  async function fetchCaptcha() {
+  const image = computed(() => URL.createObjectURL(new Blob([captchaImage.value], { type: 'image/svg+xml' })));
+
+  async function fetchCaptcha(isStart?: boolean) {
     try {
-      const response = await axios.post(
-        'http://localhost:3200/api/captcha/generate',
-        {
-          uniqueId: appStore.uniqueId
-        }
-      );
+      const response = await apiCommon.getCaptcha(appStore.uniqueId);
+      // captchaImage.value = response.data
       captchaImage.value = response.data;
-      isGetCaptcha.value = true;
-      start();
+      if (isStart) {
+        isGetCaptcha.value = isStart;
+        start();
+      }
     } catch (error) {
       console.error('Error fetching captcha:', error);
     }
   }
 
-  return { captchaImage, countdown, isRunning, isGetCaptcha, fetchCaptcha };
+  return { captchaImage, image, countdown, isRunning, isGetCaptcha, fetchCaptcha };
 }

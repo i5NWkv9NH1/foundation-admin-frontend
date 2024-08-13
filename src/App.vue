@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import { useAppStore, useUIStore } from './stores';
+import { useAppStore } from './stores';
 
 const appStore = useAppStore();
-const uiStore = useUIStore();
 onMounted(() => {
   appStore.initialize();
 });
@@ -10,8 +9,8 @@ onMounted(() => {
 
 <template>
   <ProgressBar
-    v-model:model-value="uiStore.showProgress"
-    v-model:progress="uiStore.progress"
+    v-model:model-value="appStore.showProgress"
+    v-model:progress="appStore.progress"
   />
   <RouterView />
 </template>

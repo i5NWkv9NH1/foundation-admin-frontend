@@ -12,9 +12,10 @@ import App from './App.vue';
 
 // Composables
 import { createApp } from 'vue';
+// import { setupPermission } from './router/permissionGuard';
 
 const app = createApp(App);
 
 registerPlugins(app);
 
-app.mount('#app');
+app.mount('#root');

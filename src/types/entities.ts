@@ -28,7 +28,8 @@ export interface Action extends BaseEntity {
   icon: string;
   menuId: string;
 }
-
+export type Gender = 'PRIVATE' | 'FEMALE' | 'MALE';
+export type Status = 'DISABLE' | 'ENABLE';
 export interface Account extends BaseEntity {
   name: string;
   username: string;
@@ -36,8 +37,8 @@ export interface Account extends BaseEntity {
   phone: string;
   address: string;
   avatarUrl: string;
-  status: 'DISABLE' | 'ENABLE';
-  gender: 'MALE' | 'FEMALE' | 'PRIVATE';
+  status: Status;
+  gender: Gender;
   roles?: Role[];
   organizations?: Organization[];
 }
@@ -56,11 +57,22 @@ export interface Organization extends BaseEntity {
   accounts: Account[];
 }
 
-export interface History
-  extends Pick<
-    RouteLocationNormalized,
-    'name' | 'path' | 'query' | 'params' | 'fullPath' | 'hash' | 'meta'
-  > {
-  // 你可以在这里添加额外的字段
-  timestamp?: number; // 例如，添加一个时间戳字段来记录访问时间
+export interface History extends Pick<RouteLocationNormalized, 'name' | 'path' | 'query' | 'params' | 'fullPath' | 'hash' | 'meta'> {
+  timestamp?: number;
 }
+
+// prettier-ignore
+export interface AccountDto extends Pick<Account, 'id' | 'name' | 'username' | 'avatarUrl' | 'email' | 'phone' | 'address' | 'status' | 'gender'>{
+  organizationIds: string[]
+  roles?: Role[]
+  organzations?: Organization[]
+}
+export interface Permissions {
+  actions: Action[];
+  menus: Menu[];
+}
+// prettier-ignore
+export interface CreateAccountDto extends AccountDto {}
+export interface UpdateAccountDto extends AccountDto {}
+export interface UpdateAccountOrganizationsDto {}
+export interface OrganizationDto {}

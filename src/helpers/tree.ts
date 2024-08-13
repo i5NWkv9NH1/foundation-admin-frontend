@@ -16,14 +16,21 @@ export const menuFieldMapping = {
 export const organizationFieldMapping = {
   id: 'id',
   name: 'name',
+  label: 'label',
   icon: 'icon',
   path: 'path',
   parentId: 'parentId',
+  sort: 'sort',
+  status: 'status',
+  // TODO: type field bug
+  // type: 'type',
   parent: 'parent',
   children: 'children',
   accounts: 'accounts'
 };
-export function buildTree<T>(data: T[], fieldMapping): T[] {
+export function buildTree<T>(data?: T[], fieldMapping): T[] {
+  if (!data) return;
+  if (!!!data.length) return;
   const nodesMap = {};
   const rootNodes = [];
 
@@ -47,9 +54,7 @@ export function buildTree<T>(data: T[], fieldMapping): T[] {
     if (pathParts.length > 1) {
       // 获取父节点的路径
       const parentPath = pathParts.slice(0, -1).join('.');
-      const parentId = Object.keys(nodesMap).find(
-        (id) => nodesMap[id].path === parentPath
-      );
+      const parentId = Object.keys(nodesMap).find((id) => nodesMap[id].path === parentPath);
 
       if (parentId) {
         const parentNode = nodesMap[parentId];
@@ -69,18 +74,10 @@ export function buildTree<T>(data: T[], fieldMapping): T[] {
       const childNodes = data
         .filter((item) => {
           const itemPathParts = item[fieldMapping.path].split('.');
-          return (
-            itemPathParts.length === node.path.split('.').length + 1 &&
-            item[fieldMapping.path].startsWith(node.path + '.')
-          );
+          return itemPathParts.length === node.path.split('.').length + 1 && item[fieldMapping.path].startsWith(node.path + '.');
         })
         .map((item) => nodesMap[item[fieldMapping.id]])
-        .filter(
-          (childNode) =>
-            !node.children.some(
-              (existingChild) => existingChild.id === childNode.id
-            )
-        ); // 避免重复添加
+        .filter((childNode) => !node.children.some((existingChild) => existingChild.id === childNode.id)); // 避免重复添加
 
       node.children.push(...childNodes);
       addChildren(childNodes); // 递归处理子节点

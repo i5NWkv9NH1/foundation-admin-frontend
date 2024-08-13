@@ -28,6 +28,7 @@ export function useCountdown(initialTime: number) {
   function stop() {
     if (countdownAnimationFrameId !== null) {
       cancelAnimationFrame(countdownAnimationFrameId);
+      countdownAnimationFrameId = null;
     }
     isRunning.value = false;
   }

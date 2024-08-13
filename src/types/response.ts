@@ -1,4 +1,7 @@
-export interface Response {
+import { Token } from './payload';
+import { Account, Permissions } from './entities';
+
+export interface ApiResponse {
   meta?: {
     processedBy: string;
     version: string;
@@ -6,20 +9,29 @@ export interface Response {
   message: string;
   statusCode: number;
   errors?: any;
-  timestamp: string; // To include the response timestamp
+  timestamp: string;
 }
-export interface SystemResponse<T> extends Response {
+export interface ApiResponseWithResult<T> extends ApiResponse {
   result: T;
 }
-export interface PaginateMeta {
+export interface ApiSigninResponse extends ApiResponseWithResult<Account> {}
+
+export interface ApiFindMeResponse
+  extends ApiResponseWithResult<{
+    account: Account;
+    permissions: Permissions;
+  }> {}
+
+export interface PaginationMeta {
   page: number;
-  itemPerPage: number;
+  itemsPerPage: number;
   itemsCount: number;
   pagesCount: number;
 }
-export interface SystemPaginateResponse<T> extends Response {
+
+export interface ApiPaginatedResponse<T> extends ApiResponse {
   result: {
     items: T[];
-    meta: PaginateMeta;
+    meta: PaginationMeta;
   };
 }

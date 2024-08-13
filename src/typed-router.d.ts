@@ -19,15 +19,18 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
-    '/admin': RouteRecordInfo<'/admin', '/admin', Record<never, never>, Record<never, never>>,
-    '/admin/dashboard/': RouteRecordInfo<'/admin/dashboard/', '/admin/dashboard', Record<never, never>, Record<never, never>>,
-    '/admin/dashboard/analysis/': RouteRecordInfo<'/admin/dashboard/analysis/', '/admin/dashboard/analysis', Record<never, never>, Record<never, never>>,
-    '/admin/dashboard/test/': RouteRecordInfo<'/admin/dashboard/test/', '/admin/dashboard/test', Record<never, never>, Record<never, never>>,
-    '/admin/dashboard/tools/': RouteRecordInfo<'/admin/dashboard/tools/', '/admin/dashboard/tools', Record<never, never>, Record<never, never>>,
-    '/admin/dashboard/workplace/': RouteRecordInfo<'/admin/dashboard/workplace/', '/admin/dashboard/workplace', Record<never, never>, Record<never, never>>,
-    '/admin/system/accounts/': RouteRecordInfo<'/admin/system/accounts/', '/admin/system/accounts', Record<never, never>, Record<never, never>>,
+    'NotFound': RouteRecordInfo<'NotFound', '/:404(.*)', { 404: ParamValue<true> }, { 404: ParamValue<false> }>,
     '/auth': RouteRecordInfo<'/auth', '/auth', Record<never, never>, Record<never, never>>,
-    '/auth/signin/': RouteRecordInfo<'/auth/signin/', '/auth/signin', Record<never, never>, Record<never, never>>,
-    '/auth/signup/': RouteRecordInfo<'/auth/signup/', '/auth/signup', Record<never, never>, Record<never, never>>,
+    'Signin': RouteRecordInfo<'Signin', '/auth/signin', Record<never, never>, Record<never, never>>,
+    'Signup': RouteRecordInfo<'Signup', '/auth/signup', Record<never, never>, Record<never, never>>,
+    'Dashboard': RouteRecordInfo<'Dashboard', '/dashboard', Record<never, never>, Record<never, never>>,
+    'Forbidden': RouteRecordInfo<'Forbidden', '/forbidden', Record<never, never>, Record<never, never>>,
+    '/system/': RouteRecordInfo<'/system/', '/system', Record<never, never>, Record<never, never>>,
+    'Accounts': RouteRecordInfo<'Accounts', '/system/accounts', Record<never, never>, Record<never, never>>,
+    'Unauthorized': RouteRecordInfo<'Unauthorized', '/unauthorized', Record<never, never>, Record<never, never>>,
+    '/workplace/': RouteRecordInfo<'/workplace/', '/workplace', Record<never, never>, Record<never, never>>,
+    'Analysis': RouteRecordInfo<'Analysis', '/workplace/analysis', Record<never, never>, Record<never, never>>,
+    'Test': RouteRecordInfo<'Test', '/workplace/test', Record<never, never>, Record<never, never>>,
+    'Tools': RouteRecordInfo<'Tools', '/workplace/tools', Record<never, never>, Record<never, never>>,
   }
 }
