@@ -29,6 +29,8 @@ export interface SignupPayload {
   username: string;
   password: string;
   email?: string;
+  captcha: string;
+  uniqueId: string;
 }
 export interface Token {
   accessToken: string;

@@ -10,7 +10,7 @@ const form = reactive({
 
 const loading = ref(false);
 const { signin } = useAuthStore();
-const { uniqueId } = useAppStore();
+const { uniqueId, updateAuthVideo } = useAppStore();
 const captchaEl = ref();
 
 async function onSubmit(formEl: any) {
@@ -29,6 +29,9 @@ async function onSubmit(formEl: any) {
     loading.value = false;
   }
 }
+onMounted(() => {
+  updateAuthVideo('/public/signin.mp4');
+});
 </script>
 
 <template>

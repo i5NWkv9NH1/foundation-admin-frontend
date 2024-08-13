@@ -1,38 +1,41 @@
 <script lang="ts" setup>
-import axios from 'axios';
 import { useAppStore } from '@/stores/app';
 import { validationRules } from '@/helpers';
+import { useAuthStore } from '@/stores';
 
-const appStore = useAppStore();
+const loading = ref(false);
+const { signup } = useAuthStore();
+const { uniqueId, updateAuthVideo } = useAppStore();
+const captchaEl = ref();
 const form = reactive({
   username: '',
   password: '',
   confirmPassword: '',
   captcha: ''
 });
-
-const loading = ref(false);
-
+const confirmPasswordRules = computed(() => {
+  return [(v: string) => !!v || 'Please confirm your password', (v: string) => v === form.password || 'Passwords do not match'];
+});
 async function onSubmit(formEl: any) {
   const { valid } = await formEl.validate();
-  if (valid) {
-    try {
-      loading.value = true;
-      await axios.post('http://localhost:3200/api/auth/signup', {
-        ...form,
-        uniqueId: appStore.uniqueId
-      });
-      // TODO: store, navigate
-    } catch (error) {
-      alert('Error submitting form:' + error);
-    } finally {
-      loading.value = false;
-    }
-  } else {
-    alert('Front-end validation failed');
-    // Handle captcha refresh
+  if (!valid) {
+    return;
+  }
+  try {
+    loading.value = true;
+    await signup({ ...form, uniqueId });
+  } catch (error) {
+    await captchaEl.value.fetchCaptcha();
+    form.captcha = '';
+    throw error;
+  } finally {
+    loading.value = false;
   }
 }
+
+onMounted(() => {
+  updateAuthVideo('/public/signup.mp4');
+});
 </script>
 
 <template>
@@ -67,6 +70,7 @@ async function onSubmit(formEl: any) {
           class="mb-2"
           placeholder="Confirm your password"
           type="password"
+          :rules="confirmPasswordRules"
           variant="solo"
         />
         <CaptchaInput

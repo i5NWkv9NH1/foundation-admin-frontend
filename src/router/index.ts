@@ -8,7 +8,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router/auto';
 // import { setupLayouts } from 'virtual:generated-layouts';
 // import { routes } from 'vue-router/auto-routes';
-import { useAppStore, useAuthStore, useUIStore } from '@/stores';
+import { useAppStore, useAuthStore } from '@/stores';
 
 const AuthLayout = () => import('@/layouts/AuthLayout.vue');
 const AdminLayout = () => import('@/layouts/AdminLayout.vue');
@@ -130,8 +130,8 @@ const router = createRouter({
 let progressInterval: number | null = null;
 router.beforeEach(async (to, from, next) => {
   // * ProgressBar
-  const uiStore = useUIStore();
-  uiStore.startProgress();
+  const appStore = useAppStore();
+  appStore.startProgress();
   // Simulate progress increase
   let progress = 0;
   progressInterval = setInterval(() => {
@@ -139,7 +139,7 @@ router.beforeEach(async (to, from, next) => {
     if (progress > 90) {
       progress = 90; // Cap progress at 90%
     }
-    uiStore.updateProgress(progress);
+    appStore.updateProgress(progress);
   }, 100);
 
   const authStore = useAuthStore();
@@ -151,7 +151,7 @@ router.beforeEach(async (to, from, next) => {
 });
 router.afterEach((to) => {
   const appStore = useAppStore();
-  const uiStore = useUIStore();
+
   // if (!appStore.histories.some((_) => _.fullPath === to.fullPath)) {
   //   appStore.histories.push({ ...to, timestamp: new Date().getTime() });
   //   localStorage.setItem('histories', JSON.stringify(appStore.histories));
@@ -160,7 +160,7 @@ router.afterEach((to) => {
   if (progressInterval) {
     clearInterval(progressInterval);
   }
-  uiStore.stopProgress();
+  appStore.stopProgress();
 });
 
 // Workaround for https://github.com/vitejs/vite/issues/11804

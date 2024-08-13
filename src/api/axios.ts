@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { ApiResponse } from '@/types';
 import { useAuthStore } from '@/stores';
+import { isTokenExpired } from '@/helpers';
 
 const apiClient = axios.create({
   baseURL: 'http://localhost:3200/api',
@@ -9,31 +10,27 @@ const apiClient = axios.create({
   }
 });
 
-// const noAuthPaths = ['/system/auth/signin', '/system/auth/signup', '/system/auth/refresh'];
+const noAuthPaths = ['/system/auth/signin', '/system/auth/signup', '/system/auth/refresh'];
 
 apiClient.interceptors.request.use(
   async (config) => {
-    // const router = useRouter();
-    // const authStore = useAuthStore();
-    // const isNoAuth = noAuthPaths.some((path) => config.url && config.url.startsWith(path));
-    // if (!isNoAuth && authStore.isAuthenticated) {
-    //   const { accessToken } = authStore;
-    //   if (accessToken) {
-    //     if (isTokenExpired(accessToken)) {
-    //       // Token is expired, try to refresh it
-    //       try {
-    //         await authStore.handleRefreshToken();
-    //         config.headers.Authorization = `Bearer ${authStore.accessToken}`;
-    //       } catch (refreshError) {
-    //         authStore.clearTokens();
-    //         router.push('/auth/signin');
-    //         throw new Error('Token refresh failed');
-    //       }
-    //     } else {
-    //       config.headers.Authorization = `Bearer ${accessToken}`;
-    //     }
-    //   }
-    // }
+    const authStore = useAuthStore();
+    const isNoAuth = noAuthPaths.some((path) => config.url && config.url.startsWith(path));
+    if (!isNoAuth && authStore.isAuthenticated) {
+      if (authStore.isAuthenticated) {
+        if (isTokenExpired(authStore.accessToken!)) {
+          try {
+            await authStore.refresh();
+            config.headers.Authorization = `Bearer ${authStore.accessToken}`;
+          } catch (refreshError) {
+            authStore.logout();
+            throw new Error('Token refresh failed');
+          }
+        } else {
+          config.headers.Authorization = `Bearer ${authStore.accessToken}`;
+        }
+      }
+    }
     return config;
   },
   (error: AxiosError) => Promise.reject(error)

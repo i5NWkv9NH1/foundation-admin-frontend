@@ -8,7 +8,7 @@ const signup = (payload: SignupPayload) => apiClient.post<ApiResponseWithResult<
 // * 获取当前用户信息
 const findMe = () => apiClient.get<ApiResponseWithResult<ApiFindMeResponse>>('/auth/me');
 // * 用户登出
-const logout = (payload: Token) => apiClient.post<ApiResponse>('/system/auth/logout');
+const logout = (payload: Token) => apiClient.post<ApiResponse>('/system/auth/logout', payload);
 // * 刷新 Token
 const refreshToken = (payload: { refreshToken: string }) => apiClient.post<ApiResponseWithResult<Token>>('/system/auth/refresh', payload);
 
