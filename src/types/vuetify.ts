@@ -1,28 +1,13 @@
 export type Align = 'center' | 'end' | 'start';
-export type HeaderKey =
-  | string
-  | 'data-table-group'
-  | 'data-table-select'
-  | 'data-table-expand';
+export type HeaderKey = string | 'data-table-group' | 'data-table-select' | 'data-table-expand';
 
 export interface HeaderProps {
   [key: string]: any;
 }
-export type SelectItemKey<T = Record<string, any>> =
-  | boolean
-  | null
-  | undefined
-  | string
-  | readonly (string | number)[]
-  | ((item: T, fallback?: any) => any);
+export type SelectItemKey<T = Record<string, any>> = boolean | null | undefined | string | readonly (string | number)[] | ((item: T, fallback?: any) => any);
 
 export interface CellProps {
-  (data: {
-    index: number;
-    item: any;
-    value: any;
-    internalItem: any;
-  }): Record<string, any>;
+  (data: { index: number; item: any; value: any; internalItem: any }): Record<string, any>;
   [key: string]: any;
 }
 
@@ -42,7 +27,7 @@ export interface TreeViewSlots {
   isIndeterminate: boolean;
   select: (value: boolean) => void;
 }
-
+export type Density = 'default' | 'comfortable' | 'compact';
 export interface TableHeader {
   key?: HeaderKey;
   value?: any; // Adjust based on actual type used in `SelectItemKey<Record<string, any>>`

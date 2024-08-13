@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { useAuthStore } from '@/stores';
+
 const items = ref([
   { name: 'Profile', path: 'profile', icon: 'mdi-face-man-profile' },
   { name: 'Settings', path: 'settings', icon: 'mdi-cogs' },
-  { name: 'Help', path: 'help', icon: 'mdi-help-box' },
-  { name: 'Logout', path: '/auth/signin', icon: 'mdi-logout' }
+  { name: 'Help', path: 'help', icon: 'mdi-help-box' }
 ]);
+const { logout } = useAuthStore();
 </script>
 
 <template>
@@ -35,6 +37,11 @@ const items = ref([
         :prepend-icon="item.icon"
         :title="item.name"
         :to="item.path"
+      />
+      <VListItem
+        prepend-icon="mdi-logout"
+        @click="logout"
+        title="Logout"
       />
     </VList>
   </VMenu>

@@ -37,7 +37,8 @@ export default defineConfig({
       dirs: ['./src/composables']
     }),
     Components({
-      dts: 'src/components.d.ts'
+      dts: 'src/components.d.ts',
+      dirs: ['src/components', 'src/widgets']
     }),
     Vue({
       template: { transformAssetUrls }

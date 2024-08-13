@@ -10,3 +10,16 @@ export function getCookie(name: string) {
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop()!.split(';').shift();
 }
+
+export const getLocalStorageItem = (key: string, defaultValue: any) => {
+  const item = localStorage.getItem(key);
+  return item ? (typeof item === 'object' ? JSON.parse(item) : item) : defaultValue;
+};
+
+export const setLocalStorageItem = (key: string, value: any) => {
+  if (typeof value === 'object') {
+    localStorage.setItem(key, JSON.stringify(value));
+    return;
+  }
+  localStorage.setItem(key, value);
+};

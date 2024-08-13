@@ -1,7 +1,7 @@
 export default {
   dark: false,
   label: 'Facebook Light',
-  value: 'FACEBOOK_Light',
+  value: 'FACEBOOK_LiGHT',
   colors: {
     background: '#FFFFFF',
     surface: '#F0F2F5',

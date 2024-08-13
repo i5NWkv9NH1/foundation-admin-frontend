@@ -31,7 +31,6 @@ function handleSubmit() {
           block
           color="primary"
           :disabled="props.loading"
-          rounded="lg"
           :text="props.submitText"
           type="submit"
           variant="flat"
