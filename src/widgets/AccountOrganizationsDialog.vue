@@ -4,17 +4,25 @@ import { Organization } from '@/types';
 interface Props {
   items: Organization[];
   // organizationIds: string[];
+  organizationIds: string[];
 }
 const props = withDefaults(defineProps<Props>(), {
-  items: () => []
-  // organizationIds: () => []
+  items: () => [],
+  organizationIds: () => []
 });
 const modelValue = defineModel<boolean>('modelValue', { required: true });
 const emits = defineEmits<{
   (e: 'save', selected: string[]): void;
 }>();
 // const selected = ref<string[]>([...props.organizationIds]);
-const selected = defineModel<string[] | undefined>('selected', { required: true });
+// const selected = ref(props.organizationIds);
+const selected = defineModel<string[]>('selected', { required: false });
+watch(
+  () => props.organizationIds,
+  () => {
+    selected.value = props.organizationIds;
+  }
+);
 // watch(
 //   () => props.organizationIds,
 //   () => {
@@ -22,9 +30,9 @@ const selected = defineModel<string[] | undefined>('selected', { required: true 
 //   }
 // );
 const onSave = () => {
-  emits('save', toRaw(selected.value!));
+  emits('save', selected.value!);
   modelValue.value = false;
-  selected.value = [];
+  selected.value = [...props.organizationIds];
 };
 </script>
 

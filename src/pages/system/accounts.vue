@@ -154,10 +154,10 @@ const fields = ref<FormField[]>([
   // { name: 'organizations', label: 'Organizations', type: 'treeview', activeStrategy: 'independent', options: [] },
 ]);
 // prettier-ignore
-const defaultAccountDto: AccountDto = ({
+const defaultAccountDto = ref<AccountDto>({
   name: '', username: '', email: '', phone: '', address: '', status: 'ENABLE', gender: 'PRIVATE', avatarUrl: '', roles: [], organizationIds: []
 })
-const currentAccount = ref<AccountDto>({ ...defaultAccountDto });
+const currentAccount = ref<AccountDto>({ ...defaultAccountDto.value });
 const onOpenCreateEditDialog = async (value: boolean, account?: any) => {
   isEditing.value = value;
   if (isEditing && account) {
@@ -165,14 +165,14 @@ const onOpenCreateEditDialog = async (value: boolean, account?: any) => {
       const {
         data: { result }
       } = await apiAccounts.getAccountById(account.id);
-      // currentAccount.value = response.data.result || { ...defaultAccountDto };
+      // @ts-ignore
       const organizationIds = result.organizations!.map((item) => item.id!) || [];
       currentAccount.value = { ...result, organizationIds };
     } catch (error) {
       throw new Error(onOpenCreateEditDialog.name);
     }
   } else {
-    currentAccount.value = { ...defaultAccountDto };
+    currentAccount.value = { ...defaultAccountDto.value };
   }
   createEditDialog.value = true;
 };
@@ -207,6 +207,37 @@ const onConfirmDelete = (mode: 'single' | 'multiple') => {
 };
 const deleteMode = ref<'single' | 'multiple'>('single');
 const deleteConfirmDialog = ref(false);
+/**
+ * * Drawer
+ */
+const organizationIds = ref<string[]>();
+const organizationsDialog = ref(false);
+const onOpenOrganizaitonDialog = async (account: any) => {
+  try {
+    const {
+      data: { result }
+    } = await apiAccounts.getAccountById(account.id);
+    organizationIds.value = result.organizations!.map((item) => item.id!);
+    currentAccount.value = { ...result, organizationIds: toRaw(organizationIds.value) };
+    organizationsDialog.value = true;
+  } catch (error) {
+    throw new Error(onOpenOrganizaitonDialog.name);
+  }
+};
+const onSaveOrganizations = async (ids: string[]) => {
+  try {
+    tableMeta.value.loading = true;
+    currentAccount.value.organizationIds = ids;
+    await apiAccounts.updateAccount(currentAccount.value.id!, currentAccount.value);
+    await fetchAccounts();
+  } catch (error) {
+    await Promise.all([fetchAccounts(), fetchRoles(), fetchOrganizations()]);
+  } finally {
+    tableMeta.value.loading = false;
+  }
+};
+
+// * Mounted
 onMounted(async () => {
   // await Promise.all([fetchRoles(), fetchOrganizations()]);
   await fetchRoles();
@@ -228,26 +259,6 @@ onMounted(async () => {
   // Update filters
   defaultFilters.organizationId = organizations.value![0].id;
 });
-
-/**
- * * Drawer
- */
-const organizationsDialog = ref(false);
-const onOpenOrganizaitonDialog = async (account: any) => {
-  try {
-    const {
-      data: { result }
-    } = await apiAccounts.getAccountById(account.id);
-    const organizationIds = result.organizations!.map((item) => item.id!);
-    currentAccount.value = { ...result, organizationIds };
-    organizationsDialog.value = true;
-  } catch (error) {
-    throw new Error(onOpenOrganizaitonDialog.name);
-  }
-};
-const onSaveOrganizations = (organizationIds: string[]) => {
-  console.log(organizationIds);
-};
 </script>
 
 <template>
@@ -369,9 +380,9 @@ const onSaveOrganizations = (organizationIds: string[]) => {
     <!-- Organizations dialog -->
     <AccountOrganizationsDialog
       v-model="organizationsDialog"
-      v-model:selected="currentAccount.organizationIds"
-      @save="onSaveOrganizations"
       :items="organizationsTree"
+      :organizationIds="currentAccount.organizationIds"
+      @save="onSaveOrganizations"
     />
   </VContainer>
 </template>
