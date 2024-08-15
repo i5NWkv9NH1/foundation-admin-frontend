@@ -8,7 +8,8 @@ export const menuFieldMapping = {
   parentId: 'parentId',
   component: 'component',
   redirect: 'redirect',
-  type: 'type',
+  // TODO: Bug
+  // type: 'type',
   parent: 'parent',
   children: 'children',
   actions: 'actions'

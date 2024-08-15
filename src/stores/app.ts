@@ -9,7 +9,7 @@ import { getLocalStorageItem, setLocalStorageItem } from '@/helpers';
 export const useAppStore = defineStore('app', () => {
   // * Global
   // Drawer and progress states
-  const drawer = ref(false);
+  const drawer = ref(true);
   const progress = ref(0);
   const showProgress = ref(false);
   const uniqueId = ref(getLocalStorageItem('uuid', uuid()));
@@ -35,10 +35,11 @@ export const useAppStore = defineStore('app', () => {
   };
 
   // Themes
+  // TODO
   const { themes, global } = useTheme();
-  const localThemes = ref(JSON.parse(localStorage.getItem('themes')!) || toRaw(themes.value));
-  const lightThemes = computed(() => Object.values(localThemes.value).filter((theme: any) => !theme.dark));
-  const darkThemes = computed(() => Object.values(localThemes.value).filter((theme: any) => theme.dark));
+  // const localThemes = ref(JSON.parse(localStorage.getItem('themes')!) || toRaw(themes.value));
+  // const lightThemes = computed(() => Object.values(localThemes.value).filter((theme: any) => !theme.dark));
+  // const darkThemes = computed(() => Object.values(localThemes.value).filter((theme: any) => theme.dark));
   const selectedLightTheme = ref(getLocalStorageItem('LIGHT_THEME', DEFAULT_LIGHT_THEME));
   const selectedDarkTheme = ref(getLocalStorageItem('DARK_THEME', DEFAULT_DARK_THEME));
   const themeMode = ref(getLocalStorageItem('THEME_MODE', 'system'));
@@ -54,13 +55,19 @@ export const useAppStore = defineStore('app', () => {
     } else {
       global.name.value = isSystemDark.value ? selectedDarkTheme.value : selectedLightTheme.value;
     }
-    setLocalStorageItem('themeMode', themeMode.value.toString());
+    console.log('vuetify: ', global.name.value);
+    console.log('preset light: ', selectedLightTheme.value);
+    console.log('preset dark: ', selectedDarkTheme.value);
+    console.log('themes', themes.value);
+    setLocalStorageItem('THEME_MODE', themeMode.value.toString());
+    setLocalStorageItem('LIGHT_THEME', selectedLightTheme.value.toString());
+    setLocalStorageItem('DARK_THEME', selectedDarkTheme.value.toString());
   };
 
   // Watchers to handle theme changes
   watch(selectedLightTheme, updateTheme);
   watch(selectedDarkTheme, updateTheme);
-  watch(themeMode, updateTheme, { immediate: true });
+  watch(themeMode, updateTheme);
 
   const initialize = () => {
     if (!localStorage.getItem('uuid')) {
@@ -74,7 +81,7 @@ export const useAppStore = defineStore('app', () => {
     // Handle system color scheme changes
     prefersDarkScheme.addEventListener('change', (event) => {
       if (themeMode.value === 'system') {
-        isSystemDark.value ? selectedDarkTheme.value : selectedLightTheme.value;
+        event.matches ? selectedDarkTheme.value : selectedLightTheme.value;
       }
     });
   };
@@ -91,8 +98,8 @@ export const useAppStore = defineStore('app', () => {
     startProgress,
     updateProgress,
     stopProgress,
-    initialize,
-    lightThemes,
-    darkThemes
+    initialize
+    // lightThemes,
+    // darkThemes
   };
 });

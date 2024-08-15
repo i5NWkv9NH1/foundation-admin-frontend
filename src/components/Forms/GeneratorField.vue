@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { FormComponent, FormField } from '@/types/form';
 import { VAutocomplete, VAvatar, VBtn, VCheckbox, VChipGroup, VColorPicker, VDatePicker, VFileInput, VRadioGroup, VSelect, VSlider, VSwitch, VTextField } from 'vuetify/components';
+import { VNumberInput } from 'vuetify/labs/components';
 
 interface Props {
   fields: FormField[];
@@ -15,7 +16,6 @@ function RenderField(type: FormComponent) {
     case 'button':
       return VBtn;
     case 'text':
-    case 'number':
       return VTextField;
     case 'select':
       return VSelect;
@@ -39,8 +39,8 @@ function RenderField(type: FormComponent) {
       return VColorPicker;
     case 'radios':
       return VRadioGroup;
-    case 'tree-activator':
-      return;
+    case 'number':
+      return VNumberInput;
     default:
       return VTextField;
   }
@@ -71,12 +71,15 @@ function RenderField(type: FormComponent) {
           <VRadioGroup
             v-model="form[field.name]"
             v-bind="field.attrs"
+            :inline="field.inline"
+            :label="field.label"
           >
             <VRadio
               v-for="option in field.options"
               :key="option.value"
               :label="option.text"
               :value="option.value"
+              :color="option.color || 'primary'"
             >
               <template v-slot:label>
                 <strong :class="[`text-${option.color}`]">{{ option.text }}</strong>
@@ -91,6 +94,19 @@ function RenderField(type: FormComponent) {
         </template>
 
         <!-- Select -->
+        <template v-else-if="field.type === 'select'">
+          <VSelect
+            v-model="form[field.name]"
+            :return-object="field.returnObject || false"
+            :multiple="field.multiple"
+            :chips="field.chips"
+            :items="field.options"
+            :label="field.label"
+            :item-title="field.itemTitle"
+            :item-value="field.itemValue"
+            v-bind="field.attrs"
+          />
+        </template>
         <!-- TreeView -->
 
         <component
@@ -104,6 +120,12 @@ function RenderField(type: FormComponent) {
           :rules="field.rules"
           :required="field.required"
           :placeholder="field.placeholder"
+          :readonly="field.readonly"
+          :disabled="field.disabled"
+          :hideInput="field.hideInput || false"
+          :inset="field.inset || true"
+          :controlVariant="field.controlVariant || 'default'"
+          :reverse="field.reverse || false"
         />
       </VCol>
     </VRow>

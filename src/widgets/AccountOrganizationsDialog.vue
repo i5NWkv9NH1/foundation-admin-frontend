@@ -32,7 +32,8 @@ watch(
 const onSave = () => {
   emits('save', selected.value!);
   modelValue.value = false;
-  selected.value = [...props.organizationIds];
+  // selected.value = [...props.organizationIds];
+  // selected.value = [];
 };
 </script>
 

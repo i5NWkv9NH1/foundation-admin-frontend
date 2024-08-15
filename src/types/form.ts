@@ -6,15 +6,23 @@ export interface FormField<T = Record<string, any>> {
   type: FormComponent;
   required?: boolean;
   placeholder?: string;
+  readonly?: boolean;
+  disabled?: boolean;
   options?: Record<string, any>[];
+  inline?: boolean;
   rules?: Array<(value: any) => boolean | string>;
   attrs?: {
     items?: Record<string, any>[] | any[];
     [key: string]: any;
   };
   multiple?: boolean; // Indicates if the field supports multiple selections (e.g., for select components)
+  returnObject?: boolean;
   chips?: boolean;
   activeStrategy?: 'single-independent' | 'independent';
   itemValue?: (item: T) => void;
   itemTitle?: (item: T) => void;
+  reverse?: boolean;
+  controlVariant?: 'default' | 'split' | 'stacked';
+  hideInput?: boolean;
+  inset?: boolean;
 }
