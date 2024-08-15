@@ -15,16 +15,16 @@ const getMenus = (payload: RequestPayload<MenuFilterPayload>) => {
 };
 
 // * 获取单个菜单
-const getMenuById = (id: number) => apiClient.get<ApiResponseWithResult<Menu>>(`/system/menus/${id}`);
+const getMenuById = (id: string) => apiClient.get<ApiResponseWithResult<Menu>>(`/system/menus/${id}`);
 
 // * 创建新菜单
 export const createMenu = (payload: CreateMenuPayload) => apiClient.post<ApiResponseWithResult<Menu>>('/system/menus', payload);
 
 // * 更新现有菜单
-const updateMenu = (id: number, payload: UpdateMenuPayload) => apiClient.put<ApiResponseWithResult<Menu>>(`/system/menus/${id}`, payload);
+const updateMenu = (id: string, payload: UpdateMenuPayload) => apiClient.put<ApiResponseWithResult<Menu>>(`/system/menus/${id}`, payload);
 
 // * 删除菜单
-const deleteMenu = (id: number) => apiClient.delete<ApiResponse>(`/system/menus/${id}`);
+const deleteMenu = (id: string) => apiClient.delete<ApiResponse>(`/system/menus/${id}`);
 
 export const apiMenus = {
   getMenus,

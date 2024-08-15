@@ -1,4 +1,4 @@
-import { Account, Organization, Status } from './entities';
+import { Account, Organization, RoleName, Status } from './entities';
 
 // 通用分页参数
 export interface PaginationPayload {
@@ -46,9 +46,14 @@ export interface AccountFilterPayload {
   roleId?: string;
   // 其他字段...
 }
-export interface RoleFilterPayload {}
+export interface RoleFilterPayload {
+  text?: string;
+  status?: Status | 'ALL';
+  name?: RoleName | undefined;
+}
 export interface OrganizationFilterPayload {}
 export interface MenuFilterPayload {}
+export interface ActionFilterPayload {}
 
 // 创建账户的请求参数
 export type CreateAccountPayload = Pick<Account, 'name' | 'username' | 'avatarUrl' | 'phone' | 'address' | 'gender' | 'status' | 'email' | 'roles'> & {
