@@ -24,13 +24,11 @@ const headerPrependBtns = ref([
     <VCard>
       <VCardItem>
         <VToolbar color="transparent">
-          <VScrollXTransition>
-            <VBtn
-              :icon="expand ? 'mdi-filter-variant-remove' : 'mdi-filter-variant-plus'"
-              :key="expand ? 'mdi-filter-variant-remove' : 'mdi-filter-variant-plus'"
-              @click="() => (expand = !expand)"
-            />
-          </VScrollXTransition>
+          <VBtn
+            :icon="expand ? 'mdi-filter-variant-remove' : 'mdi-filter-variant-plus'"
+            :key="expand ? 'mdi-filter-variant-remove' : 'mdi-filter-variant-plus'"
+            @click="() => (expand = !expand)"
+          />
           <VTextField
             v-model="form['text']"
             hide-details

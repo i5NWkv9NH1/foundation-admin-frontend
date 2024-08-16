@@ -1,7 +1,7 @@
 <script setup lang="ts">
 type Mode = 'single' | 'multiple';
 interface Props {
-  mode?: 'single' | 'multiple';
+  mode: 'single' | 'multiple';
 }
 const modelValue = defineModel<boolean>('modelValue', { required: true });
 const emits = defineEmits<{

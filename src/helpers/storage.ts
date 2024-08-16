@@ -15,7 +15,12 @@ export function removeCookie(name: string) {
 
 export const getLocalStorageItem = (key: string, defaultValue: any) => {
   const item = localStorage.getItem(key);
-  return item ? (typeof item === 'object' ? parseJSON(item) : item) : defaultValue;
+  try {
+    return item ? JSON.parse(item) : defaultValue;
+  } catch (error) {
+    // 如果 JSON.parse 失败，返回原始值
+    return item ?? defaultValue;
+  }
 };
 
 export const setLocalStorageItem = (key: string, value: any) => {

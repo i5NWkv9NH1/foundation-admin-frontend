@@ -5,6 +5,7 @@ import { VForm } from 'vuetify/components';
 interface Props {
   fields: FormField[];
   isEidting: boolean;
+  form: Record<string, any>;
 }
 const props = defineProps<Props>();
 const emits = defineEmits<{
@@ -41,7 +42,7 @@ const onSave = () => {
       <VCardTitle>
         {{ props.isEidting ? 'Edit Item' : 'New Item' }}
       </VCardTitle>
-      <VCardSubtitle v-if="props.isEidting"> Editing {{ form.id || 'New Item' }} </VCardSubtitle>
+      <VCardSubtitle v-if="props.isEidting"> Editing {{ form.id || 'New Item' }} {{ form.name || form.label || '' }}</VCardSubtitle>
       <VCardText>
         <VForm ref="formRef">
           <GeneratorField

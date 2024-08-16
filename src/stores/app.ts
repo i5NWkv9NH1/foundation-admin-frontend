@@ -1,6 +1,6 @@
 // stores/app.ts
 import { DEFAULT_DARK_THEME, DEFAULT_LIGHT_THEME } from '@/constants';
-import { History } from '@/types';
+import { History, SnackbarOptions } from '@/types';
 import { defineStore } from 'pinia';
 import { v4 as uuid } from 'uuid';
 import { useTheme } from 'vuetify';
@@ -9,7 +9,7 @@ import { getLocalStorageItem, setLocalStorageItem } from '@/helpers';
 export const useAppStore = defineStore('app', () => {
   // * Global
   // Drawer and progress states
-  const drawer = ref(false);
+  const drawer = ref(true);
   const progress = ref(0);
   const showProgress = ref(false);
   const uniqueId = ref(getLocalStorageItem('uuid', uuid()));
@@ -35,13 +35,14 @@ export const useAppStore = defineStore('app', () => {
   };
 
   // Themes
+  // TODO
   const { themes, global } = useTheme();
   const localThemes = ref(JSON.parse(localStorage.getItem('themes')!) || toRaw(themes.value));
   const lightThemes = computed(() => Object.values(localThemes.value).filter((theme: any) => !theme.dark));
   const darkThemes = computed(() => Object.values(localThemes.value).filter((theme: any) => theme.dark));
   const selectedLightTheme = ref(getLocalStorageItem('LIGHT_THEME', DEFAULT_LIGHT_THEME));
   const selectedDarkTheme = ref(getLocalStorageItem('DARK_THEME', DEFAULT_DARK_THEME));
-  const themeMode = ref(getLocalStorageItem('THEME_MODE', 'system'));
+  const themeMode = ref(getLocalStorageItem('THEME_MODE', 'SYSTEM'));
   const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
   const isSystemDark = computed(() => prefersDarkScheme.matches);
 
@@ -54,13 +55,15 @@ export const useAppStore = defineStore('app', () => {
     } else {
       global.name.value = isSystemDark.value ? selectedDarkTheme.value : selectedLightTheme.value;
     }
-    setLocalStorageItem('themeMode', themeMode.value.toString());
+    setLocalStorageItem('THEME_MODE', themeMode.value.toString());
+    setLocalStorageItem('LIGHT_THEME', selectedLightTheme.value.toString());
+    setLocalStorageItem('DARK_THEME', selectedDarkTheme.value.toString());
   };
 
   // Watchers to handle theme changes
   watch(selectedLightTheme, updateTheme);
   watch(selectedDarkTheme, updateTheme);
-  watch(themeMode, updateTheme, { immediate: true });
+  watch(themeMode, updateTheme);
 
   const initialize = () => {
     if (!localStorage.getItem('uuid')) {
@@ -72,12 +75,30 @@ export const useAppStore = defineStore('app', () => {
     updateTheme();
 
     // Handle system color scheme changes
-    prefersDarkScheme.addEventListener('change', (event) => {
+    prefersDarkScheme.addEventListener('change', (_) => {
       if (themeMode.value === 'system') {
-        isSystemDark.value ? selectedDarkTheme.value : selectedLightTheme.value;
+        if (_.matches) {
+          global.name.value = selectedDarkTheme.value;
+        } else {
+          global.name.value = selectedLightTheme.value;
+        }
       }
     });
+
+    clearSnackbars();
   };
+
+  const snackbars = ref<SnackbarOptions[]>([]);
+
+  function addSnackbar(options: SnackbarOptions) {
+    // @ts-ignore
+    snackbars.value.push(options);
+    console.log(snackbars.value);
+  }
+
+  function clearSnackbars() {
+    snackbars.value = [];
+  }
 
   return {
     uniqueId,
@@ -93,6 +114,9 @@ export const useAppStore = defineStore('app', () => {
     stopProgress,
     initialize,
     lightThemes,
-    darkThemes
+    darkThemes,
+    snackbars,
+    addSnackbar,
+    clearSnackbars
   };
 });

@@ -4,13 +4,18 @@ import { ref, computed } from 'vue';
 import router from '@/router';
 import { apiAuth } from '@/api';
 import type { Account, Permissions, SigninPayload, SignupPayload } from '@/types';
-import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from '@/helpers';
+import { buildTree, getLocalStorageItem, menuFieldMapping, removeLocalStorageItem, setLocalStorageItem } from '@/helpers';
+import { v4 } from 'uuid';
 
 export const useAuthStore = defineStore('auth', () => {
   const accessToken = ref<string | null>(getLocalStorageItem('accessToken', ''));
   const refreshToken = ref<string | null>(getLocalStorageItem('refreshToken', ''));
   const account = ref<Account>(getLocalStorageItem('account', {}));
   const permissions = ref<Permissions>(getLocalStorageItem('permissions', {})) || { menus: [], actions: [] };
+
+  function resetUUID() {
+    setLocalStorageItem('uuid', v4());
+  }
 
   function setTokens(newAccessToken: string, newRefreshToken: string) {
     accessToken.value = newAccessToken;
@@ -80,10 +85,10 @@ export const useAuthStore = defineStore('auth', () => {
       const {
         data: { result }
       } = await apiAuth.signup(payload);
+      resetUUID();
       setAccount(result.account);
       setPermissions(result.permissions);
       await router.push('/dashboard');
-      console.debug('AuthStore');
     } catch (error) {
       throw new Error('Registration failed');
     }
@@ -93,6 +98,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await apiAuth.logout({ accessToken: accessToken.value!, refreshToken: refreshToken.value! });
       clearTokens();
+      resetUUID();
       clearAccount();
       clearPermissions();
       router.push('/auth/signin');
@@ -111,12 +117,18 @@ export const useAuthStore = defineStore('auth', () => {
 
   const getAccountName = computed(() => account.value.name || account.value.username || '');
   const isAuthenticated = computed(() => !!accessToken.value);
+  const drawerMenus = computed(() => {
+    if (!permissions.value) return [];
+    if (!permissions.value.menus) return [];
+    return buildTree(permissions.value.menus, menuFieldMapping);
+  });
 
   return {
     accessToken,
     refreshToken,
     account,
     permissions,
+    drawerMenus,
     setTokens,
     clearTokens,
     setAccount,

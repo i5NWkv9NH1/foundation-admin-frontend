@@ -2,7 +2,7 @@
 <script setup lang="tsx">
 import { apiAccounts, apiOrganizations, apiRoles } from '@/api';
 import { buildTree, organizationFieldMapping } from '@/helpers';
-import { Account, AccountDto, AccountFilterPayload, FormField, Gender, Organization, PaginationMeta, Role, TableHeader } from '@/types';
+import { Account, AccountDto, AccountFilterPayload, FormField, Gender, Organization, PaginationMeta, Role, Status, TableHeader } from '@/types';
 import dayjs from 'dayjs';
 
 /**
@@ -14,6 +14,7 @@ const headers: TableHeader[] = [
   { title: 'Username', key: 'username', align: 'start', sortable: false },
   { title: 'Email', key: 'email', align: 'start', sortable: false },
   { title: 'Status', key: 'status', align: 'start', sortable: false },
+  { title: 'Role', key: 'roles', align: 'start', sortable: false },
   { title: 'Gender', key: 'gender', align: 'start', sortable: false },
   { title: 'Actions', key: 'actions', align: 'start', sortable: false }
 ];
@@ -22,7 +23,7 @@ function genderStyles(gender: Gender) {
   switch(gender) {
     case 'FEMALE': return { color: 'pink', icon: 'mdi-gender-female' }
     case 'MALE': return { color: 'blue', icon: 'mdi-gender-male'}
-    case 'PRIVATE': return { color: 'pink', icon: 'mdi-help'}
+    case 'PRIVATE': return { color: 'grey', icon: 'mdi-help'}
     default: return { color: 'grey', icon: 'mdi-help' }
   }
 }
@@ -36,9 +37,9 @@ const tableMeta = ref<PaginationMeta & { loading?: boolean }>({
 const selectedAccounts = ref<Account[]>();
 const isSelectedAccounts = computed(() => selectedAccounts.value && !!selectedAccounts.value.length);
 const tableRowActions = ref([
-  { name: 'Organizations', icon: 'mdi-eye-outline', label: 'Update your organizations', action: (account: any) => onOpenOrganizaitonDialog(account), color: 'primary' },
+  { name: 'Organizations', icon: 'mdi-account-group-outline', label: 'Update your organizations', action: (account: any) => onOpenOrganizaitonDialog(account), color: 'primary' },
   { name: 'Edit', icon: 'mdi-pencil-outline', label: 'Edit account profile', action: (account: any) => onOpenCreateEditDialog(true, account), color: 'info' },
-  { name: 'Delete', icon: 'mdi-delete-outline', label: 'Delete account', action: () => onOpenDeleteConfirmDialog('single'), color: 'error' }
+  { name: 'Delete', icon: 'mdi-delete-outline', label: 'Delete account', action: (account) => onOpenDeleteConfirmDialog('single', account), color: 'error' }
 ]);
 /**
  * * Accounts
@@ -135,7 +136,7 @@ const fields = ref<FormField[]>([
   { name: 'name', label: 'Name', type: 'text', required: true, attrs: { variant: 'solo' } },
   { name: 'username', label: 'Username', type: 'text', required: true, attrs: { variant: 'solo' } },
   { name: 'password', label: 'Password', type: 'text', required: true, attrs: { variant: 'solo', type: 'password' } },
-  { name: 'gender', label: 'Gender', type: 'radios', required: true, attrs: {   inline: true, 'hide-details': true },    options: [
+  { name: 'gender', label: 'Gender', type: 'radios', required: true, returnObject: true, inline: true,  attrs: {   inline: true, 'hide-details': true },    options: [
       { value: 'PRIVATE', text: 'Private', color: 'grey', icon: 'mdi-help' },
       { value: 'MALE', text: 'Male', color: 'blue', icon: 'mdi-gender-male' },
       { value: 'FEMALE', text: 'Female', color: 'pink', icon: 'mdi-gender-female' }
@@ -145,17 +146,18 @@ const fields = ref<FormField[]>([
   { name: 'address', label: 'Address', type: 'text', attrs: { variant: 'solo' } },
   { name: 'email', label: 'Email', type: 'text', required: false, attrs: { type: 'email', variant: 'solo' } },
   { name: 'avatarUrl', label: 'Avatar', type: 'text', attrs: { variant: 'solo' } },
-  { name: 'status', label: 'Status', type: 'radios', options: [
+  { name: 'status', label: 'Status', type: 'radios', returnObject: false, inline: true, options: [
       { value: 'ENABLE', text: 'Enable' },
       { value: 'DISABLE', text: 'Disable' }
   ],required: true, attrs: { inline: true, 'hide-details': true }
   },
-  { name: 'roles', label: 'Roles', type: 'select', multiple: true, chips: true, attrs: { 'item-props': true, 'item-title': 'name', 'return-object': true, variant: 'solo' }, placeholder: 'Select roles' }
+  { name: 'roles', label: 'Roles', type: 'select', multiple: true, chips: true, returnObject: true,
+  attrs: { 'item-value': 'name', 'item-title': 'name', variant: 'solo' }, placeholder: 'Select roles' }
   // { name: 'organizations', label: 'Organizations', type: 'treeview', activeStrategy: 'independent', options: [] },
 ]);
 // prettier-ignore
-const defaultAccountDto: AccountDto = ({
-  name: '', username: '', email: '', phone: '', address: '', status: 'ENABLE', gender: 'PRIVATE', avatarUrl: '', roles: [], organizationIds: []
+const defaultAccountDto = ({
+  name: '', username: '', email: '', phone: '', address: '', status: 'ENABLE' as Status, gender: 'PRIVATE' as Gender, avatarUrl: '', roles: [], organizationIds: []
 })
 const currentAccount = ref<AccountDto>({ ...defaultAccountDto });
 const onOpenCreateEditDialog = async (value: boolean, account?: any) => {
@@ -165,7 +167,7 @@ const onOpenCreateEditDialog = async (value: boolean, account?: any) => {
       const {
         data: { result }
       } = await apiAccounts.getAccountById(account.id);
-      // currentAccount.value = response.data.result || { ...defaultAccountDto };
+      // @ts-ignore
       const organizationIds = result.organizations!.map((item) => item.id!) || [];
       currentAccount.value = { ...result, organizationIds };
     } catch (error) {
@@ -182,8 +184,8 @@ const onSaveCreateEditDialog = async () => {
       await apiAccounts.updateAccount(currentAccount.value.id!, currentAccount.value);
       await fetchAccounts();
     } else {
+      await apiAccounts.createAccount(currentAccount.value);
       await fetchAccounts();
-      createEditDialog.value = false;
     }
   } catch (error) {
     await fetchAccounts();
@@ -193,13 +195,22 @@ const onSaveCreateEditDialog = async () => {
 /**
  * * Delete
  */
-const onOpenDeleteConfirmDialog = (mode: 'single' | 'multiple') => {
+const onOpenDeleteConfirmDialog = (mode: 'single' | 'multiple', account?: Account) => {
   deleteMode.value = mode;
   deleteConfirmDialog.value = true;
-};
-const onConfirmDelete = (mode: 'single' | 'multiple') => {
   if (mode === 'single') {
-    // TODO: api
+    currentAccount.value.id = account?.id;
+  }
+};
+const onConfirmDelete = async (mode: 'single' | 'multiple') => {
+  if (mode === 'single') {
+    try {
+      await apiAccounts.deleteAccount(currentAccount.value.id!);
+    } catch {
+      throw new Error(onConfirmDelete.name);
+    } finally {
+      await fetchAccounts();
+    }
   } else if (mode === 'multiple') {
     // TODO: api
   }
@@ -207,6 +218,38 @@ const onConfirmDelete = (mode: 'single' | 'multiple') => {
 };
 const deleteMode = ref<'single' | 'multiple'>('single');
 const deleteConfirmDialog = ref(false);
+/**
+ * * Drawer
+ */
+const organizationIds = ref<string[]>();
+const organizationsDialog = ref(false);
+const onOpenOrganizaitonDialog = async (account: any) => {
+  try {
+    const {
+      data: { result }
+    } = await apiAccounts.getAccountById(account.id);
+    organizationIds.value = result.organizations!.map((item) => item.id!);
+    currentAccount.value = { ...result, organizationIds: toRaw(organizationIds.value) };
+    organizationsDialog.value = true;
+  } catch (error) {
+    throw new Error(onOpenOrganizaitonDialog.name);
+  }
+};
+const onSaveOrganizations = async (ids: string[]) => {
+  try {
+    tableMeta.value.loading = true;
+    currentAccount.value.organizationIds = ids;
+    const newOrgs = currentAccount.value?.organzations?.filter((org) => ids.includes(org.id!));
+    await apiAccounts.updateAccount(currentAccount.value.id!, currentAccount.value);
+    await fetchAccounts();
+  } catch (error) {
+    await Promise.all([fetchAccounts(), fetchRoles(), fetchOrganizations()]);
+  } finally {
+    tableMeta.value.loading = false;
+  }
+};
+
+// * Mounted
 onMounted(async () => {
   // await Promise.all([fetchRoles(), fetchOrganizations()]);
   await fetchRoles();
@@ -228,26 +271,6 @@ onMounted(async () => {
   // Update filters
   defaultFilters.organizationId = organizations.value![0].id;
 });
-
-/**
- * * Drawer
- */
-const organizationsDialog = ref(false);
-const onOpenOrganizaitonDialog = async (account: any) => {
-  try {
-    const {
-      data: { result }
-    } = await apiAccounts.getAccountById(account.id);
-    const organizationIds = result.organizations!.map((item) => item.id!);
-    currentAccount.value = { ...result, organizationIds };
-    organizationsDialog.value = true;
-  } catch (error) {
-    throw new Error(onOpenOrganizaitonDialog.name);
-  }
-};
-const onSaveOrganizations = (organizationIds: string[]) => {
-  console.log(organizationIds);
-};
 </script>
 
 <template>
@@ -322,6 +345,11 @@ const onSaveOrganizations = (organizationIds: string[]) => {
                     {{ item.username }}
                   </div>
                 </template>
+                <template #item.roles="{ item }">
+                  <div class="d-flex ga-4">
+                    <VChip v-for="role in item.roles" :key="role.id" :text="role.name" />
+                  </div>
+                </template>
                 <template #item.status="{ item }">
                   <VChip :color="item.status === 'DISABLE' ? 'grey' : 'success'" :text="item.status"
                   />
@@ -369,9 +397,9 @@ const onSaveOrganizations = (organizationIds: string[]) => {
     <!-- Organizations dialog -->
     <AccountOrganizationsDialog
       v-model="organizationsDialog"
-      v-model:selected="currentAccount.organizationIds"
-      @save="onSaveOrganizations"
       :items="organizationsTree"
+      :organizationIds="currentAccount.organizationIds"
+      @save="onSaveOrganizations"
     />
   </VContainer>
 </template>

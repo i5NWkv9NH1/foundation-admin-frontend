@@ -2,6 +2,8 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { ApiResponse } from '@/types';
 import { useAuthStore } from '@/stores';
 import { isTokenExpired } from '@/helpers';
+import { useSnackbar } from '@/composables/useSnackbar';
+import { whiteList } from '@/constants';
 
 const apiClient = axios.create({
   baseURL: 'http://localhost:3200/api',
@@ -10,74 +12,112 @@ const apiClient = axios.create({
   }
 });
 
-const noAuthPaths = ['/system/auth/signin', '/system/auth/signup', '/system/auth/refresh'];
+let isRefreshing = false; // 用于跟踪是否正在刷新 token
+const subscribers: ((token: string) => void)[] = []; // 订阅者列表
+
+const onRrefreshed = (cb: (token: string) => void) => {
+  subscribers.push(cb);
+};
+
+const notifySubscribers = (token: string) => {
+  subscribers.forEach((cb) => cb(token));
+  subscribers.length = 0;
+};
 
 apiClient.interceptors.request.use(
   async (config) => {
+    const { showErrorMessage, showSuccessMessage } = useSnackbar();
     const authStore = useAuthStore();
-    const isNoAuth = noAuthPaths.some((path) => config.url && config.url.startsWith(path));
+    const isNoAuth = whiteList.some((path) => config.url && config.url.startsWith(path));
     if (!isNoAuth && authStore.isAuthenticated) {
-      if (authStore.isAuthenticated) {
-        if (isTokenExpired(authStore.accessToken!)) {
+      if (isTokenExpired(authStore.accessToken!)) {
+        if (!isRefreshing) {
+          isRefreshing = true;
           try {
-            await authStore.refresh();
+            // *
             config.headers.Authorization = `Bearer ${authStore.accessToken}`;
+            await authStore.refresh();
+            isRefreshing = false;
+            notifySubscribers(authStore.accessToken!);
           } catch (refreshError) {
+            isRefreshing = false;
             authStore.logout();
+            showErrorMessage('Token refresh failed');
             throw new Error('Token refresh failed');
           }
         } else {
-          config.headers.Authorization = `Bearer ${authStore.accessToken}`;
+          return new Promise((resolve) => {
+            onRrefreshed((token) => {
+              config.headers.Authorization = `Bearer ${token}`;
+              resolve(apiClient(config));
+            });
+          });
         }
+      } else {
+        config.headers.Authorization = `Bearer ${authStore.accessToken}`;
       }
     }
     return config;
   },
-  (error: AxiosError) => Promise.reject(error)
+  (error: AxiosError) => {
+    const { showErrorMessage } = useSnackbar();
+    showErrorMessage('Request failed');
+    return Promise.reject(error);
+  }
 );
 
 apiClient.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
-    // ! 自定义业务代码错误
-    // const { data } = response;
-    // if (data.code && data.code !== 200) {
-    //   let message = 'An error occurred';
-    //   switch (data.code) {
-    //     case 1001:
-    //       message = 'Invalid credentials';
-    //       break;
-    //     case 1002:
-    //       message = 'User not found';
-    //       break;
-    //     default:
-    //       message = 'An unexpected error occurred';
-    //       break;
-    //   }
-    //   return Promise.reject(new Error(message));
-    // }
+    const { showSuccessMessage } = useSnackbar();
+    // showSuccessMessage('Request successful');
+    // business code
     return response;
   },
   async (error: AxiosError) => {
+    const { showErrorMessage } = useSnackbar();
     const authStore = useAuthStore();
     const originalRequest = error.config;
 
-    if (
-      error.response?.status === 401 &&
-      originalRequest &&
-      // @ts-ignore
-      !originalRequest._retry
-    ) {
-      // @ts-ignore
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+      if (!authStore.refreshToken) {
+        authStore.logout();
+        showErrorMessage('No refresh token available. Please sign in again.');
+        return Promise.reject(new Error('No refresh token available. Please sign in again.'));
+      }
+
       originalRequest._retry = true;
-      try {
-        await authStore.refresh();
-        originalRequest.headers['Authorization'] = `Bearer ${authStore.accessToken}`;
-        return apiClient(originalRequest);
-      } catch (refreshError) {
-        return Promise.reject(refreshError);
+
+      if (!isRefreshing) {
+        isRefreshing = true;
+        try {
+          // *
+          originalRequest.headers['Authorization'] = `Bearer ${authStore.accessToken}`;
+          await authStore.refresh();
+          isRefreshing = false;
+          notifySubscribers(authStore.accessToken!);
+          return apiClient(originalRequest);
+        } catch (refreshError) {
+          isRefreshing = false;
+          authStore.logout();
+          showErrorMessage('Token refresh failed. Please sign in again.');
+          return Promise.reject(new Error('Token refresh failed. Please sign in again.'));
+        }
+      } else {
+        return new Promise((resolve) => {
+          onRrefreshed((token) => {
+            originalRequest.headers['Authorization'] = `Bearer ${token}`;
+            resolve(apiClient(originalRequest));
+          });
+        });
       }
     }
 
+    if (error.response?.status === 403) {
+      showErrorMessage('You have no permission');
+      return;
+    }
+
+    // showErrorMessage('Request failed');
     return Promise.reject(error);
   }
 );

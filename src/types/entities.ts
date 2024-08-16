@@ -7,16 +7,20 @@ export interface BaseEntity {
   [key: string]: any;
 }
 export interface Role extends BaseEntity {
-  name: string;
-  code: string;
+  label: string;
+  name: RoleName;
+  status: Status;
+  sort: number;
   actions: Action[];
   accounts: Account[];
 }
 export interface Menu extends BaseEntity {
-  label: string;
+  name: string;
   router: string;
   icon: string;
   path: string;
+  reidrect: string | null;
+  component: string;
   parentId: null | string;
   parent: Menu | null;
   children: Menu[];
@@ -27,6 +31,7 @@ export interface Action extends BaseEntity {
   code: string;
   icon: string;
   menuId: string;
+  menu: Menu;
 }
 export type Gender = 'PRIVATE' | 'FEMALE' | 'MALE';
 export type Status = 'DISABLE' | 'ENABLE';
@@ -67,6 +72,7 @@ export interface AccountDto extends Pick<Account, 'id' | 'name' | 'username' | '
   roles?: Role[]
   organzations?: Organization[]
 }
+export interface RoleDto extends Pick<Role, 'id' | 'name' | 'label' | 'status' | 'sort' | 'actions' | 'accounts'> {}
 export interface Permissions {
   actions: Action[];
   menus: Menu[];
@@ -76,3 +82,4 @@ export interface CreateAccountDto extends AccountDto {}
 export interface UpdateAccountDto extends AccountDto {}
 export interface UpdateAccountOrganizationsDto {}
 export interface OrganizationDto {}
+export type RoleName = 'ROOT' | 'ADMIN' | 'USER' | 'GUEST';

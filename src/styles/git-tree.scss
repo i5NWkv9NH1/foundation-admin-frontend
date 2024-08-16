@@ -1,0 +1,35 @@
+/* SCSS mixin to generate git-like connection lines */
+@use 'sass:math';
+
+@mixin generate-git-lines($level, $padding-multiplier: 2rem, $line-color: #ccc) {
+  // padding-left: $level * $padding-multiplier;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    border-left: 2px dashed $line-color;
+  }
+
+  &.git-tree-horizontal::before {
+    // left: -($padding-multiplier * $level / 2);
+    left: math.div($padding-multiplier * $level, 2);
+    width: $padding-multiplier;
+    top: 50%;
+    height: 2px;
+    border-top: 2px dashed $line-color;
+  }
+}
+
+/* Usage for different levels */
+.git-tree {
+  @for $i from 1 through 10 {
+    &.git-tree-level-#{$i} {
+      @include generate-git-lines($i);
+    }
+  }
+}

@@ -53,17 +53,35 @@ export default defineConfig({
       }
     }),
     Fonts({
-      google: {
+      // # https://github.com/vuetifyjs/vuetify/issues/19140#issuecomment-2202578585
+      fontsource: {
         families: [
           {
             name: 'Roboto',
-            styles: 'wght@100;300;400;500;700;900'
+            weights: [100, 300, 400, 500, 700, 900],
+            styles: ['normal', 'italic']
           }
         ]
       }
+      // google: {
+      //   families: [
+      //     {
+      //       name: 'Roboto',
+      //       styles: 'wght@100;300;400;500;700;900'
+      //     }
+      //   ]
+      // }
     })
   ],
   define: { 'process.env': {} },
+  css: {
+    preprocessorOptions: {
+      sass: {
+        api: 'modern'
+      }
+    },
+    preprocessorMaxWorkers: true
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

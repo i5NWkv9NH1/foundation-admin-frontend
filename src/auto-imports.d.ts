@@ -56,10 +56,12 @@ declare global {
   const useCrud: typeof import('./composables/useCRUD')['useCrud']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
+  const useDeepModel: typeof import('./composables/useDeepModel')['useDeepModel']
   const useFetch: typeof import('./composables/useFetch')['useFetch']
   const useRoute: typeof import('vue-router/auto')['useRoute']
   const useRouter: typeof import('vue-router/auto')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
+  const useSnackbar: typeof import('./composables/useSnackbar')['useSnackbar']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
@@ -127,10 +129,12 @@ declare module 'vue' {
     readonly useCrud: UnwrapRef<typeof import('./composables/useCRUD')['useCrud']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
+    readonly useDeepModel: UnwrapRef<typeof import('./composables/useDeepModel')['useDeepModel']>
     readonly useFetch: UnwrapRef<typeof import('./composables/useFetch')['useFetch']>
     readonly useRoute: UnwrapRef<typeof import('vue-router/auto')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router/auto')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useSnackbar: UnwrapRef<typeof import('./composables/useSnackbar')['useSnackbar']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>
