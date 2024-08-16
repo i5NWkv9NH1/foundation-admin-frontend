@@ -12,5 +12,6 @@ onMounted(() => {
     v-model:model-value="appStore.showProgress"
     v-model:progress="appStore.progress"
   />
+  <SnackbarQueue />
   <RouterView />
 </template>

@@ -114,14 +114,13 @@ const onSaveCreateEditDialog = async () => {
   try {
     if (isEditing.value) {
       await apiRoles.updateRole(currentRole.value.id!, currentRole.value);
-      await fetchRoles();
     } else {
       await apiRoles.createRole(currentRole.value);
-      await fetchRoles();
     }
   } catch {
-    await fetchRoles();
     throw new Error(onSaveCreateEditDialog.name);
+  } finally {
+    await fetchRoles();
   }
 };
 /**
@@ -246,7 +245,7 @@ const onSaveRoleActionsDialog = async (actions: Action[]) => {
   }
 };
 onMounted(async () => {
-  await fetchRoles();
+  // await fetchRoles();
   await fetchMenus();
   filterFields.value.map((field) => {
     if (field.name === 'name') {

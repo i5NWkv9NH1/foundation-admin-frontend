@@ -91,14 +91,7 @@ function highlightCode(split: string) {
                 <VIcon :icon="item.icon || 'mdi-empty'" />
               </template>
               <template #item.code="{ item }">
-                <template v-for="action in item.code.split(':')" :key="action">
-                  <strong :class="highlightCode(action)">
-                    {{ action }}
-                    {{
-                    item.code.split(':').indexOf(action) !== item.code.split(':').length -1 ? ':' : ''
-                  }}
-                  </strong>
-                </template>
+                <VCode class="bg-secondary text-body-2 font-weight-bold">{{ item.code }}</VCode>
               </template>
             </VDataTableServer>
           </VCol>

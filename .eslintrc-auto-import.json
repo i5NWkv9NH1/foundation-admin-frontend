@@ -82,6 +82,7 @@
     "useFetch": true,
     "generateAdminMenu": true,
     "generateMenu": true,
-    "useDeepModel": true
+    "useDeepModel": true,
+    "useSnackbar": true
   }
 }

@@ -1,6 +1,6 @@
 // stores/app.ts
 import { DEFAULT_DARK_THEME, DEFAULT_LIGHT_THEME } from '@/constants';
-import { History } from '@/types';
+import { History, SnackbarOptions } from '@/types';
 import { defineStore } from 'pinia';
 import { v4 as uuid } from 'uuid';
 import { useTheme } from 'vuetify';
@@ -84,7 +84,21 @@ export const useAppStore = defineStore('app', () => {
         event.matches ? selectedDarkTheme.value : selectedLightTheme.value;
       }
     });
+
+    clearSnackbars();
   };
+
+  const snackbars = ref<SnackbarOptions[]>([]);
+
+  function addSnackbar(options: SnackbarOptions) {
+    // @ts-ignore
+    snackbars.value.push(options);
+    console.log(snackbars.value);
+  }
+
+  function clearSnackbars() {
+    snackbars.value = [];
+  }
 
   return {
     uniqueId,
@@ -98,8 +112,11 @@ export const useAppStore = defineStore('app', () => {
     startProgress,
     updateProgress,
     stopProgress,
-    initialize
+    initialize,
     // lightThemes,
-    // darkThemes
+    // darkThemes,
+    snackbars,
+    addSnackbar,
+    clearSnackbars
   };
 });

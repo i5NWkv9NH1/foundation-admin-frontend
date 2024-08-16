@@ -1,3 +1,5 @@
+import { StyleValue, TransitionProps } from 'vue';
+
 export type Align = 'center' | 'end' | 'start';
 export type HeaderKey = string | 'data-table-group' | 'data-table-select' | 'data-table-expand';
 
@@ -53,3 +55,61 @@ export type ExpandProps = {
   expanded: readonly string[];
   'onUpdate:expanded': ((value: any[]) => void) | undefined;
 };
+
+declare const block: readonly ['top', 'bottom'];
+declare const inline: readonly ['start', 'end', 'left', 'right'];
+type Tblock = (typeof block)[number];
+type Tinline = (typeof inline)[number];
+type Anchor = Tblock | Tinline | 'center' | 'center center' | `${Tblock} ${Tinline | 'center'}` | `${Tinline} ${Tblock | 'center'}`;
+export type SnackbarLocation = Anchor;
+
+export type SnackbarPosition = 'static' | 'relative' | 'fixed' | 'absolute' | 'sticky';
+
+export type SnackbarVariant = 'text' | 'flat' | 'elevated' | 'tonal' | 'outlined' | 'plain';
+
+export type SnackbarLocationStrategy = 'static' | 'connected' | ((element: HTMLElement) => void);
+
+export interface SnackbarOptions {
+  text: string;
+  multiLine?: boolean;
+  timer?: string | boolean;
+  timeout?: string | number;
+  vertical?: boolean;
+  location?: SnackbarLocation;
+  position?: SnackbarPosition;
+  absolute?: boolean;
+  rounded?: string | number | boolean;
+  tile?: boolean;
+  color?: string;
+  variant?: SnackbarVariant;
+  theme?: string;
+  closeOnBack?: boolean;
+  contained?: boolean;
+  contentClass?: any;
+  contentProps?: any;
+  disabled?: boolean;
+  opacity?: string | number;
+  zIndex?: string | number;
+  target?: Element | 'parent' | 'cursor' | (string & {}) | Component | [number, number];
+  closeOnContentClick?: boolean;
+  style?: StyleValue;
+  class?: any;
+  height?: string | number;
+  maxHeight?: string | number;
+  maxWidth?: string | number;
+  minHeight?: string | number;
+  minWidth?: string | number;
+  width?: string | number;
+  eager?: boolean;
+  locationStrategy?: SnackbarLocationStrategy;
+  origin?: SnackbarLocation | 'auto' | 'overlap';
+  offset?: string | number | number[];
+  transition?: string | boolean | (TransitionProps & { component: Component });
+  attach?: string | boolean | Element;
+  // slots?: {
+  //   activator?: (arg: { isActive: boolean; props: Record<string, any> }) => VNodeChild;
+  //   default?: () => VNodeChild;
+  //   actions?: (arg: { isActive: Ref<boolean> }) => VNodeChild;
+  //   text?: () => VNodeChild;
+  // };
+}
