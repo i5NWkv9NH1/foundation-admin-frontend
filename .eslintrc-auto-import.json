@@ -81,6 +81,7 @@
     "watchSyncEffect": true,
     "useFetch": true,
     "generateAdminMenu": true,
-    "generateMenu": true
+    "generateMenu": true,
+    "useDeepModel": true
   }
 }

@@ -27,8 +27,8 @@ const appStore = useAppStore();
   </VResizeDrawer>
 </template>
 
-<style lang="scss">
+<!-- <style lang="scss">
 .drawer {
   background: var(--v-theme-surface);
 }
-</style>
+</style> -->

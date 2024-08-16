@@ -24,7 +24,8 @@ watch(
   () => props.actions,
   () => {
     selectedActions.value = props.actions;
-  }
+  },
+  { deep: true }
 );
 const tableMeta = defineModel<PaginationMeta & { loading: boolean }>('tableMeta', { required: true });
 
@@ -58,16 +59,18 @@ function highlightCode(split: string) {
       <VCardText>
         <VRow>
           <!-- prettier-ignore -->
-          <VCol cols="12" sm="4" md="4" lg="3">
+          <VCol cols="12" sm="4" md="4" lg="4">
             <TreeActivator
               v-model="activated"
               :items="props.items"
               :item-title="(item) => item.name"
+              class="overflow-y-scroll"
+              :style="{ maxHeight: '400px' }"
             />
           </VCol>
           <!-- prettier-ignore -->
           <VCol
-            cols="12"  sm="8" md="8" lg="9"
+            cols="12"  sm="8" md="8" lg="8"
           >
             <VDataTableServer
               v-model="selectedActions"

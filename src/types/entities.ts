@@ -15,10 +15,12 @@ export interface Role extends BaseEntity {
   accounts: Account[];
 }
 export interface Menu extends BaseEntity {
-  label: string;
+  name: string;
   router: string;
   icon: string;
   path: string;
+  reidrect: string | null;
+  component: string;
   parentId: null | string;
   parent: Menu | null;
   children: Menu[];
@@ -29,6 +31,7 @@ export interface Action extends BaseEntity {
   code: string;
   icon: string;
   menuId: string;
+  menu: Menu;
 }
 export type Gender = 'PRIVATE' | 'FEMALE' | 'MALE';
 export type Status = 'DISABLE' | 'ENABLE';

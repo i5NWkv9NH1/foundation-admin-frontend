@@ -240,7 +240,6 @@ const onSaveOrganizations = async (ids: string[]) => {
     tableMeta.value.loading = true;
     currentAccount.value.organizationIds = ids;
     const newOrgs = currentAccount.value?.organzations?.filter((org) => ids.includes(org.id!));
-    console.log(newOrgs);
     await apiAccounts.updateAccount(currentAccount.value.id!, currentAccount.value);
     await fetchAccounts();
   } catch (error) {

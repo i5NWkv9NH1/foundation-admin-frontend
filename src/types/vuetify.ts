@@ -47,3 +47,9 @@ export interface TableHeader {
   mobile?: boolean;
   children?: TableHeader[];
 }
+
+export type ExpandProps = {
+  expandOnClick: boolean;
+  expanded: readonly string[];
+  'onUpdate:expanded': ((value: any[]) => void) | undefined;
+};

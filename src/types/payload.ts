@@ -1,4 +1,4 @@
-import { Account, Organization, RoleName, Status } from './entities';
+import { Account, Action, Menu, Organization, RoleName, Status } from './entities';
 
 // 通用分页参数
 export interface PaginationPayload {
@@ -13,8 +13,8 @@ export interface FilterPayload {
 
 // 分页和过滤器的请求参数
 export interface RequestPayload<T = FilterPayload> {
-  page: number;
-  itemsPerPage: number;
+  page?: number;
+  itemsPerPage?: number;
   filters?: T;
 }
 
@@ -53,7 +53,9 @@ export interface RoleFilterPayload {
 }
 export interface OrganizationFilterPayload {}
 export interface MenuFilterPayload {}
-export interface ActionFilterPayload {}
+export interface ActionFilterPayload {
+  menuId?: string;
+}
 
 // 创建账户的请求参数
 export type CreateAccountPayload = Pick<Account, 'name' | 'username' | 'avatarUrl' | 'phone' | 'address' | 'gender' | 'status' | 'email' | 'roles'> & {
@@ -97,3 +99,11 @@ export interface UpdateMenuPayload {
   name?: string;
   // 其他字段...
 }
+export interface CreateActionPayload extends Partial<Action> {
+  name: string;
+  code: string;
+  icon: string;
+  menuId: string;
+  menu: Menu;
+}
+export interface UpdateActionPayload extends CreateActionPayload {}
