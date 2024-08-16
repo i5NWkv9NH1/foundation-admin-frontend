@@ -37,14 +37,6 @@ const onSave = () => {
   if (props.closeOnSave) modelValue.value = false;
   emits('save', selectedActions.value);
 };
-
-function highlightCode(split: string) {
-  if (split === 'view') return ['text-info'];
-  if (split === 'create') return ['text-success'];
-  if (split === 'update') return ['text-warning'];
-  if (split === 'delete') return ['text-error'];
-  return 'text-default';
-}
 </script>
 
 <template>

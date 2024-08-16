@@ -36,13 +36,10 @@ async function fetchctionsByMenuId(
 ) {
   loading.value = true;
   try {
-    const {
-      data: { result }
-    } = await apiActions.getActions({ page: 1, itemsPerPage: -1, filters: filters.value });
-    actions.value = result.items;
-    tableMeta.value = result.meta;
+    const response = await apiActions.getActions({ page: 1, itemsPerPage: -1, filters: filters.value });
+    actions.value = response.data.result.items;
+    tableMeta.value = response.data.result.meta;
   } catch (error) {
-    throw error;
   } finally {
     loading.value = false;
     // * reset selected items after update
@@ -103,8 +100,9 @@ const onOpenCreateEditDialog = async (value: boolean, action?: Action) => {
   isEditing.value = value;
   if (isEditing && action) {
     // prettier-ignore
-    const { data: { result }} = await apiActions.getActionById(action.id!)
-    currentAction.value = result;
+    // const { data: { result }} = await apiActions.getActionById(action.id!)
+    const response = await apiActions.getActionById(action.id!)
+    currentAction.value = response.data.result;
   } else {
     currentAction.value = { ...defaultAction.value } as Action;
   }
@@ -120,7 +118,6 @@ const onSaveCreateEditDialog = async () => {
       await apiActions.createAction(currentAction.value);
     }
   } catch (error) {
-    throw error;
   } finally {
     currentAction.value = { ...defaultAction.value } as Action;
     await fetchctionsByMenuId();

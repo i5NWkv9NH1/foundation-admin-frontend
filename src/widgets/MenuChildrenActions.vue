@@ -129,7 +129,6 @@ const onSaveCreateEditDialog = async () => {
       await apiMenus.createMenu(currentMenu.value);
     }
   } catch (error) {
-    throw error;
   } finally {
     await props.refresh();
     currentMenu.value = { ...defaultMenu.value };

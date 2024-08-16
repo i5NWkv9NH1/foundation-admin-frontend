@@ -24,7 +24,6 @@ async function onSubmit(formEl: any) {
   } catch (error) {
     await captchaEl.value.fetchCaptcha();
     form.captcha = '';
-    throw error;
   } finally {
     loading.value = false;
   }

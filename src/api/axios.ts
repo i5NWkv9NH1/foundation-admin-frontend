@@ -110,7 +110,12 @@ apiClient.interceptors.response.use(
       }
     }
 
-    showErrorMessage('Request failed');
+    if (error.response?.status === 403) {
+      showErrorMessage('You have no permission');
+      return;
+    }
+
+    // showErrorMessage('Request failed');
     return Promise.reject(error);
   }
 );

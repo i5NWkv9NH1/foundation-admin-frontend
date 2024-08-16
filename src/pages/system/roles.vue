@@ -239,9 +239,10 @@ const onSaveRoleActionsDialog = async (actions: Action[]) => {
   if (!currentRole.value) return;
   try {
     await apiRoles.updateRoleActionsByRoleIdMenuId(currentRole.value.id!, activatedId.value, actions);
-    await Promise.all([fetchMenus(), fetchRoleActionsByRoleIdMenuId(), fetchMenuActionsByMenuId()]);
   } catch {
     throw new Error(onSaveRoleActionsDialog.name);
+  } finally {
+    await Promise.all([fetchMenus(), fetchRoleActionsByRoleIdMenuId(), fetchMenuActionsByMenuId()]);
   }
 };
 onMounted(async () => {
