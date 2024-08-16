@@ -57,7 +57,7 @@ const filters = ref<RoleFilterPayload>({ ...defaultFilters.value });
 const roles = ref<Role[]>();
 const fetchRoles = async ({ page, itemsPerPage }: { page: number; itemsPerPage: number } = { page: tableMeta.value.page, itemsPerPage: tableMeta.value.itemsPerPage }) => {
   try {
-    tableMeta.value.loading = false;
+    tableMeta.value.loading = true;
     const {
       data: { result }
     } = await apiRoles.getRoles({ page, itemsPerPage, filters: filters.value });

@@ -13,10 +13,10 @@ import App from './App.vue';
 
 // Composables
 import { createApp } from 'vue';
-// import { setupPermission } from './router/permissionGuard';
+import { setupPermission } from './router/permissionGuard';
 
 const app = createApp(App);
 
 registerPlugins(app);
-
+setupPermission();
 app.mount('#root');

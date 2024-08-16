@@ -37,12 +37,12 @@ export const useAppStore = defineStore('app', () => {
   // Themes
   // TODO
   const { themes, global } = useTheme();
-  // const localThemes = ref(JSON.parse(localStorage.getItem('themes')!) || toRaw(themes.value));
-  // const lightThemes = computed(() => Object.values(localThemes.value).filter((theme: any) => !theme.dark));
-  // const darkThemes = computed(() => Object.values(localThemes.value).filter((theme: any) => theme.dark));
+  const localThemes = ref(JSON.parse(localStorage.getItem('themes')!) || toRaw(themes.value));
+  const lightThemes = computed(() => Object.values(localThemes.value).filter((theme: any) => !theme.dark));
+  const darkThemes = computed(() => Object.values(localThemes.value).filter((theme: any) => theme.dark));
   const selectedLightTheme = ref(getLocalStorageItem('LIGHT_THEME', DEFAULT_LIGHT_THEME));
   const selectedDarkTheme = ref(getLocalStorageItem('DARK_THEME', DEFAULT_DARK_THEME));
-  const themeMode = ref(getLocalStorageItem('THEME_MODE', 'system'));
+  const themeMode = ref(getLocalStorageItem('THEME_MODE', 'SYSTEM'));
   const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
   const isSystemDark = computed(() => prefersDarkScheme.matches);
 
@@ -55,10 +55,6 @@ export const useAppStore = defineStore('app', () => {
     } else {
       global.name.value = isSystemDark.value ? selectedDarkTheme.value : selectedLightTheme.value;
     }
-    console.log('vuetify: ', global.name.value);
-    console.log('preset light: ', selectedLightTheme.value);
-    console.log('preset dark: ', selectedDarkTheme.value);
-    console.log('themes', themes.value);
     setLocalStorageItem('THEME_MODE', themeMode.value.toString());
     setLocalStorageItem('LIGHT_THEME', selectedLightTheme.value.toString());
     setLocalStorageItem('DARK_THEME', selectedDarkTheme.value.toString());
@@ -79,9 +75,13 @@ export const useAppStore = defineStore('app', () => {
     updateTheme();
 
     // Handle system color scheme changes
-    prefersDarkScheme.addEventListener('change', (event) => {
+    prefersDarkScheme.addEventListener('change', (_) => {
       if (themeMode.value === 'system') {
-        event.matches ? selectedDarkTheme.value : selectedLightTheme.value;
+        if (_.matches) {
+          global.name.value = selectedDarkTheme.value;
+        } else {
+          global.name.value = selectedLightTheme.value;
+        }
       }
     });
 
@@ -113,8 +113,8 @@ export const useAppStore = defineStore('app', () => {
     updateProgress,
     stopProgress,
     initialize,
-    // lightThemes,
-    // darkThemes,
+    lightThemes,
+    darkThemes,
     snackbars,
     addSnackbar,
     clearSnackbars

@@ -1,8 +1,8 @@
 import { NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw } from 'vue-router';
 import router from '@/router';
 import { useAuthStore } from '@/stores';
+import { whiteList } from '@/constants';
 
-const whiteList = ['/auth/signin', '/auth/signup', '/auth/logout', '/auth/refresh'];
 export function setupPermission() {
   router.beforeEach(async (to, from, next) => {
     // NProgress.start();
@@ -25,14 +25,11 @@ async function handleAuthenticated(to: RouteLocationNormalized, from: RouteLocat
   const hasRoles = authStore.account.roles && authStore.account.roles.length > 0;
 
   if (to.path === '/auth/signin') {
-    // 如果已登录，跳转到首页
     next({ path: '/' });
   } else if (hasRoles) {
-    // 如果路由存在
     if (to.matched.length === 0) {
       next(from.name ? { name: from.name } : '/404');
     } else {
-      // 设置路由标题
       // @ts-ignore
       const title = (to.params.title as string) || (to.query.title as string);
       if (title) {
@@ -45,7 +42,8 @@ async function handleAuthenticated(to: RouteLocationNormalized, from: RouteLocat
     try {
       // const dynamicRoutes = await permissionStore.generateRoutes();
       // dynamicRoutes.forEach((route: RouteRecordRaw) => router.addRoute(route));
-      next({ ...to, replace: true });
+      // next({ ...to, replace: true });
+      next(to);
     } catch (error) {
       // 移除 token 并重定向到登录页
       authStore.clearTokens();
@@ -58,7 +56,8 @@ function handleUnauthenticated(to: RouteLocationNormalized, next: NavigationGuar
   if (whiteList.includes(to.path)) {
     next();
   } else {
-    redirectToLogin(to, next);
+    // redirectToLogin(to, next);
+    next('/auth/signin');
   }
 }
 
@@ -66,5 +65,5 @@ function redirectToLogin(to: RouteLocationNormalized, next: NavigationGuardNext)
   const params = new URLSearchParams(to.query as Record<string, string>);
   const queryString = params.toString();
   const redirect = queryString ? `${to.path}?${queryString}` : to.path;
-  next(`/login?redirect=${encodeURIComponent(redirect)}`);
+  next(`/auth/sigin?redirect=${encodeURIComponent(redirect)}`);
 }

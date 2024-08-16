@@ -20,77 +20,77 @@ import { mdi, aliases } from 'vuetify/iconsets/mdi';
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   // blueprint: md3,
-  defaults: {
-    VAppBar: {
-      flat: true
-    },
-    VAutocomplete: {
-      variant: 'filled'
-    },
-    VBanner: {
-      color: 'primary'
-    },
-    VBottomSheet: {
-      contentClass: 'rounded-t-xl overflow-hidden'
-    },
-    VBtn: {
-      color: 'primary',
-      rounded: 'xl'
-    },
-    VBtnGroup: {
-      rounded: 'xl',
-      VBtn: {
-        rounded: null
-      }
-    },
-    VCard: {
-      rounded: 'lg'
-    },
-    VCheckbox: {
-      color: 'secondary',
-      inset: true
-    },
-    VChip: {
-      rounded: 'sm'
-    },
-    VCombobox: {
-      variant: 'filled'
-    },
-    VNavigationDrawer: {
-      VList: {
-        nav: true,
-        VListItem: {
-          rounded: 'xl'
-        }
-      }
-    },
-    VSelect: {
-      variant: 'filled'
-    },
-    VSlider: {
-      color: 'primary'
-    },
-    VTabs: {
-      color: 'primary'
-    },
-    VTextarea: {
-      variant: 'filled'
-    },
-    VTextField: {
-      variant: 'filled'
-    },
-    VToolbar: {
-      VBtn: {
-        color: null
-      }
-    },
-    VNumberInput: {
-      VBtn: {
-        color: null,
-        rounded: false
-      }
-    }
-  },
+  // defaults: {
+  //   VAppBar: {
+  //     flat: true
+  //   },
+  //   VAutocomplete: {
+  //     variant: 'filled'
+  //   },
+  //   VBanner: {
+  //     color: 'primary'
+  //   },
+  //   VBottomSheet: {
+  //     contentClass: 'rounded-t-xl overflow-hidden'
+  //   },
+  //   VBtn: {
+  //     color: 'primary',
+  //     rounded: 'xl'
+  //   },
+  //   VBtnGroup: {
+  //     rounded: 'xl',
+  //     VBtn: {
+  //       rounded: null
+  //     }
+  //   },
+  //   VCard: {
+  //     rounded: 'lg'
+  //   },
+  //   VCheckbox: {
+  //     color: 'secondary',
+  //     inset: true
+  //   },
+  //   VChip: {
+  //     rounded: 'sm'
+  //   },
+  //   VCombobox: {
+  //     variant: 'filled'
+  //   },
+  //   VNavigationDrawer: {
+  //     VList: {
+  //       nav: true,
+  //       VListItem: {
+  //         rounded: 'xl'
+  //       }
+  //     }
+  //   },
+  //   VSelect: {
+  //     variant: 'filled'
+  //   },
+  //   VSlider: {
+  //     color: 'primary'
+  //   },
+  //   VTabs: {
+  //     color: 'primary'
+  //   },
+  //   VTextarea: {
+  //     variant: 'filled'
+  //   },
+  //   VTextField: {
+  //     variant: 'filled'
+  //   },
+  //   VToolbar: {
+  //     VBtn: {
+  //       color: null
+  //     }
+  //   },
+  //   VNumberInput: {
+  //     VBtn: {
+  //       color: null,
+  //       rounded: false
+  //     }
+  //   }
+  // },
   icons: {
     defaultSet: 'mdi',
     aliases,

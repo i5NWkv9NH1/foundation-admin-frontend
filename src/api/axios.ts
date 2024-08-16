@@ -3,6 +3,7 @@ import { ApiResponse } from '@/types';
 import { useAuthStore } from '@/stores';
 import { isTokenExpired } from '@/helpers';
 import { useSnackbar } from '@/composables/useSnackbar';
+import { whiteList } from '@/constants';
 
 const apiClient = axios.create({
   baseURL: 'http://localhost:3200/api',
@@ -11,7 +12,6 @@ const apiClient = axios.create({
   }
 });
 
-const noAuthPaths = ['/system/auth/signin', '/system/auth/signup', '/system/auth/refresh'];
 let isRefreshing = false; // 用于跟踪是否正在刷新 token
 const subscribers: ((token: string) => void)[] = []; // 订阅者列表
 
@@ -28,16 +28,17 @@ apiClient.interceptors.request.use(
   async (config) => {
     const { showErrorMessage, showSuccessMessage } = useSnackbar();
     const authStore = useAuthStore();
-    const isNoAuth = noAuthPaths.some((path) => config.url && config.url.startsWith(path));
+    const isNoAuth = whiteList.some((path) => config.url && config.url.startsWith(path));
     if (!isNoAuth && authStore.isAuthenticated) {
       if (isTokenExpired(authStore.accessToken!)) {
         if (!isRefreshing) {
           isRefreshing = true;
           try {
+            // *
+            config.headers.Authorization = `Bearer ${authStore.accessToken}`;
             await authStore.refresh();
             isRefreshing = false;
             notifySubscribers(authStore.accessToken!);
-            config.headers.Authorization = `Bearer ${authStore.accessToken}`;
           } catch (refreshError) {
             isRefreshing = false;
             authStore.logout();
@@ -89,10 +90,11 @@ apiClient.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true;
         try {
+          // *
+          originalRequest.headers['Authorization'] = `Bearer ${authStore.accessToken}`;
           await authStore.refresh();
           isRefreshing = false;
           notifySubscribers(authStore.accessToken!);
-          originalRequest.headers['Authorization'] = `Bearer ${authStore.accessToken}`;
           return apiClient(originalRequest);
         } catch (refreshError) {
           isRefreshing = false;

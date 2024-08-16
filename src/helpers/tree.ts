@@ -12,7 +12,8 @@ export const menuFieldMapping = {
   // type: 'type',
   parent: 'parent',
   children: 'children',
-  actions: 'actions'
+  actions: 'actions',
+  sort: 'sort'
 };
 export const organizationFieldMapping = {
   id: 'id',
@@ -32,6 +33,7 @@ export const organizationFieldMapping = {
 export function buildTree<T>(data?: T[], fieldMapping): T[] {
   if (!data) return;
   if (!!!data.length) return;
+
   const nodesMap = {};
   const rootNodes = [];
 
@@ -81,6 +83,14 @@ export function buildTree<T>(data?: T[], fieldMapping): T[] {
         .filter((childNode) => !node.children.some((existingChild) => existingChild.id === childNode.id)); // 避免重复添加
 
       node.children.push(...childNodes);
+
+      // 排序子节点
+      node.children.sort((a, b) => {
+        const sortA = a[fieldMapping.sort] || 0;
+        const sortB = b[fieldMapping.sort] || 0;
+        return sortA - sortB;
+      });
+
       addChildren(childNodes); // 递归处理子节点
     });
   }

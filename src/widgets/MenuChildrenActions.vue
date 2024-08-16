@@ -41,7 +41,6 @@ const tableMeta = ref<PaginationMeta>({
 //   },
 //   { deep: true, immediate: true }
 // );
-console.log(props.items);
 watch(selectedMenus, () => {
   console.log(selectedMenus.value);
 });
@@ -160,8 +159,6 @@ const onConfirmDelete = async () => {
       // TODO: API
     }
   } catch (error) {
-    console.error('删除操作失败:', error);
-    throw new Error('删除操作失败');
   } finally {
     deleteConfirmDialog.value = false;
     await props.refresh(); // 刷新数据
