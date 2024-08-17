@@ -13,8 +13,8 @@ const props = defineProps<{
 }>();
 // prettier-ignore
 const tableRowActions = ref([
-  { title: '新增子菜单', icon: 'mdi-vector-polyline-plus', color: 'primary', action: (item: Menu) => onCreateSubMenu(item.id!) },
-  { title: '新增同级菜单', icon: 'mdi-vector-square-plus', color: 'primary',  action: (item: Menu) => {
+  { title: 'Create Sub Menu', icon: 'mdi-vector-polyline-plus', color: 'primary', action: (item: Menu) => onCreateSubMenu(item.id!) },
+  { title: 'Create Menu', icon: 'mdi-vector-square-plus', color: 'primary',  action: (item: Menu) => {
     if (!item.parent) return onCreateRootMenu()
     return onCreateSubMenu(item.parent.id!)
   }},
@@ -67,7 +67,7 @@ const currentMenu = ref<Menu>({ ...defaultMenu.value });
 const fields = ref<FormField[]>([
   { name: 'name', label: 'Name', type: 'text' },
   { name: 'router', label: 'Router', type: 'text' },
-  { name: 'parentId', label: 'Parent Id', type: 'text', readonly: true, placeholder: '留空为一级菜单', attrs: { 'persistent-placeholder': true } },
+  { name: 'parentId', label: 'Parent Id', type: 'text', readonly: true, placeholder: 'Empty whether if Level 1', attrs: { 'persistent-placeholder': true } },
   { name: 'icon', label: 'Icon', type: 'text' },
   { name: 'sort', label: 'Sort', type: 'number', attrs: { max: 100, min: 0 } },
   { name: 'redirect', label: 'Redirect', type: 'text' },

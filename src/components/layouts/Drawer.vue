@@ -6,7 +6,7 @@ const settingStore = useSettingStore();
 </script>
 
 <template>
-  <VResizeDrawer
+  <VNavigationDrawer
     v-model="settingStore.drawer"
     order="1"
     class="drawer"
@@ -24,11 +24,11 @@ const settingStore = useSettingStore();
     </template>
     <VDivider />
     <Menu />
-  </VResizeDrawer>
+  </VNavigationDrawer>
 </template>
 
-<!-- <style lang="scss">
+<style lang="scss">
 .drawer {
-  background: var(--v-theme-surface);
+  // background: rgb(var(--v-theme-background)) !important;
 }
-</style> -->
+</style>

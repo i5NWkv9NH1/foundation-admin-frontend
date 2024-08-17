@@ -1,5 +1,8 @@
 <script lang="ts" setup>
-onMounted(() => {});
+import { useAppStore } from './stores';
+
+const appStore = useAppStore();
+appStore.clearSnackbars();
 </script>
 
 <template>

@@ -26,7 +26,10 @@ const items = ref([
     transition="slide-y-transition"
   >
     <template #activator="args">
-      <VBtn v-bind="args.props">
+      <VBtn
+        v-bind="args.props"
+        icon
+      >
         <VBadge
           content="2"
           color="error"

@@ -18,5 +18,5 @@ import { setupPermission } from './router/permissionGuard';
 const app = createApp(App);
 
 registerPlugins(app);
-setupPermission();
+// setupPermission();
 app.mount('#root');

@@ -6,8 +6,13 @@ export const useSettingStore = defineStore(
   'settings',
   () => {
     const drawer = ref(false);
+    const settingsDrawer = ref(false);
+
     function toggleDrawer() {
       drawer.value = !drawer.value;
+    }
+    function toggleSettingsDrawer() {
+      settingsDrawer.value = !settingsDrawer.value;
     }
 
     // Themes
@@ -64,11 +69,13 @@ export const useSettingStore = defineStore(
       selectedLightTheme,
       selectedDarkTheme,
       themeMode,
+      settingsDrawer,
       /**
        * * actions
        */
       updateTheme,
-      toggleDrawer
+      toggleDrawer,
+      toggleSettingsDrawer
     };
   },
   { persist: true }

@@ -160,7 +160,7 @@ const tableRowActions = ref([
             start
             icon="mdi-content-save-outline"
           />
-          <span>新增本级菜单权限</span>
+          <span>Create Action</span>
         </VBtn>
         <VBtn
           :disabled="!!!selectedActions.length"

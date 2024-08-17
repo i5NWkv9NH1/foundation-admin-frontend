@@ -51,9 +51,15 @@ onMounted(async () => {
           :src="image"
           :key="image"
           @click="updateCaptcha"
-          :class="[isRunning ? 'cursor-default' : 'cursor-pointer', 'bg-secondary']"
+          :class="[isRunning ? 'cursor-default' : 'cursor-pointer', 'captcha']"
         />
       </VSlideXTransition>
     </template>
   </VTextField>
 </template>
+
+<style lang="scss" scoped>
+.captcha {
+  background: rgb(var(--v-theme-on-primary));
+}
+</style>

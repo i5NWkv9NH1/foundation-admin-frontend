@@ -4,11 +4,12 @@ import { RouteRecordRaw } from 'vue-router';
 import { VList, VListItem, VListSubheader } from 'vuetify/components';
 import { useAuthStore } from '@/stores';
 import { convertToTree } from '@/helpers';
+import { defaultRoutes } from '@/router';
 
 const authStore = useAuthStore();
 // const items = authStore.drawerMenus as unknown as RouteRecordRaw[];
-// const items = convertToTree(authStore.permissions.menus);
-const items = authStore.routes;
+const items = defaultRoutes.concat(convertToTree(authStore.permissions.menus));
+// const items = authStore.routes;
 
 // Function to get the title for a route
 function getTitle(route: RouteRecordRaw): string {
@@ -20,12 +21,11 @@ function getTitle(route: RouteRecordRaw): string {
 function MenuItem({ route, parentRouter }: { route: RouteRecordRaw; parentRouter: string }) {
   // @ts-ignore
   const fullPath = `${parentRouter}/${route.router || route.path}`.replace(/\/{2,}/g, '/'); // Remove any double slashes
-
   return (
     <VListItem
       key={fullPath}
       to={fullPath}
-      prependIcon={route.icon}
+      prependIcon={route.meta?.icon || 'mdi-heart'}
       title={getTitle(route)}
       exact
     />

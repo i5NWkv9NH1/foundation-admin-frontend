@@ -45,6 +45,7 @@ const onSave = () => {
     scrollable
     close-on-back
     max-width="800px"
+    max-height="600px"
   >
     <VCard>
       <VCardTitle>Role Actions</VCardTitle>
@@ -56,7 +57,7 @@ const onSave = () => {
               v-model="activated"
               :items="props.items"
               :item-title="(item) => item.name"
-              class="overflow-y-scroll"
+              class="overflow-y-scroll position-sticky top-0"
               :style="{ maxHeight: '400px' }"
             />
           </VCol>
