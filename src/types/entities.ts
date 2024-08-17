@@ -19,7 +19,7 @@ export interface Menu extends BaseEntity {
   router: string;
   icon: string;
   path: string;
-  reidrect: string | null;
+  redirect: string | null;
   component: string;
   parentId: null | string;
   parent: Menu | null;

@@ -1,146 +1,134 @@
 // stores/auth.ts
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
 import router from '@/router';
 import { apiAuth } from '@/api';
-import type { Account, Permissions, SigninPayload, SignupPayload } from '@/types';
-import { buildTree, getLocalStorageItem, menuFieldMapping, removeLocalStorageItem, setLocalStorageItem } from '@/helpers';
-import { v4 } from 'uuid';
+import type { Token, Account, Permissions, SigninPayload, SignupPayload, Status, Gender, Menu } from '@/types';
+import { RouteRecordRaw } from 'vue-router';
 
-export const useAuthStore = defineStore('auth', () => {
-  const accessToken = ref<string | null>(getLocalStorageItem('accessToken', ''));
-  const refreshToken = ref<string | null>(getLocalStorageItem('refreshToken', ''));
-  const account = ref<Account>(getLocalStorageItem('account', {}));
-  const permissions = ref<Permissions>(getLocalStorageItem('permissions', {})) || { menus: [], actions: [] };
+const defaultAccount = { id: '', name: '', username: '', phone: '', address: '', email: '', avatarUrl: '', roles: [], status: 'ENABLE' as Status, createdAt: '', updatedAt: '', gender: 'FEMALE' as Gender };
+export const useAuthStore = defineStore(
+  'auth',
+  () => {
+    const logger = (fnName: string, ...rest: string[]) => `${useAuthStore.name}::${fnName}::${rest}`;
+    const token = ref<Token>({
+      accessToken: '',
+      refreshToken: ''
+    });
+    const account = ref<Account>({ ...defaultAccount });
+    const permissions = ref<Permissions>({ actions: [], menus: [] });
+    let routes = [];
 
-  function resetUUID() {
-    setLocalStorageItem('uuid', v4());
-  }
-
-  function setTokens(newAccessToken: string, newRefreshToken: string) {
-    accessToken.value = newAccessToken;
-    refreshToken.value = newRefreshToken;
-    setLocalStorageItem('accessToken', newAccessToken);
-    setLocalStorageItem('refreshToken', newRefreshToken);
-  }
-
-  function clearTokens() {
-    accessToken.value = null;
-    refreshToken.value = null;
-    removeLocalStorageItem('accessToken');
-    removeLocalStorageItem('refreshToken');
-  }
-
-  function setAccount(newAccount: Account) {
-    account.value = newAccount;
-    localStorage.setItem('account', JSON.stringify(newAccount));
-  }
-
-  function clearAccount() {
-    account.value = {} as any;
-    removeLocalStorageItem('account');
-  }
-
-  function setPermissions(newPermissions: { menus: any[]; actions: any[] }) {
-    permissions.value = newPermissions;
-    setLocalStorageItem('permissions', JSON.stringify(newPermissions));
-  }
-
-  function clearPermissions() {
-    permissions.value = { menus: [], actions: [] };
-    removeLocalStorageItem('permissions');
-  }
-
-  async function refresh() {
-    try {
-      const {
-        data: { result }
-      } = await apiAuth.refreshToken({ refreshToken: refreshToken.value! });
-      setTokens(result.accessToken, result.refreshToken);
-    } catch (error) {
-      clearTokens();
-      clearAccount();
-      clearPermissions();
-      router.push('/auth/signin');
-      throw new Error('Token refresh failed');
+    function setTokens(_token: Token) {
+      token.value = _token;
     }
-  }
-
-  async function signin(payload: SigninPayload) {
-    try {
-      const {
-        data: { result }
-      } = await apiAuth.signin(payload);
-      setTokens(result.accessToken, result.refreshToken);
-      setAccount(result.account);
-      setPermissions(result.permissions);
-      router.push('/'); // Redirect to a default or dashboard page
-    } catch (error) {
-      throw new Error('Signin failed');
+    function clearTokens() {
+      token.value = { accessToken: '', refreshToken: '' };
     }
-  }
-
-  async function signup(payload: SignupPayload) {
-    try {
-      const {
-        data: { result }
-      } = await apiAuth.signup(payload);
-      resetUUID();
-      setAccount(result.account);
-      setPermissions(result.permissions);
-      await router.push('/dashboard');
-    } catch (error) {
-      throw new Error('Registration failed');
+    function setAccount(_account: Account) {
+      account.value = _account;
     }
-  }
-
-  async function logout() {
-    try {
-      await apiAuth.logout({ accessToken: accessToken.value!, refreshToken: refreshToken.value! });
-      clearTokens();
-      resetUUID();
-      clearAccount();
-      clearPermissions();
-      router.push('/auth/signin');
-    } catch (error) {
-      throw new Error('Logout failed');
+    function clearAccount() {
+      account.value = { ...defaultAccount };
     }
-  }
 
-  async function findMe() {
-    try {
-      // Implementation of findMe
-    } catch (error) {
-      throw new Error('Find me failed');
+    function setPermissions(_permissions: Permissions) {
+      permissions.value = _permissions;
     }
-  }
 
-  const getAccountName = computed(() => account.value.name || account.value.username || '');
-  const isAuthenticated = computed(() => !!accessToken.value);
-  const drawerMenus = computed(() => {
-    if (!permissions.value) return [];
-    if (!permissions.value.menus) return [];
-    return buildTree(permissions.value.menus, menuFieldMapping);
-  });
+    function clearPermissions() {
+      permissions.value = { menus: [], actions: [] };
+    }
 
-  return {
-    accessToken,
-    refreshToken,
-    account,
-    permissions,
-    drawerMenus,
-    setTokens,
-    clearTokens,
-    setAccount,
-    clearAccount,
-    setPermissions,
-    clearPermissions,
-    refresh,
-    signin,
-    signup,
-    logout,
-    findMe,
-    getAccountName,
-    isAuthenticated
-  };
-});
+    async function refresh() {
+      try {
+        const response = await apiAuth.refreshToken({ refreshToken: token.value.refreshToken });
+        setTokens(response.data.result);
+      } catch (error) {
+        clearTokens();
+        clearAccount();
+        clearPermissions();
+        router.push('/auth/signin');
+        throw new Error(logger(refresh.name, 'failed'));
+      }
+    }
+
+    async function signin(payload: SigninPayload) {
+      try {
+        const response = await apiAuth.signin(payload);
+        setTokens(response.data.result.token);
+        setAccount(response.data.result.account);
+        // setPermissions(response.data.result.permissions);
+        router.push('/');
+      } catch (error) {
+        throw new Error(logger(signin.name, 'failed'));
+      }
+    }
+
+    async function signup(payload: SignupPayload) {
+      try {
+        const response = await apiAuth.signup(payload);
+        setTokens(response.data.result.token);
+        setAccount(response.data.result.account);
+        setPermissions(response.data.result.permissions);
+      } catch {
+        throw new Error(logger(signup.name, 'failed'));
+      }
+    }
+
+    async function logout() {
+      try {
+        await apiAuth.logout(token.value);
+        clearTokens();
+        clearAccount();
+        clearPermissions();
+        clearRoutes();
+        router.push('/auth/signin');
+      } catch (error) {
+        throw new Error(logger(logout.name, 'failed'));
+      }
+    }
+
+    async function findMe() {
+      try {
+        const response = await apiAuth.findMe();
+        setAccount(response.data.result.account);
+        setPermissions(response.data.result.permissions);
+      } catch (error) {
+        throw new Error(logger(findMe.name, 'failed'));
+      }
+    }
+
+    const isAuthenticated = computed(() => !!token.value.accessToken);
+
+    function updateRoutes(_routes: RouteRecordRaw[]) {
+      routes = _routes;
+    }
+    function clearRoutes() {
+      routes = [];
+    }
+
+    return {
+      /**
+       * * state
+       */
+      // prettier-ignore
+      token,
+      account,
+      permissions,
+      isAuthenticated,
+      routes,
+      /**
+       * * actions
+       */
+      clearTokens,
+      signin,
+      signup,
+      refresh,
+      logout,
+      findMe,
+      updateRoutes,
+      clearRoutes
+    };
+  },
+  { persist: true }
+);

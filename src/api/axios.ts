@@ -30,15 +30,17 @@ apiClient.interceptors.request.use(
     const authStore = useAuthStore();
     const isNoAuth = whiteList.some((path) => config.url && config.url.startsWith(path));
     if (!isNoAuth && authStore.isAuthenticated) {
-      if (isTokenExpired(authStore.accessToken!)) {
+      console.log('axios::request::authed');
+      if (isTokenExpired(authStore.token.accessToken!)) {
+        console.log('axios::request::token expired');
         if (!isRefreshing) {
           isRefreshing = true;
           try {
             // *
-            config.headers.Authorization = `Bearer ${authStore.accessToken}`;
+            config.headers.Authorization = `Bearer ${authStore.token.accessToken}`;
             await authStore.refresh();
             isRefreshing = false;
-            notifySubscribers(authStore.accessToken!);
+            notifySubscribers(authStore.token.accessToken!);
           } catch (refreshError) {
             isRefreshing = false;
             authStore.logout();
@@ -54,7 +56,7 @@ apiClient.interceptors.request.use(
           });
         }
       } else {
-        config.headers.Authorization = `Bearer ${authStore.accessToken}`;
+        config.headers.Authorization = `Bearer ${authStore.token.accessToken}`;
       }
     }
     return config;
@@ -74,14 +76,16 @@ apiClient.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
+    console.log('axios::response::error');
     const { showErrorMessage } = useSnackbar();
     const authStore = useAuthStore();
     const originalRequest = error.config;
 
     if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
-      if (!authStore.refreshToken) {
+      if (!authStore.token.refreshToken) {
         authStore.logout();
         showErrorMessage('No refresh token available. Please sign in again.');
+        return;
         return Promise.reject(new Error('No refresh token available. Please sign in again.'));
       }
 
@@ -91,15 +95,18 @@ apiClient.interceptors.response.use(
         isRefreshing = true;
         try {
           // *
-          originalRequest.headers['Authorization'] = `Bearer ${authStore.accessToken}`;
+          originalRequest.headers['Authorization'] = `Bearer ${authStore.token.accessToken}`;
           await authStore.refresh();
           isRefreshing = false;
-          notifySubscribers(authStore.accessToken!);
+          notifySubscribers(authStore.token.accessToken!);
           return apiClient(originalRequest);
         } catch (refreshError) {
           isRefreshing = false;
           authStore.logout();
+          //! redirect to signin
+          console.log('axios::response::error::refresh token failed');
           showErrorMessage('Token refresh failed. Please sign in again.');
+          return;
           return Promise.reject(new Error('Token refresh failed. Please sign in again.'));
         }
       } else {
@@ -110,6 +117,8 @@ apiClient.interceptors.response.use(
           });
         });
       }
+    } else if (error.response?.status === 401) {
+      // redirect to signin
     }
 
     if (error.response?.status === 403) {

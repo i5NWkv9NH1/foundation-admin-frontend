@@ -100,4 +100,53 @@ export function buildTree<T>(data?: T[], fieldMapping): T[] {
   return rootNodes;
 }
 
-export const convertToTree = buildTree;
+export function convertToTree(menus) {
+  // 1. 创建一个 ID 到菜单对象的映射
+  const menuMap = new Map();
+  menus.forEach((menu) => {
+    menuMap.set(menu.id, { ...menu, children: [] });
+  });
+
+  // 2. 构建树形结构
+  const tree = [];
+  menus.forEach((menu) => {
+    if (menu.parentId) {
+      // 如果有父菜单，将其添加到父菜单的 children 数组中
+      const parentMenu = menuMap.get(menu.parentId);
+      if (parentMenu) {
+        parentMenu.children.push(menuMap.get(menu.id));
+      }
+    } else {
+      // 如果没有父菜单，则为根菜单
+      tree.push(menuMap.get(menu.id));
+    }
+  });
+
+  return tree;
+}
+// 预先导入所有可能的组件
+const views = import.meta.glob('@/pages/**/*.vue');
+
+// 动态导入组件的辅助函数
+function loadView(view: string) {
+  const matchedView = views[`/src/pages${view}.vue`];
+  if (matchedView) {
+    return matchedView;
+  } else {
+    return views[`/src/pages/[...404].vue`];
+  }
+}
+// 从菜单数据生成 Vue Router 4 的 RouteRecordRaw
+export function buildRoutes(tree: any[], parentRouter = ''): RouteRecordRaw[] {
+  return tree.map((item) => {
+    const { path, parentId, type, ...rest } = item; // 删除 path 字段
+    const route: RouteRecordRaw = {
+      path: type === 'MENU' ? item.router.replace(/^\//, '') : item.router, // 使用 router 字段，确保子路由路径不以 / 开头
+      name: item.name,
+      component: type === 'MENU' ? loadView(`${parentRouter}/${item.component}`) : () => import('@/layouts/AdminLayout.vue'),
+      meta: { title: item.name, icon: item.icon, sort: item.sort },
+      children: item.children ? buildRoutes(item.children, type === 'CATALOG' ? `${parentRouter}${item.router}` : parentRouter) : []
+    };
+    return route;
+  });
+}

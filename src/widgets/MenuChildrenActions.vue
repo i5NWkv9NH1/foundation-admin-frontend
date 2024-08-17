@@ -60,7 +60,7 @@ const defaultMenu = ref<Menu>({
   sort: 1,
   actions: [],
   path: '',
-  reidrect: null
+  redirect: null
 });
 const createEditDialog = ref(false);
 const currentMenu = ref<Menu>({ ...defaultMenu.value });
@@ -192,7 +192,7 @@ const onConfirmDelete = async () => {
     <template #item.router="{ item }">
       <VBtn
         variant="text"
-        :to="item.parent ? `/${item.parent.router}/${item.router}` : `/${item.router}`"
+        :to="item.parent ? `${item.parent.router}${item.router}` : `${item.router}`"
       >
         {{ item.router }}
       </VBtn>

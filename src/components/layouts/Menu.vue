@@ -3,9 +3,12 @@
 import { RouteRecordRaw } from 'vue-router';
 import { VList, VListItem, VListSubheader } from 'vuetify/components';
 import { useAuthStore } from '@/stores';
+import { convertToTree } from '@/helpers';
 
 const authStore = useAuthStore();
-const items = authStore.drawerMenus as unknown as RouteRecordRaw[];
+// const items = authStore.drawerMenus as unknown as RouteRecordRaw[];
+// const items = convertToTree(authStore.permissions.menus);
+const items = authStore.routes;
 
 // Function to get the title for a route
 function getTitle(route: RouteRecordRaw): string {

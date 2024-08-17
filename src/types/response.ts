@@ -14,7 +14,13 @@ export interface ApiResponse {
 export interface ApiResponseWithResult<T> extends ApiResponse {
   result: T;
 }
-export interface ApiSigninResponse extends ApiResponseWithResult<Account> {}
+export interface ApiSigninResponse
+  extends ApiResponseWithResult<{
+    account: Account;
+    token: Token;
+    permissions: Permissions;
+  }> {}
+export interface ApiSignupResponse extends ApiSigninResponse {}
 
 export interface ApiFindMeResponse
   extends ApiResponseWithResult<{

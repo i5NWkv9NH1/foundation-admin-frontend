@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { VResizeDrawer } from '@wdns/vuetify-resize-drawer';
-import { useAppStore } from '@/stores';
+import { useSettingStore } from '@/stores';
 
-const appStore = useAppStore();
+const settingStore = useSettingStore();
 </script>
 
 <template>
   <VResizeDrawer
-    v-model="appStore.drawer"
+    v-model="settingStore.drawer"
     order="1"
     class="drawer"
   >

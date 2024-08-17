@@ -27,7 +27,8 @@ export default defineConfig({
         'vue',
         {
           'vue-router/auto': ['useRoute', 'useRouter']
-        }
+        },
+        'pinia'
       ],
       dts: 'src/auto-imports.d.ts',
       eslintrc: {

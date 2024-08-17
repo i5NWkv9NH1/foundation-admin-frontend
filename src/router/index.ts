@@ -13,16 +13,11 @@ import { useAppStore, useAuthStore } from '@/stores';
 const AuthLayout = () => import('@/layouts/AuthLayout.vue');
 const AdminLayout = () => import('@/layouts/AdminLayout.vue');
 
-const routes: RouteRecordRaw[] = [
+export const defaultRoutes: RouteRecordRaw[] = [
   {
     path: '/auth',
     component: AuthLayout,
     children: [
-      {
-        name: 'index',
-        path: '',
-        redirect: '/auth/signin'
-      },
       {
         path: 'signin',
         name: 'SignIn',
@@ -44,78 +39,23 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: AdminLayout,
+    redirect: '/dashboard',
     children: [
-      {
-        path: '',
-        name: 'dashboard',
-        redirect: '/dashboard'
-      },
       {
         path: 'dashboard',
         name: 'Dashboard',
-        component: () => import('@/pages/dashboard.vue')
+        component: () => import('@/pages/dashboard.vue'),
+        meta: {
+          title: 'dashboard',
+          icon: 'homepage',
+          affix: true,
+          keepAlive: true
+        }
       },
       {
         path: 'forbidden',
         name: 'Forbidden',
         component: () => import('@/pages/forbidden.vue')
-      },
-      {
-        path: 'unauthorized',
-        name: 'Unauthorized',
-        component: () => import('@/pages/unauthorized.vue')
-      },
-      {
-        path: 'system',
-        name: 'System',
-        children: [
-          {
-            path: '',
-            name: 'index',
-            redirect: '/system/accounts'
-          },
-          {
-            path: 'accounts',
-            name: 'Accounts',
-            component: () => import('@/pages/system/accounts.vue')
-          },
-          {
-            path: 'roles',
-            name: 'Roles',
-            component: () => import('@/pages/system/roles.vue')
-          },
-          {
-            path: 'menus',
-            name: 'Menus',
-            component: () => import('@/pages/system/menus.vue')
-          }
-        ]
-      },
-      {
-        path: 'workplace',
-        name: 'Workplace',
-        children: [
-          {
-            name: 'index',
-            path: '',
-            redirect: '/workplace/analysis'
-          },
-          {
-            path: 'analysis',
-            name: 'Analysis',
-            component: () => import('@/pages/workplace/analysis.vue')
-          },
-          {
-            path: 'test',
-            name: 'Test',
-            component: () => import('@/pages/workplace/test.vue')
-          },
-          {
-            path: 'tools',
-            name: 'Tools',
-            component: () => import('@/pages/workplace/tools.vue')
-          }
-        ]
       },
       {
         path: ':pathMatch(.*)*',
@@ -127,45 +67,9 @@ const routes: RouteRecordRaw[] = [
 ];
 
 const router = createRouter({
+  // history: createWebHistory(import.meta.env.BASE_URL),
   history: createWebHistory(import.meta.env.BASE_URL),
-  // routes: setupLayouts(routes)
-  routes
-});
-
-let progressInterval: number | null = null;
-router.beforeEach(async (to, from, next) => {
-  // * ProgressBar
-  const appStore = useAppStore();
-  appStore.startProgress();
-  // Simulate progress increase
-  let progress = 0;
-  progressInterval = setInterval(() => {
-    progress += 10; // Increase progress
-    if (progress > 90) {
-      progress = 90; // Cap progress at 90%
-    }
-    appStore.updateProgress(progress);
-  }, 100);
-
-  const authStore = useAuthStore();
-  if (to.path !== '/auth/signin' && to.path !== '/auth/signup' && !authStore.isAuthenticated) {
-    next('/auth/signin');
-    return;
-  }
-  next();
-});
-router.afterEach((to) => {
-  const appStore = useAppStore();
-
-  // if (!appStore.histories.some((_) => _.fullPath === to.fullPath)) {
-  //   appStore.histories.push({ ...to, timestamp: new Date().getTime() });
-  //   localStorage.setItem('histories', JSON.stringify(appStore.histories));
-  // }
-
-  if (progressInterval) {
-    clearInterval(progressInterval);
-  }
-  appStore.stopProgress();
+  routes: defaultRoutes
 });
 
 // Workaround for https://github.com/vitejs/vite/issues/11804
