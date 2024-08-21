@@ -33,4 +33,4 @@ export default {
     'success-lighten-1': '#66BB6A',
     'warning-darken-1': '#E65100'
   }
-};
+}

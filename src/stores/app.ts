@@ -1,32 +1,32 @@
 // stores/app.ts
-import { DEFAULT_DARK_THEME, DEFAULT_LIGHT_THEME } from '@/constants';
-import { SnackbarOptions } from '@/types';
-import { defineStore } from 'pinia';
-import { v4 as uuid } from 'uuid';
-import { useTheme } from 'vuetify';
+import { DEFAULT_DARK_THEME, DEFAULT_LIGHT_THEME } from '@/constants'
+import { SnackbarOptions } from '@/types'
+import { defineStore } from 'pinia'
+import { v4 as uuid } from 'uuid'
+import { useTheme } from 'vuetify'
 
 export const useAppStore = defineStore(
   'app',
   () => {
-    const uniqueId = ref(uuid());
+    const uniqueId = ref(uuid())
 
     // * Auth
-    const authVideo = ref('/public/signin.mp4');
+    const authVideo = ref('/public/signin.mp4')
 
     function updateAuthVideo(url: string) {
-      authVideo.value = url;
+      authVideo.value = url
     }
 
-    const snackbars = ref<SnackbarOptions[]>([]);
+    const snackbars = ref<SnackbarOptions[]>([])
 
     function addSnackbar(options: SnackbarOptions) {
       // @ts-ignore
-      snackbars.value.push(options);
-      console.log(snackbars.value);
+      snackbars.value.push(options)
+      console.log(snackbars.value)
     }
 
     function clearSnackbars() {
-      snackbars.value = [];
+      snackbars.value = []
     }
 
     return {
@@ -42,7 +42,7 @@ export const useAppStore = defineStore(
       updateAuthVideo,
       addSnackbar,
       clearSnackbars
-    };
+    }
   },
   { persist: true }
-);
+)

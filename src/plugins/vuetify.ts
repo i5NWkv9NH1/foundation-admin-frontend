@@ -5,17 +5,17 @@
  */
 
 // Styles
-import '@mdi/font/css/materialdesignicons.css';
-import 'vuetify/styles';
+import '@mdi/font/css/materialdesignicons.css'
+import 'vuetify/styles'
 
 // Composables
-import { createVuetify } from 'vuetify';
+import { createVuetify } from 'vuetify'
 // import { md3 } from 'vuetify/blueprints';
-import * as directives from 'vuetify/directives';
-import { OCEAN_BREEZE_LIGHT, OCEAN_BREEZE_DARK, FOREST_RETREAT_LIGHT, FOREST_RETREAT_DARK, SUNSET_GLOW_LIGHT, SUNSET_GLOW_DARK, GPT_LIGHT, GPT_DARK, TWITTER_LIGHT, TWITTER_DARK, GOOGLE_LIGHT, GOOGLE_DARK, FACEBOOK_LIGHT, FACEBOOK_DARK, PINTEREST_LIGHT, PINTEREST_DARK, LINKED_LIGHT, LINKED_DARK, SPOTIFY_LIGHT, SPOTIFY_DARK, GITHUB_LIGHT, GITHUB_DARK } from '@/themes';
-import { DEFAULT_LIGHT_THEME } from '@/constants';
-import { md3 } from 'vuetify/blueprints';
-import { mdi, aliases } from 'vuetify/iconsets/mdi';
+import * as directives from 'vuetify/directives'
+import { OCEAN_BREEZE_LIGHT, OCEAN_BREEZE_DARK, FOREST_RETREAT_LIGHT, FOREST_RETREAT_DARK, SUNSET_GLOW_LIGHT, SUNSET_GLOW_DARK, GPT_LIGHT, GPT_DARK, TWITTER_LIGHT, TWITTER_DARK, GOOGLE_LIGHT, GOOGLE_DARK, FACEBOOK_LIGHT, FACEBOOK_DARK, PINTEREST_LIGHT, PINTEREST_DARK, LINKED_LIGHT, LINKED_DARK, SPOTIFY_LIGHT, SPOTIFY_DARK, GITHUB_LIGHT, GITHUB_DARK } from '@/themes'
+import { DEFAULT_LIGHT_THEME } from '@/constants'
+import { md3 } from 'vuetify/blueprints'
+import { mdi, aliases } from 'vuetify/iconsets/mdi'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
@@ -131,4 +131,4 @@ export default createVuetify({
       TWITTER_LIGHT
     }
   }
-});
+})

@@ -83,7 +83,7 @@ export default {
           volume: '0.0001'
         }
       ]
-    };
+    }
   }
-};
+}
 </script>

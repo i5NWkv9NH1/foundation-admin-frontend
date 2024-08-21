@@ -1,43 +1,43 @@
-import { Token } from './payload';
-import { Account, Permissions } from './entities';
+import { Account, Permissions } from './entities'
+import { Tokens } from './payload'
 
 export interface ApiResponse {
   meta?: {
-    processedBy: string;
-    version: string;
-  };
-  message: string;
-  statusCode: number;
-  errors?: any;
-  timestamp: string;
+    processedBy: string
+    version: string
+  }
+  message: string
+  statusCode: number
+  errors?: any
+  timestamp: string
 }
 export interface ApiResponseWithResult<T> extends ApiResponse {
-  result: T;
+  result: T
 }
 export interface ApiSigninResponse
   extends ApiResponseWithResult<{
-    account: Account;
-    token: Token;
-    permissions: Permissions;
+    account: Account
+    tokens: Tokens
+    permissions: Permissions
   }> {}
 export interface ApiSignupResponse extends ApiSigninResponse {}
 
 export interface ApiFindMeResponse
   extends ApiResponseWithResult<{
-    account: Account;
-    permissions: Permissions;
+    account: Account
+    permissions: Permissions
   }> {}
 
 export interface PaginationMeta {
-  page: number;
-  itemsPerPage: number;
-  itemsCount: number;
-  pagesCount: number;
+  page: number
+  itemsPerPage: number
+  itemsLength: number
+  pagesLength: number
 }
 
 export interface ApiPaginatedResponse<T> extends ApiResponse {
   result: {
-    items: T[];
-    meta: PaginationMeta;
-  };
+    items: T[]
+    meta: PaginationMeta
+  }
 }

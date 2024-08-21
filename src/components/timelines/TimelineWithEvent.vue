@@ -130,7 +130,7 @@
   </VCard>
 </template>
 <script>
-import { VCardText } from 'vuetify/components';
+import { VCardText } from 'vuetify/components'
 
 export default {
   data: () => ({
@@ -141,13 +141,13 @@ export default {
 
   computed: {
     timeline() {
-      return this.events.slice().reverse();
+      return this.events.slice().reverse()
     }
   },
 
   methods: {
     comment() {
-      const time = new Date().toTimeString();
+      const time = new Date().toTimeString()
       this.events.push({
         id: this.nonce++,
         text: this.input,
@@ -155,12 +155,12 @@ export default {
           return ` ${contents
             .split(' ')
             .map((v) => v.charAt(0))
-            .join('')}`;
+            .join('')}`
         })
-      });
+      })
 
-      this.input = null;
+      this.input = null
     }
   }
-};
+}
 </script>

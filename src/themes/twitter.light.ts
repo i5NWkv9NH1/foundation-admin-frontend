@@ -23,4 +23,4 @@ export default {
     'border-radius': '4px',
     'button-height': '40px'
   }
-};
+}

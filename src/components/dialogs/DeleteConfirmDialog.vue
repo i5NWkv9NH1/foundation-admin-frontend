@@ -1,20 +1,20 @@
 <script setup lang="ts">
-type Mode = 'single' | 'multiple';
+type Mode = 'single' | 'multiple'
 interface Props {
-  mode: 'single' | 'multiple';
+  mode: 'single' | 'multiple'
 }
-const modelValue = defineModel<boolean>('modelValue', { required: true });
+const modelValue = defineModel<boolean>('modelValue', { required: true })
 const emits = defineEmits<{
-  (e: 'confirm', mode: Mode): void;
-}>();
+  (e: 'confirm', mode: Mode): void
+}>()
 const props = withDefaults(defineProps<Props>(), {
   mode: 'single'
-});
-const onClose = () => (modelValue.value = false);
+})
+const onClose = () => (modelValue.value = false)
 const onConfirm = () => {
-  onClose();
-  emits('confirm', props.mode);
-};
+  onClose()
+  emits('confirm', props.mode)
+}
 </script>
 
 <template>

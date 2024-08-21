@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { useSettingStore } from '@/stores';
+import { useSettingStore } from '@/stores'
 
-const settingStore = useSettingStore();
+const settingStore = useSettingStore()
 const themeModes = ref([
   { name: 'Light', value: 'light', icon: 'mdi-sun' },
   { name: 'Dark', value: 'dark', icon: 'mdi-moon' },
   { name: 'System', value: 'system', icon: 'mdi-laptop' }
-]);
-console.log(settingStore.lightThemes);
+])
 </script>
 
 <template>
@@ -35,6 +34,7 @@ console.log(settingStore.lightThemes);
       </VListItem>
       <VListSubheader>Light Themes</VListSubheader>
       <VListItem>
+        <!-- @vue-ignore -->
         <VSelect
           v-model="settingStore.selectedLightTheme"
           density="compact"
@@ -45,6 +45,7 @@ console.log(settingStore.lightThemes);
       </VListItem>
       <VListSubheader>Dark Themes</VListSubheader>
       <VListItem>
+        <!-- @vue-ignore -->
         <VSelect
           v-model="settingStore.selectedDarkTheme"
           density="compact"

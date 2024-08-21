@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const current = ref(0);
-const tabs = ref(['Message', 'Notice', 'Todo']);
+const current = ref(0)
+const tabs = ref(['Message', 'Notice', 'Todo'])
 const items = ref([
   {
     id: 1,
@@ -16,7 +16,7 @@ const items = ref([
     avatar: 'https://randomuser.me/api/portraits/thumb/men/2.jpg',
     image: 'https://picsum.photos/80/80?random=2'
   }
-]);
+])
 </script>
 
 <template>

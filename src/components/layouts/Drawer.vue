@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { VResizeDrawer } from '@wdns/vuetify-resize-drawer';
-import { useSettingStore } from '@/stores';
+import { usePermissionStore, useSettingStore } from '@/stores'
 
-const settingStore = useSettingStore();
+const settingStore = useSettingStore()
+const permissionStore = usePermissionStore()
+const router = useRouter()
+console.log(router.getRoutes())
 </script>
 
 <template>
@@ -23,12 +25,5 @@ const settingStore = useSettingStore();
       </VToolbar>
     </template>
     <VDivider />
-    <Menu />
   </VNavigationDrawer>
 </template>
-
-<style lang="scss">
-.drawer {
-  // background: rgb(var(--v-theme-background)) !important;
-}
-</style>

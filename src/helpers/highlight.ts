@@ -1,21 +1,21 @@
 export function highlightActionColor(value: string) {
   // * example
   // * `view:sys:users`
-  const strArr = value.split(':');
-  const [action, ..._modules] = strArr;
+  const strArr = value.split(':')
+  const [action, ..._modules] = strArr
   switch (action) {
     case 'view' || 'VIEW':
-      return 'primary';
+      return 'primary'
     case 'create' || 'CREATE':
-      return 'success';
+      return 'success'
     case 'update' || 'UPDATE':
-      return 'wanring';
+      return 'wanring'
     case 'delete' || 'DELETE':
-      return 'error';
+      return 'error'
     default:
-      return 'secondary';
+      return 'secondary'
   }
 }
 export const highlights = {
   action: highlightActionColor
-};
+}

@@ -1,36 +1,62 @@
 <script lang="ts" setup>
-import { useAuthStore, useAppStore } from '@/stores';
-import { validationRules } from '@/helpers';
+import { validationRules } from '@/helpers'
+import { useAppStore, useAuthStore } from '@/stores'
+import { LocationQuery } from 'vue-router'
 
 const form = reactive({
   username: '',
   password: '',
   captcha: ''
-});
+})
 
-const loading = ref(false);
-const { signin } = useAuthStore();
-const { uniqueId, updateAuthVideo } = useAppStore();
-const captchaEl = ref();
+const loading = ref(false)
+const { signin } = useAuthStore()
+const { uniqueId, updateAuthVideo } = useAppStore()
+const captchaEl = ref()
+const router = useRouter()
+const route = useRoute()
+
+function parseRedirect(): {
+  path: string
+  queryParams: Record<string, string>
+} {
+  const query: LocationQuery = route.query
+  const redirect = (query.redirect as string) ?? '/'
+
+  const url = new URL(redirect, window.location.origin)
+  const path = url.pathname
+  const queryParams: Record<string, string> = {}
+
+  url.searchParams.forEach((value, key) => {
+    queryParams[key] = value
+  })
+
+  return { path, queryParams }
+}
 
 async function onSubmit(formEl: any) {
-  const { valid } = await formEl.validate();
+  const { valid } = await formEl.validate()
   if (!valid) {
-    return;
+    return
   }
   try {
-    loading.value = true;
-    await signin({ ...form, uniqueId });
+    loading.value = true
+    await signin({
+      account: { username: form.username, password: form.password },
+      verify: { uniqueId, captcha: form.captcha }
+    })
+    const { path, queryParams } = parseRedirect()
+    router.push({ path: path, query: queryParams })
   } catch (error) {
-    await captchaEl.value.fetchCaptcha();
-    form.captcha = '';
+    await captchaEl.value.fetchCaptcha()
+    form.captcha = ''
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 onMounted(() => {
-  updateAuthVideo('/public/signin.mp4');
-});
+  updateAuthVideo('/public/signin.mp4')
+})
 </script>
 
 <template>

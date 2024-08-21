@@ -1,5 +1,5 @@
 <script>
-const exhale = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const exhale = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export default {
   data: () => ({
@@ -9,34 +9,34 @@ export default {
 
   computed: {
     avg() {
-      const sum = this.heartbeats.reduce((acc, cur) => acc + cur, 0);
-      const length = this.heartbeats.length;
+      const sum = this.heartbeats.reduce((acc, cur) => acc + cur, 0)
+      const length = this.heartbeats.length
 
-      if (!sum && !length) return 0;
+      if (!sum && !length) return 0
 
-      return Math.ceil(sum / length);
+      return Math.ceil(sum / length)
     }
   },
 
   created() {
-    this.takePulse(false);
+    this.takePulse(false)
   },
 
   methods: {
     heartbeat() {
-      return Math.ceil(Math.random() * (120 - 80) + 80);
+      return Math.ceil(Math.random() * (120 - 80) + 80)
     },
     async takePulse(inhale = true) {
-      this.checking = true;
+      this.checking = true
 
-      inhale && (await exhale(1000));
+      inhale && (await exhale(1000))
 
-      this.heartbeats = Array.from({ length: 20 }, this.heartbeat);
+      this.heartbeats = Array.from({ length: 20 }, this.heartbeat)
 
-      this.checking = false;
+      this.checking = false
     }
   }
-};
+}
 </script>
 
 <template>
@@ -67,6 +67,7 @@ export default {
         icon="mdi-arrow-right-thick"
         size="34"
         variant="text"
+        to="/system"
       ></v-btn>
     </template>
 

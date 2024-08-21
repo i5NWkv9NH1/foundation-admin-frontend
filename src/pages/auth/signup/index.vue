@@ -1,41 +1,41 @@
 <script lang="ts" setup>
-import { useAppStore } from '@/stores/app';
-import { validationRules } from '@/helpers';
-import { useAuthStore } from '@/stores';
+import { validationRules } from '@/helpers'
+import { useAuthStore } from '@/stores'
+import { useAppStore } from '@/stores/app'
 
-const loading = ref(false);
-const { signup } = useAuthStore();
-const { uniqueId, updateAuthVideo } = useAppStore();
-const captchaEl = ref();
+const loading = ref(false)
+const { signup } = useAuthStore()
+const { uniqueId, updateAuthVideo } = useAppStore()
+const captchaEl = ref()
 const form = reactive({
   username: '',
   password: '',
   confirmPassword: '',
   captcha: ''
-});
+})
 const confirmPasswordRules = computed(() => {
-  return [(v: string) => !!v || 'Please confirm your password', (v: string) => v === form.password || 'Passwords do not match'];
-});
+  return [(v: string) => !!v || 'Please confirm your password', (v: string) => v === form.password || 'Passwords do not match']
+})
 async function onSubmit(formEl: any) {
-  const { valid } = await formEl.validate();
+  const { valid } = await formEl.validate()
   if (!valid) {
-    return;
+    return
   }
   try {
-    loading.value = true;
-    await signup({ ...form, uniqueId });
+    loading.value = true
+    await signup({ ...form, uniqueId })
   } catch (error) {
-    await captchaEl.value.fetchCaptcha();
-    form.captcha = '';
-    throw error;
+    await captchaEl.value.fetchCaptcha()
+    form.captcha = ''
+    throw error
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 
 onMounted(() => {
-  updateAuthVideo('/public/signup.mp4');
-});
+  updateAuthVideo('/public/signup.mp4')
+})
 </script>
 
 <template>

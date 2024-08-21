@@ -1,7 +1,7 @@
 <script>
 export default {
   data: () => ({ review: '30%' })
-};
+}
 </script>
 
 <template>

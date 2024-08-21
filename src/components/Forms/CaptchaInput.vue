@@ -1,24 +1,24 @@
 <script lang="ts" setup>
-import { useCaptcha } from '@/composables';
+import { useCaptcha } from '@/composables'
 
-const { image, countdown, isRunning, isGetCaptcha, fetchCaptcha } = useCaptcha();
+const { image, countdown, isRunning, isGetCaptcha, fetchCaptcha } = useCaptcha()
 const props = defineProps<{
-  rules: Array<(value: string) => boolean | string>;
-  placeholder?: string;
-}>();
-const modelValue = defineModel<string>('modelValue', { required: true });
+  rules: Array<(value: string) => boolean | string>
+  placeholder?: string
+}>()
+const modelValue = defineModel<string>('modelValue', { required: true })
 const updateCaptcha = () => {
-  if (isRunning.value) return;
-  fetchCaptcha();
-};
+  if (isRunning.value) return
+  fetchCaptcha()
+}
 // ? useCaptcha is shared composable
 // ? expose it's state
 defineExpose({
   fetchCaptcha: fetchCaptcha
-});
+})
 onMounted(async () => {
-  await fetchCaptcha();
-});
+  await fetchCaptcha()
+})
 </script>
 
 <template>
