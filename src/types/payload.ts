@@ -113,14 +113,26 @@ export interface CreateMenuDto {
 
 export interface UpdateMenuDto extends CreateMenuDto {}
 
-export interface CreateOrganizationDto {}
+export interface CreateOrganizationDto {
+  id?: string
+  label: string
+  name: string
+  status: Status
+  icon?: string | null
+  parent: Organization | null
+  parentId: string | null
+  sort: number
+  path: string
+}
 export interface UpdateOrganizationDto extends CreateOrganizationDto {}
 
 export interface CreateActionDto extends Partial<Action> {
+  id?: string
   name: string
   code: string
   icon: string
   menuId: string
   sort: number
+  status: Status
 }
 export interface UpdateActionDto extends CreateActionDto {}

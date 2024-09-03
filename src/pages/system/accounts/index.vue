@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { apiAccounts, apiOrganizations, apiRoles } from '@/api'
-import { Account, AccountFilterPayload, CreateAccountDto, DeleteMode, FormField, Organization, Role, TableCallbackOptions, TableHeader, TableMeta, TableRowAction } from '@/types'
-import AccountCreateEditDrawer from './components/AccountCreateEditDrawer.vue'
-import AccountOrganizationsDialog from './components/AccountOrganizationsDialog.vue'
+import { apiAccounts, apiOrganizations, apiRoles } from '@/api';
+import { Account, AccountFilterPayload, CreateAccountDto, DeleteMode, FormField, Organization, Role, TableCallbackOptions, TableHeader, TableMeta, TableRowAction } from '@/types';
+import AccountCreateEditDrawer from './components/AccountCreateEditDrawer.vue';
+import AccountOrganizationsDialog from './components/AccountOrganizationsDialog.vue';
 
 /**
  * * Table
@@ -46,11 +46,13 @@ const defaultFilters: AccountFilterPayload = {
 const filters = ref<AccountFilterPayload>({ ...defaultFilters })
 // prettier-ignore
 const fileterFields = ref<FormField[]>([
-  { name: 'roleId', label: 'Roles', type: 'select', variant: 'outlined', options: [], attrs: { 'hide-details': true, grid: { cols: 4 }, 'item-title': 'name', 'item-value': 'id' , } },
-  { name: 'status', label: 'Status', type: 'select', variant: 'outlined',  attrs: { grid: { cols: 4 }, 'item-title': 'name',  'item-value': 'value', items: [{ name: 'All', value: 'ALL' }, { name: 'Enabled', value: 'Enabled' }, { name: 'Disabled', value: 'Dsiabled' },
-  ] }},
-  { name: 'gender', label: 'Gender', type: 'select', variant: 'outlined', attrs: { grid: { cols: 4 }, 'item-title': 'name',  'item-value': 'value', items: [{ name: 'Private', value: 'Private' }, { name: 'Male', value: 'Male' }, { name: 'Female', value: 'Female' },
-  ] }}
+  { name: 'roleId', label: 'Roles', type: 'select',  options: [], attrs: { 'hide-details': true, grid: { cols: 4 }, 'item-title': 'name', 'item-value': 'id' , variant: 'outlined' } },
+  { name: 'status', label: 'Status', type: 'select', attrs: { grid: { cols: 4 }, 'item-title': 'name',  'item-value': 'value',  'variant': 'outlined',
+    items: [{ name: 'All', value: 'ALL' }, { name: 'Enabled', value: 'Enabled' }, { name: 'Disabled', value: 'Dsiabled' },]
+  }},
+  { name: 'gender', label: 'Gender', type: 'select', attrs: { grid: { cols: 4 }, 'item-title': 'name',  'item-value': 'value',  'variant': 'outlined',
+    items: [{ name: 'Private', value: 'Private' }, { name: 'Male', value: 'Male' }, { name: 'Female', value: 'Female' },]
+  }}
 ]);
 const onFilterSubmit = async () => {
   await onFetchAccounts()
@@ -298,7 +300,7 @@ onMounted(async () => {
                   <VCardActions>
                     <VBtn
                       color="primary"
-                      @click="onOpenCreateEditDrawer(true)"
+                      @click="onOpenCreateEditDrawer(false)"
                     >
                       <VIcon
                         icon="mdi-plus-thick"

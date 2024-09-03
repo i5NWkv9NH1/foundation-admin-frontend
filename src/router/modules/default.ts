@@ -4,6 +4,7 @@ import { RouteRecordRaw } from 'vue-router'
 export const defaultRoutes = <RouteRecordRaw[]>[
   {
     path: 'dashboard',
+    name: 'Dashboard',
     component: () => import('@/pages/dashboard/index.vue'),
     meta: {
       title: 'Dashboard',

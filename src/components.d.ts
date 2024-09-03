@@ -10,6 +10,7 @@ declare module 'vue' {
     AccountCreateEditDrawer: typeof import('./pages/system/accounts/components/AccountCreateEditDrawer.vue')['default']
     AccountOrganizationsDialog: typeof import('./pages/system/accounts/components/AccountOrganizationsDialog.vue')['default']
     AuthenticationForm: typeof import('./widgets/AuthenticationForm.vue')['default']
+    Authority: typeof import('./components/Authority.vue')['default']
     AvatarWithError: typeof import('./components/AvatarWithError.vue')['default']
     BottomBar: typeof import('./components/layouts/BottomBar.vue')['default']
     BreadCrumb: typeof import('./components/layouts/BreadCrumb.vue')['default']

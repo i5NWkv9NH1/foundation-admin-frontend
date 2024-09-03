@@ -1,33 +1,36 @@
 <script lang="ts" setup>
-import { CreateMenuDto } from '@/types'
+import { CreateOrganizationDto } from '@/types'
+
+const status = ref([
+  { label: 'Enabled', value: 'Enabled', color: 'success' },
+  { label: 'Disabled', value: 'Disabled', color: 'grey' }
+])
 
 interface Props {
   isEidting: boolean
-  menu: CreateMenuDto
+  organization: CreateOrganizationDto
 }
 const modelValue = defineModel<boolean>('modelValue', {
   required: true
 })
 const props = defineProps<Props>()
-const form = ref({ ...props.menu })
+const form = ref({ ...props.organization })
 const formEl = ref()
 const isValid = ref<boolean | null>(false)
 const rules = computed(
   () =>
     form.value && {
-      name: [(v: string) => !!v || 'Label is required'],
-      router: [(v: string) => !!v || 'Name is required'],
-      component: [(v: string) => !!v || 'Component is required'],
-      icon: [(v: string) => !!v || 'Icon is required'],
+      label: [(v: string) => !!v || 'Label is required'],
+      name: [(v: string) => !!v || 'Name is required'],
       sort: [(v: number) => !!v || 'Sort is required']
     }
 )
 
 // ! Update form state when updating props
 watch(
-  () => props.menu,
+  () => props.organization,
   () => {
-    form.value = props.menu
+    form.value = props.organization
   }
 )
 
@@ -47,7 +50,7 @@ async function onSave() {
 function onClose() {
   modelValue.value = false
   emits('close')
-  console.log(props.menu)
+  console.log(props.organization)
 }
 </script>
 
@@ -78,43 +81,47 @@ function onClose() {
           class="d-flex flex-column ga-4"
         >
           <VTextField
+            v-model="form.label"
+            label="Label"
+            variant="outlined"
+            persistent-placeholder
+            :rules="rules.label"
+          />
+
+          <VTextField
             v-model="form.name"
             label="Name"
             variant="outlined"
+            placeholder="Unique name"
             persistent-placeholder
             :rules="rules.name"
           />
 
-          <VTextField
-            v-model="form.router"
-            label="Router"
+          <VTextarea
+            :value="form.path"
+            label="Path"
             variant="outlined"
             persistent-placeholder
-            :rules="rules.router"
-            :prefix="form.parent ? form.parent.router + '/' : ''"
+            readonly
           />
 
-          <VTextField
-            v-model="form.component"
-            label="Component"
-            variant="outlined"
-            persistent-placeholder
-            :rules="rules.component"
-            :prefix="form.parent ? `/pages${form.parent.router}/` : `/layouts/`"
-            :suffix="form.parent ? `/index.vue` : '.vue'"
-          />
-
-          <VTextField
-            v-model="form.redirect"
-            label="Redirect"
-            variant="outlined"
-            placeholder="Only work on parent menu"
-            persistent-placeholder
-          />
+          <VRadioGroup
+            v-model="form.status"
+            label="Status"
+            inline
+          >
+            <VRadio
+              v-for="item in status"
+              :key="item.value"
+              :label="item.label"
+              :color="item.color"
+              :value="item.value"
+            />
+          </VRadioGroup>
 
           <VTextField
             v-if="form.parent"
-            v-model="form.parent.name"
+            v-model="form.parent.label"
             label="Parent"
             variant="outlined"
             persistent-placeholder
@@ -127,7 +134,6 @@ function onClose() {
             variant="outlined"
             persistent-placeholder
             :prepend-inner-icon="form.icon"
-            :rules="rules.icon"
           />
 
           <VNumberInput

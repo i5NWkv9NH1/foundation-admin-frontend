@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { apiActions } from '@/api/actions'
 import { Action, ActionFilterPayload, CreateActionDto, DeleteMode, Menu, TableHeader, TableMeta, TableRowAction } from '@/types'
-
+import ActionCreateEditDialog from './ActionCreateEditDialog.vue'
 /**
  * * Table
  */
@@ -58,6 +58,7 @@ async function onFetchActionsByMenuId() {
 const defaultAction: CreateActionDto = {
   name: '',
   code: 'view:',
+  status: 'Enabled',
   icon: '',
   sort: 1,
   menuId: props.item.id
@@ -73,16 +74,15 @@ const onOpenCreateEditDialog = async (value: boolean, action?: Action) => {
   if (isEditing.value && action) {
     // prettier-ignore
     // const { data: { result }} = await apiActions.getActionById(action.id!)
-    const response = await apiActions.getActionById(action.id!)
-    currentAction.value = response.data.result
+    const { data: { result }} = await apiActions.getActionById(action.id!)
+    currentAction.value = result as CreateActionDto
   } else {
     currentAction.value = { ...defaultAction }
   }
   createEditDialog.value = true
 }
-const onSaveCreateEditDialog = async () => {
-  // @ts-ignore
-  delete currentAction.value.menu
+const onSaveCreateEditDialog = async (form: CreateActionDto) => {
+  currentAction.value = form
   try {
     if (isEditing.value) {
       await apiActions.updateAction(currentAction.value.id!, currentAction.value)
@@ -105,7 +105,7 @@ const onOpenDeleteConfirmDialog = (mode: DeleteMode, action?: Action) => {
   deleteMode.value = mode
   deleteConfirmDialog.value = true
   if (mode === 'single' && action) {
-    currentAction.value = action
+    currentAction.value = action as CreateActionDto
   }
 }
 const onConfirmDelete = async (mode: DeleteMode) => {
@@ -203,6 +203,13 @@ const onConfirmDelete = async (mode: DeleteMode) => {
       </VCardActions>
     </template>
   </VDataTableServer>
+
+  <ActionCreateEditDialog
+    v-model="createEditDialog"
+    @save="onSaveCreateEditDialog"
+    :is-eidting="isEditing"
+    :action="currentAction"
+  />
 
   <DeleteConfirmDialog
     v-model="deleteConfirmDialog"

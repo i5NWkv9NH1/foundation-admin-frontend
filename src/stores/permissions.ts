@@ -1,5 +1,6 @@
 import { defaultRoutes } from '@/router'
 import { Permissions } from '@/types'
+import { toRaw } from 'vue'
 
 export const usePermissionStore = defineStore('permissions', () => {
   const permissions = ref<Permissions>({
@@ -8,9 +9,10 @@ export const usePermissionStore = defineStore('permissions', () => {
     routes: []
   })
 
+  const visibleDefaultRoutes = computed(() => defaultRoutes.filter((route) => !route.meta?.hidden))
   // 用于显示在侧边菜单的路由
-  const visibleRoutes = computed(() => {
-    return [...defaultRoutes.filter((route) => !route.meta?.hidden), ...permissions.value.routes.filter((route) => !route.meta?.hidden)]
+  const allVisibleRoutes = computed(() => {
+    return [...visibleDefaultRoutes.value, ...permissions.value.routes]
   })
 
   // 面包屑路径中的所有路由
@@ -30,7 +32,7 @@ export const usePermissionStore = defineStore('permissions', () => {
 
   return {
     permissions,
-    visibleRoutes,
+    allVisibleRoutes,
     breadcrumbRoutes,
     setPermissions,
     clearPermissions

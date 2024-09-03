@@ -3,10 +3,9 @@ import 'vue-router'
 declare module 'vue-router' {
   // https://router.vuejs.org/zh/guide/advanced/meta.html#typescript
   interface RouteMeta {
-    title?: string
+    name?: string
     icon?: string
     hidden?: boolean
-
     /**
      * 始终显示父级菜单，即使只有一个子菜单
      * true 显示父级菜单, false 隐藏父级菜单，显示唯一子节点

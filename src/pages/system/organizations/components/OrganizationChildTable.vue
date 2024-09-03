@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { apiMenus } from '@/api'
-import { CreateMenuDto, DeleteMode, Menu, TableHeader, TableMeta, TableRowAction } from '@/types'
-import MenuCreateEditDialog from './MenCreateEditDialog.vue'
-import MenuActionsTable from './MenuActionsTable.vue'
+import { apiOrganizations } from '@/api'
+import { CreateOrganizationDto, DeleteMode, Organization, TableHeader, TableMeta, TableRowAction } from '@/types'
+import OrganizationCreateEditDialog from './OrganizationCreateEditDialog.vue'
 
 const props = defineProps<{
-  items: Menu[]
+  items: Organization[]
   level: number
   itemsLength: number
   loading: boolean
@@ -13,27 +12,26 @@ const props = defineProps<{
 }>()
 const headers = ref<TableHeader[]>([
   { title: 'Level', value: 'level', width: '50px' },
+  { title: 'Label', value: 'label', sortable: false, key: 'label' },
   { title: 'Name', value: 'name', sortable: false, key: 'name' },
-  { title: 'Router', value: 'router', sortable: false, key: 'router' },
   { title: 'Icon', value: 'icon', sortable: false, key: 'icon' },
-  { title: 'Component', value: 'component', sortable: false, key: 'component' },
-  { title: 'Parent', value: 'parent.name', sortable: false, key: 'parent.id' },
-  { title: 'Actions', value: 'actions', key: 'actions' }
+  { title: 'Parent', value: 'parent.label', sortable: false, key: 'parent.id' },
+  { title: 'Actions', value: 'actions', key: 'actions', sortable: false }
 ])
 // prettier-ignore
 const tableRowActions = ref<TableRowAction[]>([
-  { title: 'Create Sub Menu', icon: 'mdi-vector-polyline-plus', color: '', cb: (menu: Menu) => onCreateSubMenu(menu.id!) },
-  { title: 'Create Menu', icon: 'mdi-vector-square-plus', color: '',  cb: (menu: Menu) => {
-    if (!menu.parent) return onCreateRootMenu()
+  { title: 'Create Sub Organization', icon: 'mdi-vector-polyline-plus', color: '', cb: (organization: Organization) => onCreateSubOrganization(organization.id!) },
+  { title: 'Create Organization', icon: 'mdi-vector-square-plus', color: '',  cb: (organization: Organization) => {
+    if (!organization.parent) return onCreateRootOrganization()
     //* Same level
-    return onCreateSubMenu(menu.parent.id!)
+    return onCreateSubOrganization(organization.parent.id!)
   }},
-  { title: 'Edit Menu', icon: 'mdi-pencil-outline', color: '', cb: (menu: Menu) => onEditMenu(menu.id!) },
-  { title: 'Delete Menu', icon: 'mdi-delete-outline', color: '',  cb: (menu: Menu) => onOpenDeleteConfirmDialog('single', menu)},
+  { title: 'Edit Organization', icon: 'mdi-pencil-outline', color: '', cb: (organization: Organization) => onEditOrganization(organization.id!) },
+  { title: 'Delete Organization', icon: 'mdi-delete-outline', color: '',  cb: (organization: Organization) => onOpenDeleteConfirmDialog('single', organization)},
 ]);
 const paddingLeftStyle = computed(() => `${props.level * 2}rem`)
-const selectedMenus = ref<string[]>([])
-const expandedMenus = ref<string[]>([])
+const selectedOrganizations = ref<string[]>([])
+const expandedOrganizations = ref<string[]>([])
 // const selectedActions = ref<string[]>([])
 const tableMeta = ref<TableMeta>({
   page: 1,
@@ -48,84 +46,83 @@ const tableMeta = ref<TableMeta>({
 // watch(
 //   () => props.items,
 //   () => {
-//     expandedMenus.value = props.items.map((item) => item.id!)
+//     expandedOrganizations.value = props.items.map((item) => item.id!)
 //   },
 //   { deep: true, immediate: true }
 // )
-// watch(selectedMenus, () => {
-//   console.log(selectedMenus.value)
+// watch(selectedOrganizations, () => {
+//   console.log(selectedOrganizations.value)
 // })
 // watch(selectedActions, () => {
 //   console.log(selectedActions.value)
 // })
 
 // Dialog
-const defaultMenu: CreateMenuDto = {
+const defaultOrganization: CreateOrganizationDto = {
+  label: '',
   name: '',
-  router: '',
   parent: null,
   parentId: null,
   icon: '',
-  component: '',
   sort: 1,
   path: '',
-  redirect: null
+  status: 'Enabled'
 }
 const createEditDialog = ref(false)
-const currentMenu = ref<CreateMenuDto>({ ...defaultMenu })
+const currentOrganization = ref<CreateOrganizationDto>({ ...defaultOrganization })
 // prettier-ignore
 const isEditing = ref(false)
-const onOpenCreateEditDialog = async (isEditMode: boolean, menuId?: string, isSubMenuCreation: boolean = false) => {
+const onOpenCreateEditDialog = async (isEditMode: boolean, organizationId?: string, isSubOrganizationCreation: boolean = false) => {
   isEditing.value = isEditMode
   if (isEditMode) {
-    if (!menuId) {
-      throw new Error('Editing mode requires a menu ID.')
+    if (!organizationId) {
+      throw new Error('Editing mode requires a organization ID.')
     }
     const {
       data: { result }
-    } = await apiMenus.getMenuById(menuId)
-    currentMenu.value = result as unknown as CreateMenuDto
+    } = await apiOrganizations.getOrganizationById(organizationId)
+    currentOrganization.value = result as unknown as CreateOrganizationDto
   } else {
     // Edit
-    if (isSubMenuCreation && menuId) {
-      // Create Sub Menu
-      currentMenu.value = {
-        ...defaultMenu,
-        parentId: menuId
+    if (isSubOrganizationCreation && organizationId) {
+      // Create Sub Organization
+      currentOrganization.value = {
+        ...defaultOrganization,
+        parentId: organizationId
       }
     } else {
-      // Create Root Menu
-      currentMenu.value = { ...defaultMenu, parentId: null }
+      // Create Root Organization
+      currentOrganization.value = { ...defaultOrganization, parentId: null }
     }
   }
   createEditDialog.value = true
 }
 
-const onCreateRootMenu = () => {
+const onCreateRootOrganization = () => {
   onOpenCreateEditDialog(false)
 }
-const onEditMenu = (menuId: string) => {
-  onOpenCreateEditDialog(true, menuId)
+const onEditOrganization = (organizationId: string) => {
+  onOpenCreateEditDialog(true, organizationId)
 }
-const onCreateSubMenu = (parentMenuId: string) => {
-  onOpenCreateEditDialog(false, parentMenuId, true)
+const onCreateSubOrganization = (parentOrganizationId: string) => {
+  onOpenCreateEditDialog(false, parentOrganizationId, true)
 }
 const onSaveCreateEditDialog = async (form: any) => {
-  currentMenu.value = form
+  currentOrganization.value = form
   try {
     if (isEditing.value) {
-      await apiMenus.updateMenu(currentMenu.value.id!, currentMenu.value)
+      await apiOrganizations.updateOrganization(currentOrganization.value.id!, currentOrganization.value)
     } else {
-      await apiMenus.createMenu(currentMenu.value)
+      await apiOrganizations.createOrganization(currentOrganization.value)
     }
   } catch (error) {
     console.log(error)
   } finally {
     await props.refresh()
-    currentMenu.value = { ...defaultMenu }
-    // await fetchctionsByMenuId();
+    currentOrganization.value = { ...defaultOrganization }
+    // await fetchctionsByOrganizationId();
     // await props.refresh();
-    // await findActionsByMenuId()
+    // await findActionsByOrganizationId()
   }
 }
 
@@ -134,20 +131,20 @@ const onSaveCreateEditDialog = async (form: any) => {
  */
 const deleteMode = ref<DeleteMode>('single')
 const deleteConfirmDialog = ref(false)
-const onOpenDeleteConfirmDialog = (mode: DeleteMode, menu?: Menu) => {
+const onOpenDeleteConfirmDialog = (mode: DeleteMode, organization?: Organization) => {
   deleteMode.value = mode
   deleteConfirmDialog.value = true
-  if (mode === 'single' && menu) {
-    currentMenu.value = menu as unknown as CreateMenuDto
+  if (mode === 'single' && organization) {
+    currentOrganization.value = organization as unknown as CreateOrganizationDto
   }
 }
 const onConfirmDelete = async () => {
   try {
     if (deleteMode.value === 'single') {
-      await apiMenus.deleteMenu(currentMenu.value.id!)
+      await apiOrganizations.deleteOrganization(currentOrganization.value.id!)
     } else if (deleteMode.value === 'multiple') {
       // TODO: API
-      console.log(selectedMenus.value)
+      console.log(selectedOrganizations.value)
     }
   } catch (error) {
     console.log(error)
@@ -160,10 +157,10 @@ const onConfirmDelete = async () => {
 
 <template>
   <VDataTableServer
-    v-model="selectedMenus"
+    v-model="selectedOrganizations"
     v-model:page="tableMeta.page"
     v-model:items-per-page="tableMeta.itemsPerPage"
-    v-model:expanded="expandedMenus"
+    v-model:expanded="expandedOrganizations"
     v-bind="$attrs"
     hide-default-footer
     expand-on-click
@@ -177,35 +174,21 @@ const onConfirmDelete = async () => {
       <VSkeletonLoader type="table-row@4" />
     </template>
     <template #no-data>
-      <div>No submens.</div>
+      <div>No suborganizations.</div>
     </template>
     <template
       v-if="props.level !== 1"
       #top
     >
-      <VCardTitle>Sub Menus</VCardTitle>
+      <VCardTitle>Sub Organizations</VCardTitle>
     </template>
 
-    <template #[`item.router`]="{ item }">
-      <VBtn
-        variant="text"
-        :to="item.parent ? `${item.parent.router}${item.router}` : `${item.router}`"
-        class="text-decoration-underline"
-        exact
-      >
-        {{ item.router }}
-      </VBtn>
-    </template>
     <template #[`item.level`]>
       <VCode :class="['text-secondary', 'font-weight-bold', 'text-center', 'text-body-2']">
         {{ props.level }}
       </VCode>
     </template>
-    <template #[`item.parent`]="{ item }">
-      <VCode :class="['text-secondary', 'font-weight-bold', 'text-center', 'text-body-2']">
-        {{ item.parent?.name }}
-      </VCode>
-    </template>
+
     <template #[`item.icon`]="{ item }">
       <VIcon :icon="item.icon" />
     </template>
@@ -233,14 +216,9 @@ const onConfirmDelete = async () => {
         :colspan="columns.length"
         :style="{ paddingLeft: paddingLeftStyle }"
       >
-        <!-- Render actions if available -->
-        <MenuActionsTable
-          :item="item"
-          :level="props.level + 1"
-        />
         <!-- Render children if available -->
-        <MenuChildrenTable
-          v-model="selectedMenus"
+        <OrganizationChildTable
+          v-model="selectedOrganizations"
           :loading="tableMeta.loading"
           :level="props.level + 1"
           :items="item.children"
@@ -252,9 +230,9 @@ const onConfirmDelete = async () => {
     </template>
   </VDataTableServer>
 
-  <MenuCreateEditDialog
+  <OrganizationCreateEditDialog
     v-model="createEditDialog"
-    :menu="currentMenu"
+    :organization="currentOrganization"
     @save="onSaveCreateEditDialog"
     :is-eidting="isEditing"
   />

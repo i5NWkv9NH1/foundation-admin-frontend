@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { usePermissionStore, useSettingStore } from '@/stores'
+import { useSettingStore } from '@/stores'
 
 const settingStore = useSettingStore()
-const permissionStore = usePermissionStore()
-const router = useRouter()
-console.log(router.getRoutes())
 </script>
 
 <template>
@@ -25,5 +22,6 @@ console.log(router.getRoutes())
       </VToolbar>
     </template>
     <VDivider />
+    <Menu />
   </VNavigationDrawer>
 </template>

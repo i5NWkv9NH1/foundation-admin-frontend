@@ -65,6 +65,7 @@ export interface TableRowAction {
   icon?: string
   color?: string
   cb: Function
+  permission?: string | string[]
 }
 
 export type ExpandProps = {

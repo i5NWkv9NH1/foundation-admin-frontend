@@ -41,9 +41,15 @@ const isValid = ref<boolean | null>(false)
 
 watch(
   () => props.account,
-  () => {
+  async () => {
     form.value = props.account
-  }
+    if (!props.isEditing) {
+      await nextTick(async () => {
+        await formEl.value.resetValidation()
+      })
+    }
+  },
+  { deep: true }
 )
 
 const emits = defineEmits<{
@@ -66,6 +72,7 @@ function onClose() {
     v-model="modelValue"
     width="400"
     temporary
+    location="right"
   >
     <template #prepend>
       <VCardTitle>
