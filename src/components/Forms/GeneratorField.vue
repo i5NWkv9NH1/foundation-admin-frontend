@@ -1,48 +1,48 @@
 <script setup lang="ts">
-import { FormComponent, FormField } from '@/types/form';
-import { VAutocomplete, VAvatar, VBtn, VCheckbox, VChipGroup, VColorPicker, VDatePicker, VFileInput, VRadioGroup, VSelect, VSlider, VSwitch, VTextField } from 'vuetify/components';
-import { VNumberInput } from 'vuetify/labs/components';
+import { FormComponent, FormField } from '@/types/form'
+import { VAutocomplete, VAvatar, VBtn, VCheckbox, VChipGroup, VColorPicker, VDatePicker, VFileInput, VRadioGroup, VSelect, VSlider, VSwitch, VTextField } from 'vuetify/components'
+import { VNumberInput } from 'vuetify/labs/components'
 
 interface Props {
-  fields: FormField[];
-  form: Record<string, any>;
+  fields: FormField[]
+  form: Record<string, any>
 }
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 function RenderField(type: FormComponent) {
   switch (type) {
     case 'avatar':
-      return VAvatar;
+      return VAvatar
     case 'btn':
     case 'button':
-      return VBtn;
+      return VBtn
     case 'text':
-      return VTextField;
+      return VTextField
     case 'select':
-      return VSelect;
+      return VSelect
     case 'checkbox':
-      return VCheckbox;
+      return VCheckbox
     case 'date':
-      return VDatePicker;
+      return VDatePicker
     case 'switch':
-      return VSwitch;
+      return VSwitch
     case 'textarea':
-      return VTextField;
+      return VTextField
     case 'autocomplete':
-      return VAutocomplete;
+      return VAutocomplete
     case 'file':
-      return VFileInput;
+      return VFileInput
     case 'slider':
-      return VSlider;
+      return VSlider
     case 'chips':
-      return VChipGroup;
+      return VChipGroup
     case 'color-picker':
-      return VColorPicker;
+      return VColorPicker
     case 'radios':
-      return VRadioGroup;
+      return VRadioGroup
     case 'number':
-      return VNumberInput;
+      return VNumberInput
     default:
-      return VTextField;
+      return VTextField
   }
 }
 </script>
@@ -69,7 +69,7 @@ function RenderField(type: FormComponent) {
         <!-- Radio Group -->
         <template v-else-if="field.type === 'radios'">
           <VRadioGroup
-            v-model="form[field.name]"
+            v-model="form[field.name]!"
             v-bind="field.attrs"
             :inline="field.inline"
             :label="field.label"
@@ -96,7 +96,7 @@ function RenderField(type: FormComponent) {
         <!-- Select -->
         <template v-else-if="field.type === 'select'">
           <VSelect
-            v-model="form[field.name]"
+            v-model="form[field.name]!"
             :return-object="field.returnObject || false"
             :multiple="field.multiple"
             :chips="field.chips"
@@ -112,7 +112,7 @@ function RenderField(type: FormComponent) {
         <component
           v-else
           :is="RenderField(field.type)"
-          v-model="form[field.name]"
+          v-model="form[field.name]!"
           :data="JSON.stringify(field)"
           v-bind="field.attrs"
           :label="field.label"
@@ -126,6 +126,7 @@ function RenderField(type: FormComponent) {
           :inset="field.inset || true"
           :controlVariant="field.controlVariant || 'default'"
           :reverse="field.reverse || false"
+          :variant="field.variant || 'outlined'"
         />
       </VCol>
     </VRow>

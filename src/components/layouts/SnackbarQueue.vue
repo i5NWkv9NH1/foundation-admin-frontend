@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { useAppStore } from '@/stores';
+import { useAppStore } from '@/stores'
 
-const appStore = useAppStore();
+const appStore = useAppStore()
 </script>

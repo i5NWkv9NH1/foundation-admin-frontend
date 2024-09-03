@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/stores';
+import { useAuthStore } from '@/stores'
 
 const items = ref([
   { name: 'Profile', path: 'profile', icon: 'mdi-face-man-profile' },
   { name: 'Settings', path: 'settings', icon: 'mdi-cogs' },
   { name: 'Help', path: 'help', icon: 'mdi-help-box' }
-]);
-const authStore = useAuthStore();
+])
+const authStore = useAuthStore()
 </script>
 
 <template>

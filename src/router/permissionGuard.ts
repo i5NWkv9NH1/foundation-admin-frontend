@@ -1,69 +1,100 @@
-import { NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw } from 'vue-router';
-import router from '@/router';
-import { useAuthStore } from '@/stores';
-import { whiteList } from '@/constants';
+import { whiteList } from '@/constants'
+import router from '@/router'
+import { useAuthStore, usePermissionStore } from '@/stores'
+import { isEmpty } from 'lodash'
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 
-export function setupPermission() {
+const pages = import.meta.glob('../pages/**/**.vue')
+const layouts = import.meta.glob('../layouts/**.vue')
+
+export async function initializePermissions() {
+  const authStore = useAuthStore()
+  const permissionStore = usePermissionStore()
+  const hasLoadedRoutes = computed(() => !isEmpty(permissionStore.permissions.routes))
+
   router.beforeEach(async (to, from, next) => {
-    // NProgress.start();
-    const authStore = useAuthStore();
-
-    if (authStore.isAuthenticated) {
-      handleAuthenticated(to, from, next);
-    } else {
-      handleUnauthenticated(to, next);
+    if (to.path === '/auth/signin') {
+      if (authStore.isAuthenticated) {
+        return next(from.fullPath)
+      } else {
+        console.log('expire')
+      }
+      resetRouter()
+      return next()
     }
-  });
+
+    if (whiteList.includes(to.path)) return next()
+    if (!authStore.isAuthenticated) return next({ path: '/auth/signin', replace: true })
+    if (!hasLoadedRoutes.value) {
+      try {
+        await authStore.findMe()
+        const routes = convertToVueRoutes(permissionStore.permissions.routes)
+        routes.forEach((route: any) => {
+          router.addRoute(route)
+        })
+      } catch {
+        resetRouter()
+        redirectToSignIn(to, next)
+      }
+      return next({ ...to, replace: true })
+    }
+    next()
+  })
 
   router.afterEach(() => {
     // NProgress.done();
-  });
+  })
 }
 
-async function handleAuthenticated(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
-  const authStore = useAuthStore();
-  const hasRoles = authStore.account.roles && authStore.account.roles.length > 0;
+function redirectToSignIn(to: RouteLocationNormalized, next: NavigationGuardNext) {
+  const queryParams = new URLSearchParams(to.query as Record<string, string>)
+  const queryString = queryParams.toString()
+  const redirectPath = queryString ? `${to.path}?${queryString}` : to.path
+  next(`/auth/signin?redirect=${encodeURIComponent(redirectPath)}`)
+}
 
-  if (to.path === '/auth/signin') {
-    next({ path: '/' });
-  } else if (hasRoles) {
-    if (to.matched.length === 0) {
-      next(from.name ? { name: from.name } : '/404');
-    } else {
-      // @ts-ignore
-      const title = (to.params.title as string) || (to.query.title as string);
-      if (title) {
-        to.meta.title = title;
-      }
-      next();
+function convertToVueRoutes(backEndRoutes: any) {
+  return backEndRoutes.map((route: any) => {
+    const isParent = !!!route.parentId
+    return {
+      path: route.path,
+      name: route.name,
+      // component: isParent ? layouts[`../layouts/${route.components}.vue`] : pages[`../pages/system/${route.component}/index.vue`],
+      component: isParent ? layouts[`../layouts/AdminLayout.vue`] : pages[`../pages/system/${route.component}/index.vue`],
+      meta: route.meta,
+      children: route.children ? convertToVueRoutes(route.children) : [],
+      redirect: route.redirect || undefined
     }
-  } else {
-    // 动态添加路由
-    try {
-      // const dynamicRoutes = await permissionStore.generateRoutes();
-      // dynamicRoutes.forEach((route: RouteRecordRaw) => router.addRoute(route));
-      // next({ ...to, replace: true });
-      next(to);
-    } catch (error) {
-      // 移除 token 并重定向到登录页
-      authStore.clearTokens();
-      redirectToLogin(to, next);
+  })
+}
+
+/** 路由对象 */
+export interface RouteVO {
+  children: RouteVO[]
+  component?: string
+  meta?: Meta
+  name?: string
+  router: string
+  redirect?: string
+  parentId: string | null
+  parent: RouteVO
+}
+
+/** Meta，路由属性 */
+export interface Meta {
+  alwaysShow?: boolean
+  hidden?: boolean
+  icon?: string
+  keepAlive?: boolean
+  title?: string
+}
+
+export const resetRouter = () => {
+  const permissionStore = usePermissionStore()
+  permissionStore.permissions.routes.forEach((route: any) => {
+    const { name } = route
+    if (name && router.hasRoute(name)) {
+      router.removeRoute(name)
     }
-  }
-}
-
-function handleUnauthenticated(to: RouteLocationNormalized, next: NavigationGuardNext) {
-  if (whiteList.includes(to.path)) {
-    next();
-  } else {
-    // redirectToLogin(to, next);
-    next('/auth/signin');
-  }
-}
-
-function redirectToLogin(to: RouteLocationNormalized, next: NavigationGuardNext) {
-  const params = new URLSearchParams(to.query as Record<string, string>);
-  const queryString = params.toString();
-  const redirect = queryString ? `${to.path}?${queryString}` : to.path;
-  next(`/auth/sigin?redirect=${encodeURIComponent(redirect)}`);
+  })
 }

@@ -3,20 +3,20 @@
  *
  * Bootstraps Vuetify and other plugins then mounts the App`
  */
-import 'unfonts.css';
-import '@/styles/index.scss';
+import '@/styles/index.scss'
+import 'unfonts.css'
 // Plugins
-import { registerPlugins } from '@/plugins';
+import { registerPlugins } from '@/plugins'
 
 // Components
-import App from './App.vue';
+import App from './App.vue'
 
 // Composables
-import { createApp } from 'vue';
-import { setupPermission } from './router/permissionGuard';
+import { createApp } from 'vue'
+import { initializePermissions } from './router/permissionGuard'
 
-const app = createApp(App);
+const app = createApp(App)
 
-registerPlugins(app);
-setupPermission();
-app.mount('#root');
+registerPlugins(app)
+initializePermissions()
+app.mount('#root')

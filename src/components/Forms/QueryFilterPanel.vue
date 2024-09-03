@@ -1,27 +1,28 @@
 <script setup lang="ts">
-import { FormField } from '@/types';
+import { FormField, TableRowAction } from '@/types'
 
 interface Props {
-  fields: FormField[];
-  form: Record<string, any>;
+  fields: FormField[]
+  form: Record<string, any>
 }
-const props = withDefaults(defineProps<Props>(), {});
-const expand = ref(false);
+const props = withDefaults(defineProps<Props>(), {})
+const expand = ref(false)
 const emits = defineEmits<{
-  (e: 'reset'): void;
-  (e: 'submit'): void;
-  (e: 'create'): void;
-}>();
-const headerPrependBtns = ref([
-  { icon: 'mdi-magnify', action: () => emits('submit') },
-  { icon: 'mdi-refresh', action: () => emits('reset') },
-  { icon: 'mdi-plus', action: () => emits('create') }
-]);
+  (e: 'reset'): void
+  (e: 'submit'): void
+  (e: 'create'): void
+}>()
+const queryFilterActions = ref<TableRowAction[]>([
+  { title: 'Query', icon: 'mdi-magnify', cb: () => emits('submit'), color: '' },
+  { title: 'Reset', icon: 'mdi-refresh', cb: () => emits('reset'), color: '' },
+  { title: 'Create Item', icon: 'mdi-plus', cb: () => emits('create'), color: '' }
+])
 </script>
 
 <template>
   <VForm @submit.prevent="emits('submit')">
     <VCard>
+      <VCardTitle>Query Filter</VCardTitle>
       <VCardItem>
         <VToolbar color="transparent">
           <VBtn
@@ -30,7 +31,7 @@ const headerPrependBtns = ref([
             @click="() => (expand = !expand)"
           />
           <VTextField
-            v-model="form['text']"
+            v-model="form.text!"
             hide-details
             variant="plain"
             label="Search by text"
@@ -38,18 +39,26 @@ const headerPrependBtns = ref([
             persistent-placeholder
           />
           <template #append>
-            <VBtn
-              v-for="(btn, index) in headerPrependBtns"
-              :key="index"
-              :icon="btn.icon"
-              @click="btn.action"
-            />
+            <VTooltip
+              v-for="btn in queryFilterActions"
+              :key="btn.title"
+              :text="btn.title"
+              location="top"
+            >
+              <template #activator="args">
+                <VBtn
+                  :icon="btn.icon"
+                  @click="btn.cb"
+                  v-bind="args.props"
+                />
+              </template>
+            </VTooltip>
           </template>
         </VToolbar>
       </VCardItem>
       <VExpandTransition>
         <VCardItem v-if="expand">
-          <VCardText class="py-0">
+          <VCardText>
             <GeneratorField
               :fields="props.fields"
               :form="props.form"

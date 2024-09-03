@@ -1,17 +1,13 @@
 <script lang="ts" setup>
-import { useAppStore } from './stores';
+import { useAppStore, useSettingStore } from './stores'
 
-const appStore = useAppStore();
-onMounted(() => {
-  appStore.initialize();
-});
+const appStore = useAppStore()
+appStore.clearSnackbars()
+const settingStore = useSettingStore()
+settingStore.updateTheme()
 </script>
 
 <template>
-  <ProgressBar
-    v-model:model-value="appStore.showProgress"
-    v-model:progress="appStore.progress"
-  />
   <SnackbarQueue />
   <RouterView />
 </template>

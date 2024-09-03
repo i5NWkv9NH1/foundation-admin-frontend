@@ -4,6 +4,7 @@
 <template>
   <VApp>
     <Drawer />
+    <SettingsDrawer />
     <TopBar />
     <VMain>
       <RouterView v-slot="{ Component, route }">

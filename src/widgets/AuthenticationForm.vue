@@ -1,15 +1,15 @@
 <!-- TOOD: Form generator -->
 <script lang="ts" setup>
 const props = defineProps<{
-  loading: boolean;
-  submitText: string;
-}>();
+  loading: boolean
+  submitText: string
+}>()
 const emits = defineEmits<{
-  (formEl: 'submit', forEl: any): void;
-}>();
-const formEl = ref<any>();
+  (formEl: 'submit', forEl: any): void
+}>()
+const formEl = ref<any>()
 function handleSubmit() {
-  emits('submit', formEl.value);
+  emits('submit', formEl.value)
 }
 </script>
 

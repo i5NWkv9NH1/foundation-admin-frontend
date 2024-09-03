@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useAppStore } from '@/stores';
-const appStore = useAppStore();
+import { useSettingStore } from '@/stores'
+const settingStore = useSettingStore()
 </script>
 
 <template>
@@ -8,9 +8,16 @@ const appStore = useAppStore();
     order="2"
     flat
   >
-    <VAppBarNavIcon @click="appStore.toggleDrawer" />
+    <VAppBarNavIcon @click="settingStore.toggleDrawer" />
+    <BreadCrumb />
     <VSpacer />
-    <NotificationSheet />
-    <UserProfileDropdown />
+    <div class="d-flex ga-2">
+      <NotificationSheet />
+      <VBtn
+        icon="mdi-cog-outline"
+        @click="settingStore.toggleSettingsDrawer"
+      />
+      <UserProfileDropdown />
+    </div>
   </VAppBar>
 </template>

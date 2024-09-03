@@ -1,70 +1,61 @@
-<!-- TODO -->
 <script setup lang="tsx">
-import { RouteRecordRaw } from 'vue-router';
-import { VList, VListItem, VListSubheader } from 'vuetify/components';
-import { useAuthStore } from '@/stores';
+import { usePermissionStore } from '@/stores'
+import { VList, VListGroup, VListItem } from 'vuetify/components'
 
-const authStore = useAuthStore();
-const items = authStore.drawerMenus as unknown as RouteRecordRaw[];
+const permissionStore = usePermissionStore()
 
-// Function to get the title for a route
-function getTitle(route: RouteRecordRaw): string {
-  // @ts-ignore
-  return route.name || route.meta?.name || route.meta?.title || 'Title';
-}
-
-// Function to create a menu item
-function MenuItem({ route, parentRouter }: { route: RouteRecordRaw; parentRouter: string }) {
-  // @ts-ignore
-  const fullPath = `${parentRouter}/${route.router || route.path}`.replace(/\/{2,}/g, '/'); // Remove any double slashes
-
-  return (
-    <VListItem
-      key={fullPath}
-      to={fullPath}
-      prependIcon={route.icon}
-      title={getTitle(route)}
-      exact
-    />
-  );
-}
-
-// Recursive function to create a list of menus
-function Menus({ items, parentRouter }: { items: RouteRecordRaw[]; parentRouter: string }) {
+function MenuItem({ items, subgroup }: { items: any[]; subgroup?: boolean }) {
   return (
     <>
-      {items.map((item) => (
-        <>
-          {item.children && item.children.length > 0 ? (
-            <>
-              {/* @ts-ignore */}
-              <VListSubheader key={`subheader-${parentRouter}/${item.router || item.path}`}>{getTitle(item)}</VListSubheader>
-              <Menus
-                items={item.children}
-                // @ts-ignore
-                parentRouter={`${parentRouter}/${item.router || item.path}`}
-              />
-            </>
-          ) : (
-            <MenuItem
-              // @ts-ignore
-              key={`${parentRouter}/${item.router || item.path}`}
-              route={item}
-              parentRouter={parentRouter}
+      {items.map((item) => {
+        if (!item.children || item.children.length === 0) {
+          return (
+            <VListItem
+              title={item.name as string}
+              key={item.name}
+              prependIcon={item.meta.icon}
+              //* Fix default router and api router field
+              to={item.router ? `${item.parent.router}/${item.path}` : `/${item.path}`}
+              exact
             />
-          )}
-        </>
-      ))}
+          )
+        } else {
+          return (
+            <VListGroup
+              key={item.name}
+              subgroup={subgroup}
+              value={item.name}
+              v-slots={{
+                activator: ({ props }) => (
+                  <VListItem
+                    title={item.name as string}
+                    prependIcon={item.meta.icon}
+                    {...props}
+                    value={item.name}
+                  />
+                ),
+                default: () => (
+                  <MenuItem
+                    items={item.children}
+                    subgroup={true}
+                  />
+                )
+              }}
+            />
+          )
+        }
+      })}
     </>
-  );
+  )
 }
 </script>
 
 <template>
-  <VList nav>
-    <Menus
-      :items="items"
-      parentRouter=""
-    />
+  <VList
+    open-strategy="multiple"
+    nav
+    slim
+  >
+    <MenuItem :items="permissionStore.allVisibleRoutes" />
   </VList>
 </template>

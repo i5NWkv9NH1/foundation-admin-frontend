@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const dialog = defineModel<boolean>('dialog', { required: true });
-const emits = defineEmits(['update:icon']);
-const selectedIcon = ref('');
+const dialog = defineModel<boolean>('dialog', { required: true })
+const emits = defineEmits(['update:icon'])
+const selectedIcon = ref('')
 
 // prettier-ignore
 const icons = ref([
@@ -24,12 +24,12 @@ const icons = ref([
   ])
 
 const selectIcon = (icon: string) => {
-  selectedIcon.value = icon;
-  emits('update:icon', icon);
-  closeDialog();
-};
+  selectedIcon.value = icon
+  emits('update:icon', icon)
+  closeDialog()
+}
 
-const closeDialog = () => {};
+const closeDialog = () => {}
 </script>
 
 <template>
