@@ -13,7 +13,7 @@ export async function initializePermissions() {
   const authStore = useAuthStore()
   const permissionStore = usePermissionStore()
   const hasLoadedRoutes = computed(() => !isEmpty(permissionStore.permissions.routes))
-  const hasActions = computed(() => !isEmpty(permissionStore.permissions.actions))
+  // const hasActions = computed(() => !isEmpty(permissionStore.permissions.actions))
 
   router.beforeEach(async (to, from, next) => {
     NProgress.start()
