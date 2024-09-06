@@ -45,13 +45,17 @@ const defaultFilters = ref<RoleFilterPayload>({
 const filters = ref<RoleFilterPayload>({ ...defaultFilters.value })
 const filterFields = ref<FormField[]>([
   // prettier-ignore
-  { name: 'status', label: 'Status', type: 'select',
-    attrs: { 'hide-details': true, grid: { cols: 4 }, 'item-title': 'name',  'item-value': 'value', variant: 'outlined',
+  {
+    name: 'status', label: 'Status', type: 'select',
+    attrs: {
+      'hide-details': true, grid: { cols: 4 }, 'item-title': 'name', 'item-value': 'value', variant: 'outlined',
       items: [
         { name: 'All', value: 'ALL' },
         { name: 'Enable', value: 'Enabled' },
         { name: 'Disable', value: 'Disabled' },
-    ]}},
+      ]
+    }
+  },
   { name: 'name', label: 'Name', type: 'select', options: [], attrs: { 'hide-details': true, variant: 'outlined', grid: { cols: 4 }, itemTitle: (item: Role) => item.name, itemValue: (item: Role) => item.name } }
 ])
 const onFilterSubmit = async () => {
@@ -88,7 +92,7 @@ async function onFetchRoles(options: TableCallbackOptions = {
       page, itemsPerPage, filters: filters.value
     })
     roles.value = result.items
-    tableMeta.value = {...result.meta, loading: false}
+    tableMeta.value = { ...result.meta, loading: false }
     //* update field options
     filterFields.value.filter((field) => {
       if (field.name === 'name') {
@@ -97,7 +101,7 @@ async function onFetchRoles(options: TableCallbackOptions = {
       }
     })
   }
-  catch(error) {
+  catch (error) {
     console.log(error)
   }
 }
@@ -105,8 +109,8 @@ async function onFetchRoles(options: TableCallbackOptions = {
 async function onFetchRoleById(id: string) {
   try {
     const { data: { result } } = await apiRoles.getRoleById(id)
-    currentRole.value  = result
-  } catch(error) {
+    currentRole.value = result
+  } catch (error) {
     console.log(error)
   }
 }
@@ -127,9 +131,9 @@ async function onCreateRole() {
 // prettier-ignore
 async function onFetchMenus() {
   try {
-    const { data: { result }} = await apiMenus.getMenus({ page: 1, itemsPerPage: -1 })
+    const { data: { result } } = await apiMenus.getMenus({ page: 1, itemsPerPage: -1 })
     menus.value = result.items
-  } catch(error) {
+  } catch (error) {
     console.log(error)
   }
 }
@@ -217,52 +221,25 @@ onMounted(async () => {
     <div class="d-flex flex-column ga-4">
       <!-- * Query Filter -->
 
-      <QueryFilterPanel
-        :form="filters"
-        :fields="filterFields"
-        @submit="onFilterSubmit"
-        @reset="onFilterReest"
-        @create="onFilterCreate"
-      />
+      <QueryFilterPanel :form="filters" :fields="filterFields" @submit="onFilterSubmit" @reset="onFilterReest"
+        @create="onFilterCreate" />
 
       <!-- * Table -->
       <VCard>
         <VCardTitle> Roles </VCardTitle>
         <VCardText>
-          <VDataTableServer
-            v-model="selectedRoles"
-            v-model:items-per-page="tableMeta.itemsPerPage"
-            show-select
-            @update:options="onFetchRoles"
-            :page="tableMeta.page"
-            :loading="tableMeta.loading"
-            :items="roles"
-            :items-length="tableMeta.itemsLength"
-            :item-value="(item: Role) => item"
-            :headers="headers"
-          >
+          <VDataTableServer v-model="selectedRoles" v-model:items-per-page="tableMeta.itemsPerPage" show-select
+            @update:options="onFetchRoles" :page="tableMeta.page" :loading="tableMeta.loading" :items="roles"
+            :items-length="tableMeta.itemsLength" :item-value="(item: Role) => item" :headers="headers">
             <template #top>
               <VCardActions>
-                <VBtn
-                  color="primary"
-                  @click="onOpenCreateEditDialog(false)"
-                >
-                  <VIcon
-                    icon="mdi-plus-thick"
-                    start
-                  />
+                <VBtn color="primary" @click="onOpenCreateEditDialog(false)">
+                  <VIcon icon="mdi-plus-thick" start />
                   <span>New Role</span>
                 </VBtn>
                 <VSlideXTransition>
-                  <VBtn
-                    v-if="isSelectedRoles"
-                    color="error"
-                    @click="onOpenDeleteConfirmDialog('multiple')"
-                  >
-                    <VIcon
-                      icon="mdi-delete-outline"
-                      start
-                    />
+                  <VBtn v-if="isSelectedRoles" color="error" @click="onOpenDeleteConfirmDialog('multiple')">
+                    <VIcon icon="mdi-delete-outline" start />
                     <span>Delete</span>
                   </VBtn>
                 </VSlideXTransition>
@@ -274,19 +251,9 @@ onMounted(async () => {
             </template>
             <template #[`item.actions`]="{ item }">
               <VCardActions>
-                <VTooltip
-                  v-for="btn in tableRowActions"
-                  :key="btn.title"
-                  :text="btn.title"
-                  location="top"
-                >
+                <VTooltip v-for="btn in tableRowActions" :key="btn.title" :text="btn.title" location="top">
                   <template #activator="args">
-                    <VBtn
-                      v-bind="args.props"
-                      :icon="btn.icon"
-                      :color="btn.color"
-                      @click="btn.cb(item)"
-                    />
+                    <VBtn v-bind="args.props" :icon="btn.icon" :color="btn.color" @click="btn.cb(item)" />
                   </template>
                 </VTooltip>
               </VCardActions>
@@ -303,25 +270,13 @@ onMounted(async () => {
     </div>
 
     <!-- * CreateEditDialog -->
-    <RoleCreateEditDialog
-      v-model="createEditDialog"
-      @save="onSaveCreateEditDialog"
-      :role="currentRole"
-      :is-eidting="isEditing"
-    />
+    <RoleCreateEditDialog v-model="createEditDialog" @save="onSaveCreateEditDialog" :role="currentRole"
+      :is-eidting="isEditing" />
 
     <!-- * RoleActionsDialog -->
-    <RoleActionsDialog
-      v-model="roleActionsDialog"
-      :menus="menus!"
-      :activatedRole="activatedRole"
-    />
+    <RoleActionsDialog v-model="roleActionsDialog" :menus="menus!" :activatedRole="activatedRole" />
 
     <!-- * Dialog -->
-    <DeleteConfirmDialog
-      v-model="deleteConfirmDialog"
-      @confirm="onConfirmDelete"
-      :mode="deleteMode"
-    />
+    <DeleteConfirmDialog v-model="deleteConfirmDialog" @confirm="onConfirmDelete" :mode="deleteMode" />
   </VContainer>
 </template>

@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { useAppStore } from '@/stores'
-
-const appStore = useAppStore()
 </script>
 
 <template>
@@ -30,7 +27,7 @@ const appStore = useAppStore()
               class="video"
               loop
               muted
-              :src="appStore.authVideo"
+              src="/public/signin.mp4"
             />
           </VCol>
           <VCol

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { CreateOrganizationDto } from '@/types'
+import { CreateOrganizationDto } from '@/types';
 
 const status = ref([
   { label: 'Enabled', value: 'Enabled', color: 'success' },
@@ -55,116 +55,46 @@ function onClose() {
 </script>
 
 <template>
-  <VDialog
-    v-model="modelValue"
-    max-width="450"
-    max-height="600"
-    scroll-strategy="block"
-    scrollable
-  >
+  <VDialog v-model="modelValue" max-width="450" max-height="600" scroll-strategy="block" scrollable>
     <VCard>
       <VCardTitle>
         {{ props.isEidting ? `Edit Menu` : 'New Menu' }}
       </VCardTitle>
-      <VCardSubtitle
-        v-if="props.isEidting"
-        class="text-info"
-      >
+      <VCardSubtitle v-if="props.isEidting" class="text-info">
         {{ form.name }}
       </VCardSubtitle>
       <VCardText>
-        <VForm
-          ref="formEl"
-          v-model="isValid"
-          @submit.prevent="onSave"
-          fast-fail
-          class="d-flex flex-column ga-4"
-        >
-          <VTextField
-            v-model="form.label"
-            label="Label"
-            variant="outlined"
-            persistent-placeholder
-            :rules="rules.label"
-          />
+        <VForm ref="formEl" v-model="isValid" @submit.prevent="onSave" fast-fail class="d-flex flex-column ga-4">
+          <VTextField v-model="form.label" label="Label" variant="outlined" persistent-placeholder
+            :rules="rules.label" />
 
-          <VTextField
-            v-model="form.name"
-            label="Name"
-            variant="outlined"
-            placeholder="Unique name"
-            persistent-placeholder
-            :rules="rules.name"
-          />
+          <VTextField v-model="form.name" label="Name" variant="outlined" placeholder="Unique name"
+            persistent-placeholder :rules="rules.name" />
 
-          <VTextarea
-            :value="form.path"
-            label="Path"
-            variant="outlined"
-            persistent-placeholder
-            readonly
-          />
+          <VTextarea :value="form.path" label="Path" variant="outlined" persistent-placeholder readonly />
 
-          <VRadioGroup
-            v-model="form.status"
-            label="Status"
-            inline
-          >
-            <VRadio
-              v-for="item in status"
-              :key="item.value"
-              :label="item.label"
-              :color="item.color"
-              :value="item.value"
-            />
+          <VRadioGroup v-model="form.status" label="Status" inline>
+            <VRadio v-for="item in status" :key="item.value" :label="item.label" :color="item.color"
+              :value="item.value" />
           </VRadioGroup>
 
-          <VTextField
-            v-if="form.parent"
-            v-model="form.parent.label"
-            label="Parent"
-            variant="outlined"
-            persistent-placeholder
-            readonly
-          />
+          <VTextField v-if="form.parent" v-model="form.parent.label" label="Parent" variant="outlined"
+            persistent-placeholder readonly />
 
-          <VTextField
-            v-model="form.icon"
-            label="Icon"
-            variant="outlined"
-            persistent-placeholder
-            :prepend-inner-icon="form.icon"
-          />
+          <VTextField v-model="form.icon" label="Icon" variant="outlined" persistent-placeholder
+            :prepend-inner-icon="form.icon" />
 
-          <VNumberInput
-            v-model="form.sort"
-            :min="0"
-            :max="100"
-            variant="outlined"
-            label="Sort"
-            :rules="rules.sort"
-            control-variant="split"
-            hide-details
-          />
+          <VNumberInput v-model="form.sort" :min="0" :max="100" variant="outlined" label="Sort" :rules="rules.sort"
+            control-variant="split" hide-details />
         </VForm>
       </VCardText>
       <VCardActions>
         <VBtn @click="onClose">
-          <VIcon
-            start
-            icon="mdi-close-thick"
-          />
+          <VIcon start icon="mdi-close-thick" />
           <span>Cancel</span>
         </VBtn>
-        <VBtn
-          color="primary"
-          @click="onSave"
-          :disabled="!isValid"
-        >
-          <VIcon
-            start
-            icon="mdi-content-save-outline"
-          />
+        <VBtn color="primary" @click="onSave" :disabled="!isValid">
+          <VIcon start icon="mdi-content-save-outline" />
           <span>Save</span>
         </VBtn>
       </VCardActions>

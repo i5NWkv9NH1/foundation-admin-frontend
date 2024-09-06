@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { apiActions } from '@/api/actions'
-import { Action, ActionFilterPayload, CreateActionDto, DeleteMode, Menu, TableHeader, TableMeta, TableRowAction } from '@/types'
-import ActionCreateEditDialog from './ActionCreateEditDialog.vue'
+import { apiActions } from '@/api/actions';
+import { Action, ActionFilterPayload, CreateActionDto, DeleteMode, Menu, TableHeader, TableMeta, TableRowAction } from '@/types';
+import ActionCreateEditDialog from './ActionCreateEditDialog.vue';
 /**
  * * Table
  */
@@ -74,7 +74,7 @@ const onOpenCreateEditDialog = async (value: boolean, action?: Action) => {
   if (isEditing.value && action) {
     // prettier-ignore
     // const { data: { result }} = await apiActions.getActionById(action.id!)
-    const { data: { result }} = await apiActions.getActionById(action.id!)
+    const { data: { result } } = await apiActions.getActionById(action.id!)
     currentAction.value = result as CreateActionDto
   } else {
     currentAction.value = { ...defaultAction }
@@ -126,18 +126,10 @@ const onConfirmDelete = async (mode: DeleteMode) => {
 </script>
 
 <template>
-  <VDataTableServer
-    v-model="selectedActions"
-    v-model:page="tableMeta.page"
-    v-model:items-per-page="tableMeta.itemsPerPage"
-    v-bind="$attrs"
-    hide-default-footer
-    @update:options="onFetchActionsByMenuId"
-    :loading="tableMeta.loading"
-    :items="actions"
-    :items-length="tableMeta.itemsLength"
-    :headers="headers"
-  >
+  <VDataTableServer v-model="selectedActions" v-model:page="tableMeta.page"
+    v-model:items-per-page="tableMeta.itemsPerPage" v-bind="$attrs" hide-default-footer
+    @update:options="onFetchActionsByMenuId" :loading="tableMeta.loading" :items="actions"
+    :items-length="tableMeta.itemsLength" :headers="headers">
     <template #loading>
       <VSkeletonLoader type="table-row@4" />
     </template>
@@ -146,34 +138,18 @@ const onConfirmDelete = async (mode: DeleteMode) => {
     </template>
     <template #top>
       <VCardActions>
-        <VBtn
-          color="primary"
-          @click="onOpenCreateEditDialog(false)"
-        >
-          <VIcon
-            start
-            icon="mdi-content-save-outline"
-          />
+        <VBtn color="primary" @click="onOpenCreateEditDialog(false)">
+          <VIcon start icon="mdi-content-save-outline" />
           <span>Create Action</span>
         </VBtn>
-        <VBtn
-          :disabled="!!!selectedActions.length"
-          color="error"
-          @click="onOpenDeleteConfirmDialog('multiple')"
-        >
-          <VIcon
-            start
-            icon="mdi-delete-outline"
-          />
+        <VBtn :disabled="!!!selectedActions.length" color="error" @click="onOpenDeleteConfirmDialog('multiple')">
+          <VIcon start icon="mdi-delete-outline" />
           <span>Delete</span>
         </VBtn>
       </VCardActions>
     </template>
     <template #[`item.level`]>
-      <VIcon
-        :icon="`mdi-numeric-${props.level}`"
-        size="32"
-      />
+      <VIcon :icon="`mdi-numeric-${props.level}`" size="32" />
     </template>
     <template #[`item.code`]="{ item }">
       <VCode :class="[`bg-secondary`, `font-weight-bold`, `text-body-2`]">
@@ -185,35 +161,17 @@ const onConfirmDelete = async (mode: DeleteMode) => {
     </template>
     <template #[`item.actions`]="{ item }">
       <VCardActions>
-        <VTooltip
-          v-for="btn in tableRowActions"
-          :key="btn.title"
-          :text="btn.title"
-          location="top"
-        >
+        <VTooltip v-for="btn in tableRowActions" :key="btn.title" :text="btn.title" location="top">
           <template #activator="args">
-            <VBtn
-              @click="btn.cb(item)"
-              :icon="btn.icon"
-              :color="btn.color"
-              v-bind="args.props"
-            />
+            <VBtn @click="btn.cb(item)" :icon="btn.icon" :color="btn.color" v-bind="args.props" />
           </template>
         </VTooltip>
       </VCardActions>
     </template>
   </VDataTableServer>
 
-  <ActionCreateEditDialog
-    v-model="createEditDialog"
-    @save="onSaveCreateEditDialog"
-    :is-eidting="isEditing"
-    :action="currentAction"
-  />
+  <ActionCreateEditDialog v-model="createEditDialog" @save="onSaveCreateEditDialog" :is-eidting="isEditing"
+    :action="currentAction" />
 
-  <DeleteConfirmDialog
-    v-model="deleteConfirmDialog"
-    @confirm="onConfirmDelete"
-    :mode="deleteMode"
-  />
+  <DeleteConfirmDialog v-model="deleteConfirmDialog" @confirm="onConfirmDelete" :mode="deleteMode" />
 </template>

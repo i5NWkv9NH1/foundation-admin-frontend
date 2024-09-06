@@ -9,7 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AccountCreateEditDrawer: typeof import('./pages/system/accounts/components/AccountCreateEditDrawer.vue')['default']
     AccountOrganizationsDialog: typeof import('./pages/system/accounts/components/AccountOrganizationsDialog.vue')['default']
-    AuthenticationForm: typeof import('./widgets/AuthenticationForm.vue')['default']
+    AuthenticationForm: typeof import('./components/AuthenticationForm.vue')['default']
     Authority: typeof import('./components/Authority.vue')['default']
     AvatarWithError: typeof import('./components/AvatarWithError.vue')['default']
     BottomBar: typeof import('./components/layouts/BottomBar.vue')['default']
@@ -18,7 +18,7 @@ declare module 'vue' {
     CaptchaInput: typeof import('./components/forms/CaptchaInput.vue')['default']
     CreateEditDialog: typeof import('./components/dialogs/CreateEditDialog.vue')['default']
     DeleteConfirmDialog: typeof import('./components/dialogs/DeleteConfirmDialog.vue')['default']
-    Drawer: typeof import('./components/layouts/Drawer.vue')['default']
+    Drawer: typeof import('./layouts/components/Drawer.vue')['default']
     EarningsGoal: typeof import('./components/charts/EarningsGoal.vue')['default']
     Event: typeof import('./components/timelines/Event.vue')['default']
     GeneratorField: typeof import('./components/forms/GeneratorField.vue')['default']
@@ -27,7 +27,7 @@ declare module 'vue' {
     Menu: typeof import('./components/layouts/Menu.vue')['default']
     MenuActionsTable: typeof import('./pages/system/menus/components/MenuActionsTable.vue')['default']
     MenuChildrenActions: typeof import('./pages/system/roles/components/MenuChildrenActions.vue')['default']
-    NotificationSheet: typeof import('./widgets/NotificationSheet.vue')['default']
+    NotificationSheet: typeof import('./layouts/components/NotificationSheet.vue')['default']
     ProgressBar: typeof import('./components/layouts/ProgressBar.vue')['default']
     ProgressCard: typeof import('./components/charts/ProgressCard.vue')['default']
     QueryFilterPanel: typeof import('./components/forms/QueryFilterPanel.vue')['default']
@@ -43,7 +43,7 @@ declare module 'vue' {
     TopBar: typeof import('./components/layouts/TopBar.vue')['default']
     TreeActivator: typeof import('./components/treeviews/TreeActivator.vue')['default']
     TreeSelector: typeof import('./components/treeviews/TreeSelector.vue')['default']
-    UserProfileDropdown: typeof import('./widgets/UserProfileDropdown.vue')['default']
+    UserProfileDropdown: typeof import('./layouts/components/UserProfileDropdown.vue')['default']
     Weather: typeof import('./components/charts/Weather.vue')['default']
   }
 }

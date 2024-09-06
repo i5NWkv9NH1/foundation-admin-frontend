@@ -27,9 +27,9 @@ const tableMeta = ref<TableMeta>({
 const selectedAccounts = ref<Account[]>()
 const isSelectedAccounts = computed(() => selectedAccounts.value && !!selectedAccounts.value.length)
 const tableRowActions = ref<TableRowAction[]>([
-  { title: 'Update Organizations', icon: 'mdi-account-group-outline', cb: onOpenOrganizaitonDialog, color: '' },
-  { title: 'Edit Account', icon: 'mdi-pencil-outline', cb: (account: Account) => onOpenCreateEditDrawer(true, account), color: '' },
-  { title: 'Delete Account', icon: 'mdi-delete-outline', cb: (account: Account) => onOpenDeleteConfirmDialog('single', account), color: '' }
+  { title: 'Update Organizations', icon: 'mdi-account-group-outline', cb: onOpenOrganizaitonDialog, color: '', permission: ['view:sys:organizations', 'update:sys:organizations'] },
+  { title: 'Edit Account', icon: 'mdi-pencil-outline', cb: (account: Account) => onOpenCreateEditDrawer(true, account), color: '', permission: ['view:sys:accounts', 'update:sys:accounts'] },
+  { title: 'Delete Account', icon: 'mdi-delete-outline', cb: (account: Account) => onOpenDeleteConfirmDialog('single', account), color: '', permission: ['delete:sys:accounts', 'update:sys:accounts'] }
 ])
 
 /**
@@ -46,13 +46,19 @@ const defaultFilters: AccountFilterPayload = {
 const filters = ref<AccountFilterPayload>({ ...defaultFilters })
 // prettier-ignore
 const fileterFields = ref<FormField[]>([
-  { name: 'roleId', label: 'Roles', type: 'select',  options: [], attrs: { 'hide-details': true, grid: { cols: 4 }, 'item-title': 'name', 'item-value': 'id' , variant: 'outlined' } },
-  { name: 'status', label: 'Status', type: 'select', attrs: { grid: { cols: 4 }, 'item-title': 'name',  'item-value': 'value',  'variant': 'outlined',
-    items: [{ name: 'All', value: 'ALL' }, { name: 'Enabled', value: 'Enabled' }, { name: 'Disabled', value: 'Dsiabled' },]
-  }},
-  { name: 'gender', label: 'Gender', type: 'select', attrs: { grid: { cols: 4 }, 'item-title': 'name',  'item-value': 'value',  'variant': 'outlined',
-    items: [{ name: 'Private', value: 'Private' }, { name: 'Male', value: 'Male' }, { name: 'Female', value: 'Female' },]
-  }}
+  { name: 'roleId', label: 'Roles', type: 'select', options: [], attrs: { 'hide-details': true, grid: { cols: 4 }, 'item-title': 'name', 'item-value': 'id', variant: 'outlined' } },
+  {
+    name: 'status', label: 'Status', type: 'select', attrs: {
+      grid: { cols: 4 }, 'item-title': 'name', 'item-value': 'value', 'variant': 'outlined',
+      items: [{ name: 'All', value: 'ALL' }, { name: 'Enabled', value: 'Enabled' }, { name: 'Disabled', value: 'Dsiabled' },]
+    }
+  },
+  {
+    name: 'gender', label: 'Gender', type: 'select', attrs: {
+      grid: { cols: 4 }, 'item-title': 'name', 'item-value': 'value', 'variant': 'outlined',
+      items: [{ name: 'Private', value: 'Private' }, { name: 'Male', value: 'Male' }, { name: 'Female', value: 'Female' },]
+    }
+  }
 ]);
 const onFilterSubmit = async () => {
   await onFetchAccounts()
@@ -88,22 +94,22 @@ async function onFetchAccounts(options: TableCallbackOptions = {
   try {
     tableMeta.value.loading = true
     const { page, itemsPerPage } = options
-    const { data: { result }} = await apiAccounts.getAccounts({
+    const { data: { result } } = await apiAccounts.getAccounts({
       page, itemsPerPage, filters: filters.value
     })
     accounts.value = result.items
     tableMeta.value = { ...result.meta, loading: false }
-  } catch(error) {
+  } catch (error) {
     console.log(error)
   }
 }
 // prettier-ignore
 async function onFetchAccountById(id: string) {
   try {
-    const { data: { result: { roles, organizations, ...rest }}} = await apiAccounts.getAccountById(id)
+    const { data: { result: { roles, organizations, ...rest } } } = await apiAccounts.getAccountById(id)
     const organizationIds = organizations.map(org => org.id)
-    currentAccount.value = {...rest, roles, organizations, organizationIds }
-  } catch(error) {
+    currentAccount.value = { ...rest, roles, organizations, organizationIds }
+  } catch (error) {
     console.log(error)
   }
 }
@@ -125,29 +131,26 @@ async function onCreateAccount() {
 async function onFetchRoles() {
   try {
     // * fetch all roles
-    const { data: { result }} = await apiRoles.getRoles({ page: 1, itemsPerPage: -1 })
+    const { data: { result } } = await apiRoles.getRoles({ page: 1, itemsPerPage: -1 })
     roles.value = result.items
-      // ? Set the query field optiosn
+    // ? Set the query field optiosn
     fileterFields.value.map((field) => {
       if (field.name === 'roleId') field.options = roles.value
       return field
     })
-  } catch(error) {
+  } catch (error) {
     console.log(error)
   }
 }
 // prettier-ignore
 async function onFetchOrganizations() {
   try {
-    // prettier-ignore
     const { data: { result } } = await apiOrganizations.getOrganizations({ page: 1, itemsPerPage: -1 })
     organizations.value = result.items
-    // ? Set the organizations tree id
     activatedIds.value = [organizations.value[0].id]
-    // ? Set the fitlers
     defaultFilters.organizationId = organizations.value[0].id
     filters.value = { ...defaultFilters }
-  } catch(error) {
+  } catch (error) {
     console.log(error)
   }
 }
@@ -247,77 +250,37 @@ onMounted(async () => {
 <template>
   <VContainer fluid>
     <VRow>
-      <!-- Organizations Tree -->
-      <VCol
-        cols="12"
-        lg="3"
-        md="4"
-        sm="4"
-      >
+      <!--* Organizations Tree -->
+      <VCol cols="12" lg="3" md="4" sm="4">
         <VCard>
           <VCardTitle>Organizations</VCardTitle>
           <VCardText>
-            <!-- Tree -->
-            <TreeActivator
-              v-model="activatedIds"
-              :items="organizations"
-              mandatory
-            />
+            <!--* Tree -->
+            <TreeActivator v-model="activatedIds" :items="organizations" mandatory />
           </VCardText>
         </VCard>
       </VCol>
-      <VCol
-        cols="12"
-        lg="9"
-        md="8"
-        sm="8"
-      >
+      <VCol cols="12" lg="9" md="8" sm="8">
         <div class="d-flex flex-column ga-4">
-          <!-- Query -->
-          <QueryFilterPanel
-            :fields="fileterFields"
-            :form="filters"
-            @submit="onFilterSubmit"
-            @reset="onFilterReest"
-            @create="onFilterCreate"
-          />
-          <!-- Table -->
+          <!--* Query -->
+          <QueryFilterPanel :fields="fileterFields" :form="filters" @submit="onFilterSubmit" @reset="onFilterReest"
+            @create="onFilterCreate" />
+          <!--* Table -->
           <VCard>
             <VCardTitle>Accounts</VCardTitle>
             <VCardText>
-              <VDataTableServer
-                v-model="selectedAccounts"
-                v-model:page="tableMeta.page"
-                v-model:items-per-page="tableMeta.itemsPerPage"
-                show-select
-                @update:options="onFetchAccounts"
-                :loading="tableMeta.loading"
-                :items="accounts"
-                :items-length="tableMeta.itemsLength"
-                :headers="headers"
-              >
+              <VDataTableServer v-model="selectedAccounts" v-model:page="tableMeta.page"
+                v-model:items-per-page="tableMeta.itemsPerPage" show-select @update:options="onFetchAccounts"
+                :loading="tableMeta.loading" :items="accounts" :items-length="tableMeta.itemsLength" :headers="headers">
                 <template #top>
                   <VCardActions>
-                    <VBtn
-                      color="primary"
-                      @click="onOpenCreateEditDrawer(false)"
-                    >
-                      <VIcon
-                        icon="mdi-plus-thick"
-                        start
-                      />
+                    <VBtn color="primary" @click="onOpenCreateEditDrawer(false)">
+                      <VIcon icon="mdi-plus-thick" start />
                       <span>New Item</span>
                     </VBtn>
                     <VSlideXTransition>
-                      <VBtn
-                        v-if="isSelectedAccounts"
-                        color="error"
-                        @click="onOpenDeleteConfirmDialog('multiple')"
-                      >
-                        <VIcon
-                          icon="mdi-delete-outline"
-                          start
-                        />
+                      <VBtn v-if="isSelectedAccounts" color="error" @click="onOpenDeleteConfirmDialog('multiple')">
+                        <VIcon icon="mdi-delete-outline" start />
                         <span>Delete Selected</span>
                       </VBtn>
                     </VSlideXTransition>
@@ -327,11 +290,7 @@ onMounted(async () => {
                   <VSkeletonLoader type="table-row@4" />
                 </template>
                 <template #[`item.avatarUrl`]="{ item }">
-                  <AvatarWithError
-                    :image="item.profile.avatarUrl"
-                    :size="40"
-                    :text="item.name"
-                  />
+                  <AvatarWithError :image="item.profile.avatarUrl" :size="40" :text="item.name" />
                 </template>
                 <template #[`item.email`]="{ item }">
                   <span>{{ item.profile.email }}</span>
@@ -347,19 +306,11 @@ onMounted(async () => {
                 </template>
                 <template #[`item.actions`]="{ item }">
                   <VCardActions>
-                    <VTooltip
-                      v-for="btn in tableRowActions"
-                      :key="btn.title"
-                      :text="btn.title"
-                      location="top"
-                    >
+                    <VTooltip v-for="btn in tableRowActions" :key="btn.title" :text="btn.title" location="top">
                       <template #activator="args">
-                        <VBtn
-                          v-bind="args.props"
-                          :icon="btn.icon"
-                          @click="btn.cb(item)"
-                          :color="btn.color"
-                        />
+                        <Authority :permission="btn.permission">
+                          <VBtn v-bind="args.props" :icon="btn.icon" @click="btn.cb(item)" :color="btn.color" />
+                        </Authority>
                       </template>
                     </VTooltip>
                   </VCardActions>
@@ -372,29 +323,14 @@ onMounted(async () => {
     </VRow>
 
     <!-- * AccountCreateEditDrawer -->
-    <AccountCreateEditDrawer
-      v-model="createEditDrawer"
-      @save="onSaveCreateEditDrawer"
-      :roles="roles"
-      :organizaitons="organizations"
-      :is-editing="isEditing"
-      :account="currentAccount"
-    />
+    <AccountCreateEditDrawer v-model="createEditDrawer" @save="onSaveCreateEditDrawer" :roles="roles"
+      :organizaitons="organizations" :is-editing="isEditing" :account="currentAccount" />
 
     <!-- * AccountOrganizations -->
-    <AccountOrganizationsDialog
-      v-model="organizationsDialog"
-      v-model:selected="currentAccount.organizationIds"
-      @save="onSaveOrganizationsDialog"
-      :organizationIds="currentAccount.organizationIds"
-      :items="organizations"
-    />
+    <AccountOrganizationsDialog v-model="organizationsDialog" v-model:selected="currentAccount.organizationIds"
+      @save="onSaveOrganizationsDialog" :organizationIds="currentAccount.organizationIds" :items="organizations" />
 
     <!-- * Dialog -->
-    <DeleteConfirmDialog
-      v-model="deleteConfirmDialog"
-      @confirm="onConfirmDelete"
-      :mode="deleteMode"
-    />
+    <DeleteConfirmDialog v-model="deleteConfirmDialog" @confirm="onConfirmDelete" :mode="deleteMode" />
   </VContainer>
 </template>

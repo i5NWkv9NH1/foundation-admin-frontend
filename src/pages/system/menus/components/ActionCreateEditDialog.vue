@@ -52,100 +52,39 @@ function onClose() {
 </script>
 
 <template>
-  <VDialog
-    v-model="modelValue"
-    width="400"
-    scroll-strategy="block"
-    scrollable
-  >
+  <VDialog v-model="modelValue" width="400" scroll-strategy="block" scrollable>
     <VCard>
       <VCardTitle>
         {{ props.isEidting ? `Edit Action` : 'New Action' }}
       </VCardTitle>
       <VCardSubtitle v-if="props.isEidting"> Editing {{ form.id }} </VCardSubtitle>
       <VCardText>
-        <VForm
-          ref="formEl"
-          v-model="isValid"
-          @submit.prevent="onSave"
-          fast-fail
-          class="d-flex flex-column ga-4"
-        >
-          <VTextField
-            v-model="form.name"
-            label="Name"
-            variant="outlined"
-            persistent-placeholder
-            :rules="rules.name"
-          />
+        <VForm ref="formEl" v-model="isValid" @submit.prevent="onSave" fast-fail class="d-flex flex-column ga-4">
+          <VTextField v-model="form.name" label="Name" variant="outlined" persistent-placeholder :rules="rules.name" />
 
-          <VTextField
-            v-model="form.code"
-            label="Code"
-            variant="outlined"
-            persistent-placeholder
-            :rules="rules.code"
-          />
+          <VTextField v-model="form.code" label="Code" variant="outlined" persistent-placeholder :rules="rules.code" />
 
-          <VTextField
-            v-model="form.icon"
-            label="Icon"
-            variant="outlined"
-            persistent-placeholder
-            :prepend-inner-icon="form.icon"
-            hide-details
-          />
+          <VTextField v-model="form.icon" label="Icon" variant="outlined" persistent-placeholder
+            :prepend-inner-icon="form.icon" hide-details />
 
-          <VRadioGroup
-            v-model="form.status"
-            label="Status"
-            inline
-          >
-            <VRadio
-              v-for="item in status"
-              :key="item.value"
-              :value="item.value"
-              :color="item.color"
-              :label="item.label"
-            />
+          <VRadioGroup v-model="form.status" label="Status" inline>
+            <VRadio v-for="item in status" :key="item.value" :value="item.value" :color="item.color"
+              :label="item.label" />
           </VRadioGroup>
 
-          <VTextField
-            v-if="form.menuId"
-            :value="form.menuId"
-            variant="outlined"
-            label="Menu Id"
-            persistent-placeholder
-            readonly
-          />
+          <VTextField v-if="form.menuId" :value="form.menuId" variant="outlined" label="Menu Id" persistent-placeholder
+            readonly />
 
-          <VNumberInput
-            v-model="form.sort"
-            :min="0"
-            :max="100"
-            variant="outlined"
-            label="Sort"
-            hide-details
-          />
+          <VNumberInput v-model="form.sort" :min="0" :max="100" variant="outlined" label="Sort" hide-details />
         </VForm>
       </VCardText>
       <VCardActions>
         <VBtn @click="onClose">
-          <VIcon
-            start
-            icon="mdi-close-thick"
-          />
+          <VIcon start icon="mdi-close-thick" />
           <span>Cancel</span>
         </VBtn>
-        <VBtn
-          color="primary"
-          @click="onSave"
-          :disabled="!isValid"
-        >
-          <VIcon
-            start
-            icon="mdi-content-save-outline"
-          />
+        <VBtn color="primary" @click="onSave" :disabled="!isValid">
+          <VIcon start icon="mdi-content-save-outline" />
           <span>Save</span>
         </VBtn>
       </VCardActions>

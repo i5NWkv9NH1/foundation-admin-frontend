@@ -1,28 +1,43 @@
 // stores/auth.ts
 import { apiAuth } from '@/api'
-import type { Account, Gender, SigninPayload, SignupPayload, Status, Tokens } from '@/types'
+import type { Account, SigninPayload, SignupPayload, Tokens } from '@/types'
 import { defineStore } from 'pinia'
 import { usePermissionStore } from './permissions'
 
-const defaultAccount = {
+//#region
+const defaultAccount: Account = {
   id: '',
   name: '',
   username: '',
-  phone: '',
-  address: '',
-  email: '',
-  avatarUrl: '',
   roles: [],
-  status: 'ENABLE' as Status,
+  organizations: [],
+  profile: {
+    status: 'Enabled',
+    gender: 'Female',
+    email: '',
+    phone: '',
+    address: '',
+    avatarUrl: '',
+    bannerurl: '',
+    bio: '',
+    website: '',
+    location: '',
+    socialMediaLinks: {},
+    id: '',
+    createdAt: '',
+    updatedAt: ''
+  },
+  password: '',
   createdAt: '',
-  updatedAt: '',
-  gender: 'FEMALE' as Gender
+  updatedAt: ''
 }
-export const useAuthStore = defineStore(
-  'auth',
-  () => {
-    const logger = (fnName: string, ...rest: string[]) => `${useAuthStore.name}::${fnName}::${rest}`
+//#endregion
 
+export const useUserStore = defineStore(
+  'user',
+  () => {
+    const logger = (fnName: string, ...rest: string[]) => `${useUserStore.name}::${fnName}::${rest}`
+    const router = useRouter()
     const { setPermissions, clearPermissions } = usePermissionStore()
 
     const tokens = ref<Tokens>({
@@ -49,12 +64,14 @@ export const useAuthStore = defineStore(
         const response = await apiAuth.refreshToken({
           refreshToken: tokens.value.refreshToken
         })
-        setTokens(response.data.result)
+        setTokens(response.data.result.tokens)
+        setAccount(response.data.result.account)
       } catch (error) {
         clearTokens()
         clearAccount()
         clearPermissions()
-        throw new Error(logger(refresh.name, 'failed'))
+        router.push('/auth/signin')
+        throw new Error(logger(refresh.name, 'Token Expire'))
       }
     }
 
@@ -84,6 +101,7 @@ export const useAuthStore = defineStore(
         clearTokens()
         clearAccount()
         clearPermissions()
+        router.push('/auth/signin')
       } catch (error) {
         throw new Error(logger(logout.name, 'failed'))
       }
@@ -122,3 +140,5 @@ export const useAuthStore = defineStore(
   },
   { persist: true }
 )
+
+export const useAuthStore = useUserStore

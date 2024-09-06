@@ -14,27 +14,13 @@ function handleSubmit() {
 </script>
 
 <template>
-  <VForm
-    ref="formEl"
-    @submit.prevent="handleSubmit"
-  >
-    <VCard
-      color="transparent"
-      variant="flat"
-      :loading="props.loading"
-    >
+  <VForm ref="formEl" @submit.prevent="handleSubmit">
+    <VCard color="transparent" variant="flat" :loading="props.loading">
       <VCardText>
         <slot name="fields" />
       </VCardText>
       <VCardActions>
-        <VBtn
-          block
-          color="primary"
-          :disabled="props.loading"
-          :text="props.submitText"
-          type="submit"
-          variant="flat"
-        />
+        <VBtn block color="primary" :disabled="props.loading" :text="props.submitText" type="submit" variant="flat" />
       </VCardActions>
       <VCardActions>
         <slot name="actions" />

@@ -2,6 +2,8 @@ import { whiteList } from '@/constants'
 import router from '@/router'
 import { useAuthStore, usePermissionStore } from '@/stores'
 import { isEmpty } from 'lodash'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 
 const pages = import.meta.glob('../pages/**/**.vue')
@@ -11,20 +13,33 @@ export async function initializePermissions() {
   const authStore = useAuthStore()
   const permissionStore = usePermissionStore()
   const hasLoadedRoutes = computed(() => !isEmpty(permissionStore.permissions.routes))
+  const hasActions = computed(() => !isEmpty(permissionStore.permissions.actions))
 
   router.beforeEach(async (to, from, next) => {
+    NProgress.start()
+
+    //*
+    const title = import.meta.env.VITE_WEB_TITLE;
+    document.title = to.meta.title || title;
+
+    //*
     if (to.path === '/auth/signin') {
+      //*
       if (authStore.isAuthenticated) {
         return next(from.fullPath)
       } else {
         console.log('expire')
       }
+      //*
       resetRouter()
       return next()
     }
 
+    //*
     if (whiteList.includes(to.path)) return next()
+    //*
     if (!authStore.isAuthenticated) return next({ path: '/auth/signin', replace: true })
+    //*
     if (!hasLoadedRoutes.value) {
       try {
         await authStore.findMe()
@@ -38,11 +53,12 @@ export async function initializePermissions() {
       }
       return next({ ...to, replace: true })
     }
+    //*
     next()
   })
 
   router.afterEach(() => {
-    // NProgress.done();
+    NProgress.done();
   })
 }
 
@@ -66,27 +82,6 @@ function convertToVueRoutes(backEndRoutes: any) {
       redirect: route.redirect || undefined
     }
   })
-}
-
-/** 路由对象 */
-export interface RouteVO {
-  children: RouteVO[]
-  component?: string
-  meta?: Meta
-  name?: string
-  router: string
-  redirect?: string
-  parentId: string | null
-  parent: RouteVO
-}
-
-/** Meta，路由属性 */
-export interface Meta {
-  alwaysShow?: boolean
-  hidden?: boolean
-  icon?: string
-  keepAlive?: boolean
-  title?: string
 }
 
 export const resetRouter = () => {

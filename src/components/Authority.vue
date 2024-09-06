@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { usePermissionStore } from '@/stores';
+import { every, isArray, isEmpty, some } from 'lodash';
 
 interface Props {
-  permission: string[];
+  permission: string[] | string;
 }
 const props = withDefaults(defineProps<Props>(), {
   permission: () => [],
@@ -11,21 +12,17 @@ const props = withDefaults(defineProps<Props>(), {
 
 const permissionStore = usePermissionStore()
 const showSlot = computed(() => {
-  // 没有传入权限，直接显示
-  if (!props.permission) return true;
+  if (!props.permission) return false;
 
-  if (!permissionStore.permissions.actions) {
+  if (isEmpty(permissionStore.permissions.actions)) {
     return false;
   }
 
-  // 如果插槽按钮需要多个权限才能显示
-  if (Array.isArray(props.permission)) {
-    // 判断父组件传过来的 permission 是不是当前用户权限拥有的
-    return props.permission.every(p => permissionStore.permissions.actions.some(a => a.name === p));
-  } else {
-    // 如果父组件传过来单个权限
-    return permissionStore.permissions.actions.includes(props.permission);
+  if (isArray(props.permission)) {
+    return every(props.permission, (p) => some(permissionStore.permissions.actions, { code: p }))
   }
+  return some(permissionStore.permissions.actions, { code: props.permission })
+
 });
 </script>
 

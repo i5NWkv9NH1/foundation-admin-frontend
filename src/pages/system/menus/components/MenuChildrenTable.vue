@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { apiMenus } from '@/api'
-import { CreateMenuDto, DeleteMode, Menu, TableHeader, TableMeta, TableRowAction } from '@/types'
-import MenuCreateEditDialog from './MenCreateEditDialog.vue'
-import MenuActionsTable from './MenuActionsTable.vue'
+import { apiMenus } from '@/api';
+import { CreateMenuDto, DeleteMode, Menu, TableHeader, TableMeta, TableRowAction } from '@/types';
+import MenuCreateEditDialog from './MenCreateEditDialog.vue';
+import MenuActionsTable from './MenuActionsTable.vue';
 
 const props = defineProps<{
   items: Menu[]
@@ -23,13 +23,15 @@ const headers = ref<TableHeader[]>([
 // prettier-ignore
 const tableRowActions = ref<TableRowAction[]>([
   { title: 'Create Sub Menu', icon: 'mdi-vector-polyline-plus', color: '', cb: (menu: Menu) => onCreateSubMenu(menu.id!) },
-  { title: 'Create Menu', icon: 'mdi-vector-square-plus', color: '',  cb: (menu: Menu) => {
-    if (!menu.parent) return onCreateRootMenu()
-    //* Same level
-    return onCreateSubMenu(menu.parent.id!)
-  }},
+  {
+    title: 'Create Menu', icon: 'mdi-vector-square-plus', color: '', cb: (menu: Menu) => {
+      if (!menu.parent) return onCreateRootMenu()
+      //* Same level
+      return onCreateSubMenu(menu.parent.id!)
+    }
+  },
   { title: 'Edit Menu', icon: 'mdi-pencil-outline', color: '', cb: (menu: Menu) => onEditMenu(menu.id!) },
-  { title: 'Delete Menu', icon: 'mdi-delete-outline', color: '',  cb: (menu: Menu) => onOpenDeleteConfirmDialog('single', menu)},
+  { title: 'Delete Menu', icon: 'mdi-delete-outline', color: '', cb: (menu: Menu) => onOpenDeleteConfirmDialog('single', menu) },
 ]);
 const paddingLeftStyle = computed(() => `${props.level * 2}rem`)
 const selectedMenus = ref<string[]>([])
@@ -159,40 +161,24 @@ const onConfirmDelete = async () => {
 </script>
 
 <template>
-  <VDataTableServer
-    v-model="selectedMenus"
-    v-model:page="tableMeta.page"
-    v-model:items-per-page="tableMeta.itemsPerPage"
-    v-model:expanded="expandedMenus"
-    v-bind="$attrs"
-    hide-default-footer
-    expand-on-click
-    :loading="props.loading"
-    :items="props.items"
+  <VDataTableServer v-model="selectedMenus" v-model:page="tableMeta.page"
+    v-model:items-per-page="tableMeta.itemsPerPage" v-model:expanded="expandedMenus" v-bind="$attrs" hide-default-footer
+    expand-on-click :loading="props.loading" :items="props.items"
     :items-per-page-text="`level: ${props.level} : ${items[0]?.parent?.name || 'Null'} `"
-    :items-length="props.items.length"
-    :headers="headers"
-  >
+    :items-length="props.items.length" :headers="headers">
     <template #loading>
       <VSkeletonLoader type="table-row@4" />
     </template>
     <template #no-data>
       <div>No submens.</div>
     </template>
-    <template
-      v-if="props.level !== 1"
-      #top
-    >
+    <template v-if="props.level !== 1" #top>
       <VCardTitle>Sub Menus</VCardTitle>
     </template>
 
     <template #[`item.router`]="{ item }">
-      <VBtn
-        variant="text"
-        :to="item.parent ? `${item.parent.router}${item.router}` : `${item.router}`"
-        class="text-decoration-underline"
-        exact
-      >
+      <VBtn variant="text" :to="item.parent ? `${item.parent.router}${item.router}` : `${item.router}`"
+        class="text-decoration-underline" exact>
         {{ item.router }}
       </VBtn>
     </template>
@@ -211,57 +197,27 @@ const onConfirmDelete = async () => {
     </template>
     <template #[`item.actions`]="{ item }">
       <VCardActions>
-        <VTooltip
-          v-for="btn in tableRowActions"
-          :key="btn.title"
-          location="top"
-        >
+        <VTooltip v-for="btn in tableRowActions" :key="btn.title" location="top">
           <template #activator="args">
-            <VBtn
-              @click.stop="btn.cb(item)"
-              :icon="btn.icon"
-              :color="btn.color"
-              v-bind="args.props"
-            />
+            <VBtn @click.stop="btn.cb(item)" :icon="btn.icon" :color="btn.color" v-bind="args.props" />
           </template>
           <span> {{ btn.title }}</span>
         </VTooltip>
       </VCardActions>
     </template>
     <template #expanded-row="{ item, columns }">
-      <td
-        :colspan="columns.length"
-        :style="{ paddingLeft: paddingLeftStyle }"
-      >
+      <td :colspan="columns.length" :style="{ paddingLeft: paddingLeftStyle }">
         <!-- Render actions if available -->
-        <MenuActionsTable
-          :item="item"
-          :level="props.level + 1"
-        />
+        <MenuActionsTable :item="item" :level="props.level + 1" />
         <!-- Render children if available -->
-        <MenuChildrenTable
-          v-model="selectedMenus"
-          :loading="tableMeta.loading"
-          :level="props.level + 1"
-          :items="item.children"
-          :items-length="item.children.length"
-          :headers="headers"
-          :refresh="props.refresh"
-        />
+        <MenuChildrenTable v-model="selectedMenus" :loading="tableMeta.loading" :level="props.level + 1"
+          :items="item.children" :items-length="item.children.length" :headers="headers" :refresh="props.refresh" />
       </td>
     </template>
   </VDataTableServer>
 
-  <MenuCreateEditDialog
-    v-model="createEditDialog"
-    :menu="currentMenu"
-    @save="onSaveCreateEditDialog"
-    :is-eidting="isEditing"
-  />
+  <MenuCreateEditDialog v-model="createEditDialog" :menu="currentMenu" @save="onSaveCreateEditDialog"
+    :is-eidting="isEditing" />
 
-  <DeleteConfirmDialog
-    v-model="deleteConfirmDialog"
-    :mode="deleteMode"
-    @confirm="onConfirmDelete"
-  />
+  <DeleteConfirmDialog v-model="deleteConfirmDialog" :mode="deleteMode" @confirm="onConfirmDelete" />
 </template>

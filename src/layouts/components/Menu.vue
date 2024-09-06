@@ -1,6 +1,6 @@
 <script setup lang="tsx">
-import { usePermissionStore } from '@/stores'
-import { VList, VListGroup, VListItem } from 'vuetify/components'
+import { usePermissionStore } from '@/stores';
+import { VList, VListGroup, VListItem } from 'vuetify/components';
 
 const permissionStore = usePermissionStore()
 
@@ -15,7 +15,7 @@ function MenuItem({ items, subgroup }: { items: any[]; subgroup?: boolean }) {
               key={item.name}
               prependIcon={item.meta.icon}
               //* Fix default router and api router field
-              to={item.router ? `${item.parent.router}/${item.path}` : `/${item.path}`}
+              to={(item.router && item.parent) ? `${item.parent.router}/${item.path}` : `/${item.path}`}
               exact
             />
           )
@@ -51,11 +51,7 @@ function MenuItem({ items, subgroup }: { items: any[]; subgroup?: boolean }) {
 </script>
 
 <template>
-  <VList
-    open-strategy="multiple"
-    nav
-    slim
-  >
+  <VList open-strategy="multiple" nav slim>
     <MenuItem :items="permissionStore.allVisibleRoutes" />
   </VList>
 </template>

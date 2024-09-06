@@ -1,18 +1,13 @@
 import { Action, Gender, Menu, Organization, Role, Status } from './entities'
 
-// 通用分页参数
 export interface PaginationPayload {
   page?: number
   itemsPerPage?: number
 }
-
-// 每个模块特定的过滤器参数
 export interface FilterPayload {
-  [key: string]: any // 通用过滤器字段
+  [key: string]: any
 }
 
-// 获取账户的请求参数
-// 特定于账户模块的过滤器参数
 export interface AccountFilterPayload {
   text?: string
   status?: Status | 'ALL'
@@ -20,27 +15,24 @@ export interface AccountFilterPayload {
   roleId?: string
   startDate?: string
   endDate?: string
-  // 其他字段...
 }
 export interface RoleFilterPayload {
   text?: string
   status?: Status | 'ALL'
   name?: string | undefined
 }
-export interface OrganizationFilterPayload {}
-export interface MenuFilterPayload {}
+export interface OrganizationFilterPayload { }
+export interface MenuFilterPayload { }
 export interface ActionFilterPayload {
   menuId?: string
 }
 
-// 分页和过滤器的请求参数
 export interface RequestPayload<T = FilterPayload> {
   page?: number
   itemsPerPage?: number
   filters?: T
 }
 
-// 登录请求的 payload 类型
 export interface SigninPayload {
   account: {
     username: string
@@ -63,7 +55,6 @@ export interface Tokens {
   refreshToken: string
 }
 
-// prettier-ignore
 export interface CreateAccountDto {
   id?: string;
   name: string;
@@ -87,7 +78,7 @@ export interface CreateAccountDto {
   }
 }
 
-export interface UpdateAccountDto extends CreateAccountDto {}
+export interface UpdateAccountDto extends CreateAccountDto { }
 
 export interface CreateRoleDto {
   id?: string
@@ -96,7 +87,7 @@ export interface CreateRoleDto {
   status: Status
   sort: number
 }
-export interface UpdateRoleDto extends CreateRoleDto {}
+export interface UpdateRoleDto extends CreateRoleDto { }
 
 export interface CreateMenuDto {
   id?: string
@@ -111,7 +102,7 @@ export interface CreateMenuDto {
   sort: number
 }
 
-export interface UpdateMenuDto extends CreateMenuDto {}
+export interface UpdateMenuDto extends CreateMenuDto { }
 
 export interface CreateOrganizationDto {
   id?: string
@@ -124,7 +115,7 @@ export interface CreateOrganizationDto {
   sort: number
   path: string
 }
-export interface UpdateOrganizationDto extends CreateOrganizationDto {}
+export interface UpdateOrganizationDto extends CreateOrganizationDto { }
 
 export interface CreateActionDto extends Partial<Action> {
   id?: string
@@ -135,4 +126,4 @@ export interface CreateActionDto extends Partial<Action> {
   sort: number
   status: Status
 }
-export interface UpdateActionDto extends CreateActionDto {}
+export interface UpdateActionDto extends CreateActionDto { }

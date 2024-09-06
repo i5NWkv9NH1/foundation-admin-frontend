@@ -17,9 +17,9 @@ export interface AccountProfile extends BaseEntity {
   bio: string
   website: string
   location: string
-  socialMediaLinks: Record<string, string>
   status: Status
   gender: Gender
+  socialMediaLinks: Record<string, string>
 }
 export interface Account extends BaseEntity {
   name: string

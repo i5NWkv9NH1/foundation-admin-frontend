@@ -28,6 +28,20 @@ export const errorRoutes = [
     }
   },
   {
+    path: '/500',
+    name: '500',
+    component: () => import('@/pages/error/500.vue'),
+    meta: {
+      title: '500 Error',
+      icon: 'mdi-cancel',
+      hidden: true,
+      alwaysShow: false,
+      keepAlive: false,
+      affix: true,
+      breadcrumb: false
+    }
+  },
+  {
     path: '/:pathMatch(.*)*',
     component: () => import('@/pages/error/404.vue')
   }
