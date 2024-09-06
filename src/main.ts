@@ -16,7 +16,6 @@ import { createApp } from 'vue'
 import { initializePermissions } from './router/permissionGuard'
 
 const app = createApp(App)
-
 registerPlugins(app)
 initializePermissions()
 app.mount('#root')

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { apiOrganizations } from '@/api'
-import { CreateOrganizationDto, DeleteMode, Organization, TableHeader, TableMeta, TableRowAction } from '@/types'
-import OrganizationCreateEditDialog from './OrganizationCreateEditDialog.vue'
+import { apiOrganizations } from '@/api';
+import { CreateOrganizationDto, DeleteMode, Organization, TableHeader, TableMeta, TableRowAction } from '@/types';
+import OrganizationCreateEditDialog from './OrganizationCreateEditDialog.vue';
 
 const props = defineProps<{
   items: Organization[]
@@ -21,13 +21,15 @@ const headers = ref<TableHeader[]>([
 // prettier-ignore
 const tableRowActions = ref<TableRowAction[]>([
   { title: 'Create Sub Organization', icon: 'mdi-vector-polyline-plus', color: '', cb: (organization: Organization) => onCreateSubOrganization(organization.id!) },
-  { title: 'Create Organization', icon: 'mdi-vector-square-plus', color: '',  cb: (organization: Organization) => {
-    if (!organization.parent) return onCreateRootOrganization()
-    //* Same level
-    return onCreateSubOrganization(organization.parent.id!)
-  }},
+  {
+    title: 'Create Organization', icon: 'mdi-vector-square-plus', color: '', cb: (organization: Organization) => {
+      if (!organization.parent) return onCreateRootOrganization()
+      //* Same level
+      return onCreateSubOrganization(organization.parent.id!)
+    }
+  },
   { title: 'Edit Organization', icon: 'mdi-pencil-outline', color: '', cb: (organization: Organization) => onEditOrganization(organization.id!) },
-  { title: 'Delete Organization', icon: 'mdi-delete-outline', color: '',  cb: (organization: Organization) => onOpenDeleteConfirmDialog('single', organization)},
+  { title: 'Delete Organization', icon: 'mdi-delete-outline', color: '', cb: (organization: Organization) => onOpenDeleteConfirmDialog('single', organization) },
 ]);
 const paddingLeftStyle = computed(() => `${props.level * 2}rem`)
 const selectedOrganizations = ref<string[]>([])
@@ -156,30 +158,18 @@ const onConfirmDelete = async () => {
 </script>
 
 <template>
-  <VDataTableServer
-    v-model="selectedOrganizations"
-    v-model:page="tableMeta.page"
-    v-model:items-per-page="tableMeta.itemsPerPage"
-    v-model:expanded="expandedOrganizations"
-    v-bind="$attrs"
-    hide-default-footer
-    expand-on-click
-    :loading="props.loading"
-    :items="props.items"
+  <VDataTableServer v-model="selectedOrganizations" v-model:page="tableMeta.page"
+    v-model:items-per-page="tableMeta.itemsPerPage" v-model:expanded="expandedOrganizations" v-bind="$attrs"
+    hide-default-footer expand-on-click :loading="props.loading" :items="props.items"
     :items-per-page-text="`level: ${props.level} : ${items[0]?.parent?.name || 'Null'} `"
-    :items-length="props.items.length"
-    :headers="headers"
-  >
+    :items-length="props.items.length" :headers="headers">
     <template #loading>
       <VSkeletonLoader type="table-row@4" />
     </template>
     <template #no-data>
       <div>No suborganizations.</div>
     </template>
-    <template
-      v-if="props.level !== 1"
-      #top
-    >
+    <template v-if="props.level !== 1" #top>
       <VCardTitle>Sub Organizations</VCardTitle>
     </template>
 
@@ -194,52 +184,25 @@ const onConfirmDelete = async () => {
     </template>
     <template #[`item.actions`]="{ item }">
       <VCardActions>
-        <VTooltip
-          v-for="btn in tableRowActions"
-          :key="btn.title"
-          location="top"
-        >
+        <VTooltip v-for="btn in tableRowActions" :key="btn.title" location="top">
           <template #activator="args">
-            <VBtn
-              @click.stop="btn.cb(item)"
-              :icon="btn.icon"
-              :color="btn.color"
-              v-bind="args.props"
-            />
+            <VBtn @click.stop="btn.cb(item)" :icon="btn.icon" :color="btn.color" v-bind="args.props" />
           </template>
           <span> {{ btn.title }}</span>
         </VTooltip>
       </VCardActions>
     </template>
     <template #expanded-row="{ item, columns }">
-      <td
-        :colspan="columns.length"
-        :style="{ paddingLeft: paddingLeftStyle }"
-      >
+      <td :colspan="columns.length" :style="{ paddingLeft: paddingLeftStyle }">
         <!-- Render children if available -->
-        <OrganizationChildTable
-          v-model="selectedOrganizations"
-          :loading="tableMeta.loading"
-          :level="props.level + 1"
-          :items="item.children"
-          :items-length="item.children.length"
-          :headers="headers"
-          :refresh="props.refresh"
-        />
+        <OrganizationChildTable v-model="selectedOrganizations" :loading="tableMeta.loading" :level="props.level + 1"
+          :items="item.children" :items-length="item.children.length" :headers="headers" :refresh="props.refresh" />
       </td>
     </template>
   </VDataTableServer>
 
-  <OrganizationCreateEditDialog
-    v-model="createEditDialog"
-    :organization="currentOrganization"
-    @save="onSaveCreateEditDialog"
-    :is-eidting="isEditing"
-  />
+  <OrganizationCreateEditDialog v-model="createEditDialog" :organization="currentOrganization"
+    @save="onSaveCreateEditDialog" :is-eidting="isEditing" />
 
-  <DeleteConfirmDialog
-    v-model="deleteConfirmDialog"
-    :mode="deleteMode"
-    @confirm="onConfirmDelete"
-  />
+  <DeleteConfirmDialog v-model="deleteConfirmDialog" :mode="deleteMode" @confirm="onConfirmDelete" />
 </template>

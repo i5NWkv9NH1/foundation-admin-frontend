@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FormField, TableRowAction } from '@/types'
+import { FormField, TableRowAction } from '@/types';
 
 interface Props {
   fields: FormField[]
@@ -25,32 +25,14 @@ const queryFilterActions = ref<TableRowAction[]>([
       <VCardTitle>Query Filter</VCardTitle>
       <VCardItem>
         <VToolbar color="transparent">
-          <VBtn
-            :icon="expand ? 'mdi-filter-variant-remove' : 'mdi-filter-variant-plus'"
-            :key="expand ? 'mdi-filter-variant-remove' : 'mdi-filter-variant-plus'"
-            @click="() => (expand = !expand)"
-          />
-          <VTextField
-            v-model="form.text!"
-            hide-details
-            variant="plain"
-            label="Search by text"
-            placeholder="Typing something"
-            persistent-placeholder
-          />
+          <VBtn :icon="expand ? 'mdi-filter-variant-remove' : 'mdi-filter-variant-plus'"
+            :key="expand ? 'mdi-filter-variant-remove' : 'mdi-filter-variant-plus'" @click="() => (expand = !expand)" />
+          <VTextField v-model="form.text!" hide-details variant="plain" label="Search by text"
+            placeholder="Typing something" persistent-placeholder />
           <template #append>
-            <VTooltip
-              v-for="btn in queryFilterActions"
-              :key="btn.title"
-              :text="btn.title"
-              location="top"
-            >
+            <VTooltip v-for="btn in queryFilterActions" :key="btn.title" :text="btn.title" location="top">
               <template #activator="args">
-                <VBtn
-                  :icon="btn.icon"
-                  @click="btn.cb"
-                  v-bind="args.props"
-                />
+                <VBtn :icon="btn.icon" @click="btn.cb" v-bind="args.props" />
               </template>
             </VTooltip>
           </template>
@@ -59,18 +41,11 @@ const queryFilterActions = ref<TableRowAction[]>([
       <VExpandTransition>
         <VCardItem v-if="expand">
           <VCardText>
-            <GeneratorField
-              :fields="props.fields"
-              :form="props.form"
-            />
+            <GeneratorField :fields="props.fields" :form="props.form" />
           </VCardText>
           <VCardActions class="justify-end">
             <VBtn @click="() => emits('reset')">Reset</VBtn>
-            <VBtn
-              variant="outlined"
-              @click="() => emits('submit')"
-              >Apply</VBtn
-            >
+            <VBtn variant="outlined" @click="() => emits('submit')">Apply</VBtn>
           </VCardActions>
         </VCardItem>
       </VExpandTransition>

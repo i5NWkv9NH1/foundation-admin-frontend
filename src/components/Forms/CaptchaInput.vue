@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useCaptcha } from '@/composables'
+import { useCaptcha } from '@/composables';
 
 const { image, countdown, isRunning, isGetCaptcha, fetchCaptcha } = useCaptcha()
 const props = defineProps<{
@@ -22,37 +22,17 @@ onMounted(async () => {
 </script>
 
 <template>
-  <VTextField
-    v-model="modelValue"
-    :placeholder="props.placeholder"
-    :rules="props.rules"
-    variant="solo"
-  >
-    <template
-      v-if="isGetCaptcha"
-      #details
-    >
+  <VTextField v-model="modelValue" :placeholder="props.placeholder" :rules="props.rules" variant="solo">
+    <template v-if="isGetCaptcha" #details>
       <div>{{ countdown }} seconds to refetch captcha</div>
     </template>
     <template #append-inner>
       <VSlideXTransition hide-on-leave>
-        <VBtn
-          v-if="!image"
-          color="primary"
-          variant="outlined"
-          @click.stop="updateCaptcha"
-        >
+        <VBtn v-if="!image" color="primary" variant="outlined" @click.stop="updateCaptcha">
           <span>Captcha</span>
         </VBtn>
-        <img
-          v-else
-          cover
-          height="50"
-          :src="image"
-          :key="image"
-          @click="updateCaptcha"
-          :class="[isRunning ? 'cursor-default' : 'cursor-pointer', 'captcha']"
-        />
+        <img v-else cover height="50" :src="image" :key="image" @click="updateCaptcha"
+          :class="[isRunning ? 'cursor-default' : 'cursor-pointer', 'captcha']" />
       </VSlideXTransition>
     </template>
   </VTextField>

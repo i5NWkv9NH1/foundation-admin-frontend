@@ -1,6 +1,6 @@
 <!-- TODO: type field bug-->
-<script setup lang="ts" generic="T extends BaseEntity">
-import { BaseEntity } from '@/types'
+<script setup lang="ts" generic="T extends BaseEntity & { label: string; id: string | number; children: any}">
+import { BaseEntity } from '@/types';
 
 interface Props {
   items: T[] | undefined
@@ -27,19 +27,7 @@ const itemChildren = (item: any): any => (item.children ? (item.children.length 
 </script>
 <template>
   <!-- prettier-ignore -->
-  <VTreeview
-    v-model:selected="selected"
-    v-bind="$attrs"
-    selectable
-    :items="props.items"
-    :item-title="props.itemTitle"
-    :item-value="(props.itemValue as any)"
-    :item-children="itemChildren"
-    select-strategy='independent'
-    return-object
-    mandatory
-    :activatable="false"
-    open-all
-    opened
-  />
+  <VTreeview v-model:selected="selected" v-bind="$attrs" selectable :items="props.items" :item-title="props.itemTitle"
+    :item-value="(props.itemValue as any)" :item-children="itemChildren" select-strategy='independent' return-object
+    mandatory :activatable="false" open-all opened />
 </template>

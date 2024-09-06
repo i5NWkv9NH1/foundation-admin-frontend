@@ -1,8 +1,8 @@
 // useCaptcha.ts
-import { ref } from 'vue'
+import { apiCommon } from '@/api'
 import { useCountdown } from '@/composables'
 import { useAppStore } from '@/stores/app'
-import { apiCommon } from '@/api'
+import { ref } from 'vue'
 
 export function useCaptcha() {
   const appStore = useAppStore()
@@ -15,7 +15,6 @@ export function useCaptcha() {
   async function fetchCaptcha(isStart?: boolean) {
     try {
       const response = await apiCommon.getCaptcha(appStore.uniqueId)
-      // captchaImage.value = response.data
       captchaImage.value = response.data
       if (isStart) {
         isGetCaptcha.value = isStart

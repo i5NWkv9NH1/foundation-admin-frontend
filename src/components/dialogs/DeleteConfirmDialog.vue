@@ -18,10 +18,7 @@ const onConfirm = () => {
 </script>
 
 <template>
-  <VDialog
-    v-model="modelValue"
-    max-width="500"
-  >
+  <VDialog v-model="modelValue" max-width="500">
     <VCard>
       <VCardTitle> Confirm Deletion </VCardTitle>
       <VCardText>
@@ -35,15 +32,8 @@ const onConfirm = () => {
           <VIcon start> mdi-close-thick </VIcon>
           <span>Cancel</span>
         </VBtn>
-        <VBtn
-          color="error"
-          variant="elevated"
-          @click="onConfirm"
-        >
-          <VIcon
-            start
-            icon="mdi-trash-can-outline"
-          />
+        <VBtn color="error" variant="elevated" @click="onConfirm">
+          <VIcon start icon="mdi-trash-can-outline" />
           <span>Confirm</span>
         </VBtn>
       </VCardActions>

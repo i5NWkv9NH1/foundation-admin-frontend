@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { FormComponent, FormField } from '@/types/form'
-import { VAutocomplete, VAvatar, VBtn, VCheckbox, VChipGroup, VColorPicker, VDatePicker, VFileInput, VRadioGroup, VSelect, VSlider, VSwitch, VTextField } from 'vuetify/components'
-import { VNumberInput } from 'vuetify/labs/components'
+import { FormComponent, FormField } from '@/types/form';
+import { VAutocomplete, VAvatar, VBtn, VCheckbox, VChipGroup, VColorPicker, VDatePicker, VFileInput, VRadioGroup, VSelect, VSlider, VSwitch, VTextField } from 'vuetify/components';
+import { VNumberInput } from 'vuetify/labs/components';
 
 interface Props {
   fields: FormField[]
@@ -50,44 +50,22 @@ function RenderField(type: FormComponent) {
 <template>
   <div>
     <VRow>
-      <VCol
-        cols="12"
-        v-bind="field.attrs?.grid"
-        v-for="(field, index) in props.fields"
-        :key="index"
-      >
+      <VCol cols="12" v-bind="field.attrs?.grid" v-for="(field, index) in props.fields" :key="index">
         <!-- Avatar -->
         <template v-if="field.type === 'avatar'">
           <VSlideXTransition>
-            <VAvatar
-              :color="form.avatarUrl ? undefined : 'secondary'"
-              :image="form.avatarUrl ?? undefined"
-              size="120"
-            />
+            <VAvatar :color="form.avatarUrl ? undefined : 'secondary'" :image="form.avatarUrl ?? undefined"
+              size="120" />
           </VSlideXTransition>
         </template>
         <!-- Radio Group -->
         <template v-else-if="field.type === 'radios'">
-          <VRadioGroup
-            v-model="form[field.name]!"
-            v-bind="field.attrs"
-            :inline="field.inline"
-            :label="field.label"
-          >
-            <VRadio
-              v-for="option in field.options"
-              :key="option.value"
-              :label="option.text"
-              :value="option.value"
-              :color="option.color || 'primary'"
-            >
+          <VRadioGroup v-model="form[field.name]!" v-bind="field.attrs" :inline="field.inline" :label="field.label">
+            <VRadio v-for="option in field.options" :key="option.value" :label="option.text" :value="option.value"
+              :color="option.color || 'primary'">
               <template v-slot:label>
                 <strong :class="[`text-${option.color}`]">{{ option.text }}</strong>
-                <VIcon
-                  v-if="option.icon"
-                  start
-                  :icon="option.icon"
-                />
+                <VIcon v-if="option.icon" start :icon="option.icon" />
               </template>
             </VRadio>
           </VRadioGroup>
@@ -95,39 +73,18 @@ function RenderField(type: FormComponent) {
 
         <!-- Select -->
         <template v-else-if="field.type === 'select'">
-          <VSelect
-            v-model="form[field.name]!"
-            :return-object="field.returnObject || false"
-            :multiple="field.multiple"
-            :chips="field.chips"
-            :items="field.options"
-            :label="field.label"
-            :item-title="field.itemTitle"
-            :item-value="field.itemValue"
-            v-bind="field.attrs"
-          />
+          <VSelect v-model="form[field.name]!" :return-object="field.returnObject || false" :multiple="field.multiple"
+            :chips="field.chips" :items="field.options" :label="field.label" :item-title="field.itemTitle"
+            :item-value="field.itemValue" v-bind="field.attrs" />
         </template>
         <!-- TreeView -->
 
-        <component
-          v-else
-          :is="RenderField(field.type)"
-          v-model="form[field.name]!"
-          :data="JSON.stringify(field)"
-          v-bind="field.attrs"
-          :label="field.label"
-          :options="field.options"
-          :rules="field.rules"
-          :required="field.required"
-          :placeholder="field.placeholder"
-          :readonly="field.readonly"
-          :disabled="field.disabled"
-          :hideInput="field.hideInput || false"
-          :inset="field.inset || true"
-          :controlVariant="field.controlVariant || 'default'"
-          :reverse="field.reverse || false"
-          :variant="field.variant || 'outlined'"
-        />
+        <component v-else :is="RenderField(field.type)" v-model="form[field.name]!" :data="JSON.stringify(field)"
+          v-bind="field.attrs" :label="field.label" :options="field.options" :rules="field.rules"
+          :required="field.required" :placeholder="field.placeholder" :readonly="field.readonly"
+          :disabled="field.disabled" :hideInput="field.hideInput || false" :inset="field.inset || true"
+          :controlVariant="field.controlVariant || 'default'" :reverse="field.reverse || false"
+          :variant="field.variant || 'outlined'" />
       </VCol>
     </VRow>
   </div>

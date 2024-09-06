@@ -92,7 +92,6 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
-    readonly axiosInstance: UnwrapRef<typeof import('./composables/useCRUD')['axiosInstance']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly createPinia: UnwrapRef<typeof import('pinia')['createPinia']>
@@ -150,15 +149,11 @@ declare module 'vue' {
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
     readonly useCaptcha: UnwrapRef<typeof import('./composables/useCaptcha')['useCaptcha']>
     readonly useCountdown: UnwrapRef<typeof import('./composables/useCountdown')['useCountdown']>
-    readonly useCrud: UnwrapRef<typeof import('./composables/useCRUD')['useCrud']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
-    readonly useDeepModel: UnwrapRef<typeof import('./composables/useDeepModel')['useDeepModel']>
-    readonly useFetch: UnwrapRef<typeof import('./composables/useFetch')['useFetch']>
     readonly useRoute: UnwrapRef<typeof import('vue-router/auto')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router/auto')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
-    readonly useSnackbar: UnwrapRef<typeof import('./composables/useSnackbar')['useSnackbar']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>

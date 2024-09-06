@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CreateAccountDto, Organization, Role } from '@/types'
+import { CreateAccountDto, Organization, Role } from '@/types';
 
 const genders = ref([
   { label: 'Private', value: 'Private', color: 'grey', icon: 'mdi-help' },
@@ -42,9 +42,10 @@ const isValid = ref<boolean | null>(false)
 watch(
   () => props.account,
   async () => {
-    form.value = props.account
+    form.value = { ...props.account }
     if (!props.isEditing) {
       await nextTick(async () => {
+        // await formEl.value.reset()
         await formEl.value.resetValidation()
       })
     }
@@ -68,12 +69,7 @@ function onClose() {
 </script>
 
 <template>
-  <VNavigationDrawer
-    v-model="modelValue"
-    width="400"
-    temporary
-    location="right"
-  >
+  <VNavigationDrawer v-model="modelValue" width="400" temporary location="right">
     <template #prepend>
       <VCardTitle>
         {{ props.isEditing ? `Edit: ${form.name}` : 'Create' }}
@@ -81,113 +77,40 @@ function onClose() {
     </template>
     <template #default>
       <VCardText>
-        <VForm
-          ref="formEl"
-          v-model="isValid"
-          class="d-flex flex-column ga-4"
-          @submit.prevent="onSave"
-        >
-          <VTextField
-            v-model="form.name"
-            label="Name"
-            persistent-placeholder
-            variant="outlined"
-            :rules="rules.name"
-          />
-          <VTextField
-            v-model="form.username"
-            label="Username"
-            persistent-placeholder
-            variant="outlined"
-            :rules="rules.username"
-          />
-          <VTextField
-            v-if="!props.isEditing"
-            v-model="form.password"
-            label="Password"
-            persistent-placeholder
-            variant="outlined"
-          />
+        <VForm ref="formEl" v-model="isValid" class="d-flex flex-column ga-4" @submit.prevent="onSave">
+          <VTextField v-model="form.name" label="Name" persistent-placeholder variant="outlined" :rules="rules.name" />
+          <VTextField v-model="form.username" label="Username" persistent-placeholder variant="outlined"
+            :rules="rules.username" />
+          <VTextField v-if="!props.isEditing" v-model="form.password" label="Password" persistent-placeholder
+            variant="outlined" />
 
-          <VSelect
-            variant="outlined"
-            v-model="form.roles"
-            multiple
-            label="Roles"
-            chips
-            :rules="rules.roles"
-            :items="props.roles"
-            :item-value="(role: Role) => role"
-            :item-title="(role: Role) => role.name"
-          />
+          <VSelect variant="outlined" v-model="form.roles" multiple label="Roles" chips :rules="rules.roles"
+            :items="props.roles" :item-value="(role: Role) => role" :item-title="(role: Role) => role.name" />
 
           <VDivider />
 
-          <VRadioGroup
-            v-model="form.profile.status"
-            label="Status"
-            :rules="rules.profile.status"
-            inline
-          >
-            <VRadio
-              v-for="item in status"
-              :key="item.value"
-              :value="item.value"
-              :color="item.color"
-              :label="item.label"
-            />
+          <VRadioGroup v-model="form.profile.status" label="Status" :rules="rules.profile.status" inline>
+            <VRadio v-for="item in status" :key="item.value" :value="item.value" :color="item.color"
+              :label="item.label" />
           </VRadioGroup>
 
-          <VRadioGroup
-            v-model="form.profile.gender"
-            label="Gender"
-            :rules="rules.profile.gender"
-          >
-            <VRadio
-              v-for="item in genders"
-              :key="item.value"
-              :value="item.value"
-              :color="item.color"
-              :label="item.label"
-            >
+          <VRadioGroup v-model="form.profile.gender" label="Gender" :rules="rules.profile.gender">
+            <VRadio v-for="item in genders" :key="item.value" :value="item.value" :color="item.color"
+              :label="item.label">
               <template #label>
-                <VIcon
-                  :icon="item.icon"
-                  :color="item.color"
-                  start
-                />
+                <VIcon :icon="item.icon" :color="item.color" start />
                 <span>{{ item.label }}</span>
               </template>
             </VRadio>
           </VRadioGroup>
 
-          <VTextField
-            v-model="form.profile.email"
-            label="Email"
-            persistent-placeholder
-            :rules="rules.profile.email"
-            variant="outlined"
-          />
-          <VTextField
-            v-model="form.profile.phone"
-            label="Phone"
-            persistent-placeholder
-            :rules="rules.profile.phone"
-            variant="outlined"
-          />
-          <VTextField
-            v-model="form.profile.address"
-            label="Address"
-            persistent-placeholder
-            :rules="rules.profile.address"
-            variant="outlined"
-          />
-          <VTextarea
-            v-model="form.profile.bio"
-            label="Bio"
-            persistent-placeholder
-            variant="outlined"
-          />
+          <VTextField v-model="form.profile.email" label="Email" persistent-placeholder :rules="rules.profile.email"
+            variant="outlined" />
+          <VTextField v-model="form.profile.phone" label="Phone" persistent-placeholder :rules="rules.profile.phone"
+            variant="outlined" />
+          <VTextField v-model="form.profile.address" label="Address" persistent-placeholder
+            :rules="rules.profile.address" variant="outlined" />
+          <VTextarea v-model="form.profile.bio" label="Bio" persistent-placeholder variant="outlined" />
         </VForm>
       </VCardText>
     </template>
@@ -195,21 +118,11 @@ function onClose() {
       <VDivider />
       <VCardActions>
         <VBtn @click="onClose">
-          <VIcon
-            icon="mdi-close-thick"
-            start
-          />
+          <VIcon icon="mdi-close-thick" start />
           <span>Cancel</span>
         </VBtn>
-        <VBtn
-          @click="onSave"
-          color="primary"
-          :disabled="!isValid"
-        >
-          <VIcon
-            icon="mdi-content-save-outline"
-            start
-          />
+        <VBtn @click="onSave" color="primary" :disabled="!isValid">
+          <VIcon icon="mdi-content-save-outline" start />
           <span>Save</span>
         </VBtn>
       </VCardActions>
@@ -218,7 +131,7 @@ function onClose() {
 </template>
 
 <style lang="scss">
-.v-radio-group > .v-input__control > .v-label {
+.v-radio-group>.v-input__control>.v-label {
   margin: unset;
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Organization } from '@/types'
+import { Organization } from '@/types';
 
 interface Props {
   items: Organization[]
@@ -28,34 +28,19 @@ const onSave = () => {
 </script>
 
 <template>
-  <VDialog
-    v-model="modelValue"
-    scrollable
-    max-width="400px"
-    max-height="400px"
-    close-on-back
-  >
+  <VDialog v-model="modelValue" scrollable max-width="400px" max-height="400px" close-on-back>
     <VCard>
       <VCardTitle>Organizations</VCardTitle>
       <VCardText>
-        <TreeSelector
-          :items="props.items"
-          v-model="selected"
-        />
+        <TreeSelector :items="props.items" v-model="selected" />
       </VCardText>
       <VCardActions>
         <VBtn @click="modelValue = false">
-          <VIcon
-            icon="mdi-close-thick"
-            start
-          />
+          <VIcon icon="mdi-close-thick" start />
           <span>Cancel</span>
         </VBtn>
         <VBtn @click="onSave">
-          <VIcon
-            icon="mdi-content-save-outline"
-            start
-          />
+          <VIcon icon="mdi-content-save-outline" start />
           <span>Save</span>
         </VBtn>
       </VCardActions>

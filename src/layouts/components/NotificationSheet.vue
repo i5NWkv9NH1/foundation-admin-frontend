@@ -20,20 +20,10 @@ const items = ref([
 </script>
 
 <template>
-  <VMenu
-    offset="10"
-    :close-on-content-click="false"
-    transition="slide-y-transition"
-  >
+  <VMenu offset="10" :close-on-content-click="false" transition="slide-y-transition">
     <template #activator="args">
-      <VBtn
-        v-bind="args.props"
-        icon
-      >
-        <VBadge
-          content="2"
-          color="error"
-        >
+      <VBtn v-bind="args.props" icon>
+        <VBadge content="2" color="error">
           <VIcon>mdi-bell-outline</VIcon>
         </VBadge>
       </VBtn>
@@ -41,32 +31,14 @@ const items = ref([
     <VCard>
       <VCardText>
         <VTabs v-model="current">
-          <VTab
-            v-for="item in tabs"
-            :key="item"
-            :text="item"
-          />
+          <VTab v-for="item in tabs" :key="item" :text="item" />
         </VTabs>
         <VTabsWindow v-model="current">
-          <VTabsWindowItem
-            v-for="tab in tabs"
-            :key="tab"
-          >
-            <VList
-              lines="two"
-              item-props
-            >
-              <VListItem
-                v-for="i in items"
-                :title="i.title"
-                :subtitle="i.subtitle"
-                :prepend-avatar="i.avatar"
-              >
+          <VTabsWindowItem v-for="tab in tabs" :key="tab">
+            <VList lines="two" item-props>
+              <VListItem v-for="i in items" :title="i.title" :subtitle="i.subtitle" :prepend-avatar="i.avatar">
                 <template #append>
-                  <VImg
-                    :src="i.image"
-                    width="40"
-                  />
+                  <VImg :src="i.image" width="40" />
                 </template>
               </VListItem>
             </VList>

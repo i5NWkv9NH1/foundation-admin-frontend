@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { FormField } from '@/types'
-import { VForm } from 'vuetify/components'
+import { FormField } from '@/types';
+import { VForm } from 'vuetify/components';
 
 interface Props {
   fields: FormField[]
@@ -42,41 +42,25 @@ function onClose() {
 </script>
 
 <template>
-  <VDialog
-    v-model="modelValue"
-    max-width="600px"
-    scroll-strategy="block"
-    scrollable
-  >
+  <VDialog v-model="modelValue" max-width="600px" scroll-strategy="block" scrollable>
     <VCard>
       <VCardTitle>
         {{ props.isEidting ? 'Edit Item' : 'New Item' }}
       </VCardTitle>
-      <VCardSubtitle v-if="props.isEidting"> Editing {{ form.id || 'New Item' }} {{ form.name || form.label || '' }}</VCardSubtitle>
+      <VCardSubtitle v-if="props.isEidting"> Editing {{ form.id || 'New Item' }} {{ form.name || form.label || '' }}
+      </VCardSubtitle>
       <VCardText>
         <VForm ref="formEl">
-          <GeneratorField
-            :fields="props.fields"
-            :form="form"
-          />
+          <GeneratorField :fields="props.fields" :form="form" />
         </VForm>
       </VCardText>
       <VCardActions>
         <VBtn @click="onClose">
-          <VIcon
-            start
-            icon="mdi-close-thick"
-          />
+          <VIcon start icon="mdi-close-thick" />
           <span>Cancel</span>
         </VBtn>
-        <VBtn
-          color="primary"
-          @click="onSave"
-        >
-          <VIcon
-            start
-            icon="mdi-content-save-outlined"
-          />
+        <VBtn color="primary" @click="onSave">
+          <VIcon start icon="mdi-content-save-outlined" />
           <span>Save</span>
         </VBtn>
       </VCardActions>
